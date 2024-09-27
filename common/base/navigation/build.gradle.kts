@@ -29,13 +29,22 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
+            //navigation
             implementation(libs.navigation)
             //features
             implementation(projects.common.features.splash.impl)
-            implementation(projects.common.features.authorization.impl)
+            implementation(projects.common.features.main.impl)
+            implementation(projects.common.features.language.api)
+            implementation(projects.common.features.events.api)
+            //di
+            implementation(libs.koin.core)
         }
         androidMain.dependencies {
-
+            //ui
+            implementation(libs.material3.android)
+            implementation(projects.common.base.ui)
+            //di
+            implementation(libs.koin.compose)
         }
         iosMain.dependencies {
 

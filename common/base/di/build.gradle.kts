@@ -30,8 +30,22 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.koin.core)
+            implementation(projects.common.base.network)
+            implementation(projects.common.base.storage)
+            implementation(projects.common.base.utils)
             implementation(projects.common.features.splash.impl)
             implementation(projects.common.features.authorization.impl)
+            implementation(projects.common.features.registration.impl)
+            implementation(projects.common.features.language.impl)
+            implementation(projects.common.features.networkconnection.impl)
+            implementation(projects.common.features.profile.impl)
+            implementation(projects.common.features.books.impl)
+            implementation(projects.common.features.events.impl)
+            implementation(projects.common.features.interview.impl)
+            implementation(projects.common.features.news.impl)
+            implementation(projects.common.features.study.impl)
+            implementation(projects.common.features.tests.impl)
+            implementation(projects.common.features.main.impl)
         }
         androidMain.dependencies {
             //di

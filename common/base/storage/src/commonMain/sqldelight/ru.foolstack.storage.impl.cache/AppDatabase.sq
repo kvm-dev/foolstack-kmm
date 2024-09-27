@@ -1,0 +1,445 @@
+
+CREATE TABLE Profile (
+    userId INTEGER NOT NULL,
+    userName TEXT NOT NULL,
+    userType TEXT NOT NULL,
+    userStatus INTEGER NOT NULL,
+    userEmail TEXT NOT NULL,
+    userPhotoUrl TEXT NOT NULL,
+    userPhotoBase64 TEXT NOT NULL
+);
+
+CREATE TABLE UserAchievments (
+    achievementId INTEGER NOT NULL,
+    userId INTEGER NOT NULL,
+    achievementName TEXT NOT NULL,
+    achievementDescription Text NOT NULL,
+    achievementLevel INTEGER NOT NULL
+);
+
+CREATE TABLE UserPurchasedProfessions(
+   userId INTEGER NOT NULL,
+   professionId INTEGER NOT NULL
+);
+
+CREATE TABLE Materials(
+   materialId INTEGER NOT NULL,
+   materialName TEXT NOT NULL,
+   materialText TEXT NOT NULL,
+   materialPriority INTEGER NOT NULL
+);
+
+CREATE TABLE MaterialsKnowledgeAreas(
+   materialId INTEGER NOT NULL,
+   knowledgeArea INTEGER NOT NULL
+);
+CREATE TABLE MaterialsSubProfessions(
+   materialId INTEGER NOT NULL,
+   materialSubProfession INTEGER NOT NULL
+);
+
+CREATE TABLE Tests(
+   testId INTEGER NOT NULL,
+   testName TEXT NOT NULL,
+   testLevel INTEGER NOT NULL,
+   testTimeLimit INTEGER NOT NULL
+);
+
+CREATE TABLE TestQuestion(
+   testId INTEGER NOT NULL,
+   questionId INTEGER NOT NULL,
+   questionText TEXT NOT NULL
+);
+
+CREATE TABLE TestQuestionVariant(
+   questionId INTEGER NOT NULL,
+   variantId INTEGER NOT NULL,
+   variantText TEXT NOT NULL,
+   isRight INTEGER NOT NULL
+);
+
+CREATE TABLE TestProfessions(
+   testId INTEGER NOT NULL,
+   professionId INTEGER NOT NULL
+);
+
+CREATE TABLE Events(
+   eventId INTEGER NOT NULL,
+   eventName TEXT NOT NULL,
+   eventDescription TEXT NOT NULL,
+   eventRefLink TEXT NOT NULL,
+   eventDateStart INTEGER NOT NULL,
+   eventCost INTEGER NOT NULL,
+   eventImageUrl TEXT NOT NULL,
+   eventImageBase64 TEXT NOT NULL
+);
+
+CREATE TABLE EventSubs(
+   eventId INTEGER NOT NULL,
+   eventSubId INTEGER NOT NULL
+);
+
+CREATE TABLE News(
+   newsId INTEGER NOT NULL,
+   newsName TEXT NOT NULL,
+   newsText TEXT NOT NULL,
+   newsDate INTEGER NOT NULL,
+   newsImageUrl TEXT NOT NULL,
+   newsImageBase64 TEXT NOT NULL,
+   newsLink TEXT NOT NULL
+);
+
+CREATE TABLE Books(
+   bookId INTEGER NOT NULL,
+   bookName TEXT NOT NULL,
+   bookDescription TEXT NOT NULL,
+   bookImageUrl TEXT NOT NULL,
+   bookImageBase64 TEXT NOT NULL,
+   bookRefLink TEXT NOT NULL,
+   bookCostWithSale INTEGER NOT NULL,
+   bookCostWithoutSale INTEGER NOT NULL
+);
+
+CREATE TABLE BooksPR(
+   bookPrId INTEGER NOT NULL,
+   maxSalePercent INTEGER NOT NULL,
+   prText TEXT NOT NULL
+);
+
+CREATE TABLE BookProfessions(
+   bookId INTEGER NOT NULL,
+   professionId INTEGER NOT NULL
+);
+
+CREATE TABLE Professions(
+   professionId INTEGER NOT NULL,
+   professionName TEXT NOT NULL,
+   professionImageUrl TEXT NOT NULL,
+   professionImageBase64 TEXT NOT NULL,
+   professionType INTEGER NOT NULL,
+   professionParent INTEGER NOT NULL,
+   professionPriority INTEGER NOT NULL
+);
+
+CREATE TABLE Studies(
+   studyId INTEGER NOT NULL,
+   studyName TEXT NOT NULL,
+   studyCost INTEGER NOT NULL,
+   studyImageUrl TEXT NOT NULL,
+   studyImageBase64 TEXT NOT NULL,
+   studyRefLink TEXT NOT NULL,
+   studySalePercent INTEGER NOT NULL,
+   studyLength INTEGER NOT NULL,
+   studyLengthType INTEGER NOT NULL,
+   studyOwner TEXT NOT NULL,
+   studyAdditionalText TEXT NOT NULL
+);
+
+CREATE TABLE StudyProfessions(
+   studyId INTEGER NOT NULL,
+   professionId INTEGER NOT NULL
+);
+
+CREATE TABLE StudiesPR(
+   studiesPrId INTEGER NOT NULL,
+   prText TEXT NOT NULL
+);
+
+
+insertProfile:
+INSERT INTO Profile(userId, userName, userType, userStatus, userEmail, userPhotoUrl, userPhotoBase64)
+VALUES(?, ?, ?, ?, ?, ?, ?);
+
+selectProfile:
+SELECT Profile.*
+FROM Profile;
+
+clearAllProfiles:
+DELETE FROM Profile;
+
+updateUserName:
+UPDATE Profile
+SET userName = :userName
+WHERE userId IS :userId;
+
+updateUserType:
+UPDATE Profile
+SET userType = :userType
+WHERE userId IS :userId;
+
+updateUserStatus:
+UPDATE Profile
+SET userStatus = :userStatus
+WHERE userId IS :userId;
+
+updateUserEmail:
+UPDATE Profile
+SET userEmail = :userEmail
+WHERE userId IS :userId;
+
+
+insertAchievment:
+INSERT INTO UserAchievments(achievementId, userId, achievementName, achievementDescription, achievementLevel)
+VALUES(?, ?, ?, ?, ?);
+
+selectAchievments:
+SELECT UserAchievments.*
+FROM UserAchievments;
+
+clearAllAchievments:
+DELETE FROM UserAchievments;
+
+deleteAchievment:
+DELETE FROM UserAchievments
+WHERE achievementId IS :achievementId;
+
+updateAchievementName:
+UPDATE UserAchievments
+SET achievementName = :achievementName
+WHERE userId IS :userId;
+
+updateAchievementDescription:
+UPDATE UserAchievments
+SET achievementDescription = :achievementDescription
+WHERE userId IS :userId;
+
+updateAchievementLevel:
+UPDATE UserAchievments
+SET achievementLevel = :achievementLevel
+WHERE userId IS :userId;
+
+
+insertPurchasedProfession:
+INSERT INTO UserPurchasedProfessions(userId, professionId)
+VALUES(?, ?);
+
+selectPurchasedProfessions:
+SELECT UserPurchasedProfessions.*
+FROM UserPurchasedProfessions;
+
+clearAllPurchasedProfessions:
+DELETE FROM UserPurchasedProfessions;
+
+
+insertMaterial:
+INSERT INTO Materials(materialId, materialName, materialText, materialPriority)
+VALUES(?, ?, ?, ?);
+
+selectMaterials:
+SELECT Materials.*
+FROM Materials;
+
+clearAllMaterials:
+DELETE FROM Materials;
+
+
+insertMaterialsKnowledgeArea:
+INSERT INTO MaterialsKnowledgeAreas(materialId, knowledgeArea)
+VALUES(?, ?);
+
+selectMaterialsKnowledgeAreas:
+SELECT MaterialsKnowledgeAreas.*
+FROM MaterialsKnowledgeAreas
+WHERE materialId IS :materialId;
+
+clearAllMaterialsKnowledgeAreas:
+DELETE FROM MaterialsKnowledgeAreas;
+
+
+insertMaterialSubProfession:
+INSERT INTO MaterialsSubProfessions(materialId, materialSubProfession)
+VALUES(?, ?);
+
+selectMaterialSubProfessions:
+SELECT MaterialsSubProfessions.*
+FROM MaterialsSubProfessions
+WHERE materialId IS :materialId;
+
+clearAllMaterialSubProfessions:
+DELETE FROM MaterialsSubProfessions;
+
+insertTests:
+INSERT INTO Tests(testId, testName, testLevel, testTimeLimit)
+VALUES(?, ?, ?, ?);
+
+selectTests:
+SELECT Tests.*
+FROM Tests;
+
+clearAllTests:
+DELETE FROM Tests;
+
+
+insertTestQuestion:
+INSERT INTO TestQuestion(testId, questionId, questionText)
+VALUES(?, ?, ?);
+
+selectTestQuestions:
+SELECT TestQuestion.*
+FROM TestQuestion
+WHERE testId IS :testId;
+
+clearAllTestQuestions:
+DELETE FROM TestQuestion;
+
+
+insertTestQuestionVariant:
+INSERT INTO TestQuestionVariant(questionId, variantId, variantText, isRight)
+VALUES(?, ?, ?, ?);
+
+selectTestQuestionVariant:
+SELECT TestQuestionVariant.*
+FROM TestQuestionVariant
+WHERE questionId IS :questionId;
+
+clearAllTestQuestionVariant:
+DELETE FROM TestQuestionVariant;
+
+
+insertTestProfessions:
+INSERT INTO TestProfessions(professionId, testId)
+VALUES(?, ?);
+
+selectTestProfessions:
+SELECT TestProfessions.*
+FROM TestProfessions
+WHERE testId IS :testId;
+
+clearAllTestProfessions:
+DELETE FROM TestProfessions;
+
+
+insertBooks:
+INSERT INTO Books(bookId, bookName, bookDescription, bookImageUrl, bookImageBase64, bookRefLink, bookCostWithSale, bookCostWithoutSale)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+
+selectBooks:
+SELECT Books.*
+FROM Books;
+
+clearAllBooks:
+DELETE FROM Books;
+
+
+insertBookProfessions:
+INSERT INTO BookProfessions(professionId, bookId)
+VALUES(?, ?);
+
+selectBookProfessions:
+SELECT BookProfessions.*
+FROM BookProfessions;
+
+clearAllBookProfessions:
+DELETE FROM BookProfessions;
+
+
+insertBooksPr:
+INSERT INTO BooksPR(bookPrId, maxSalePercent, prText)
+VALUES(?, ?, ?);
+
+selectBooksPr:
+SELECT BooksPR.*
+FROM BooksPR;
+
+
+clearAllBookPr:
+DELETE FROM BooksPR;
+
+
+insertNews:
+INSERT INTO News(newsId, newsName, newsText, newsDate, newsImageUrl, newsImageBase64, newsLink)
+VALUES(?, ?, ?, ?, ?, ?, ?);
+
+selectNews:
+SELECT News.*
+FROM News;
+
+clearAllNews:
+DELETE FROM News;
+
+
+insertEvents:
+INSERT INTO Events(eventId, eventName, eventDescription, eventRefLink, eventDateStart, eventCost, eventImageUrl, eventImageBase64)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+
+selectEvents:
+SELECT Events.*
+FROM Events;
+
+clearAllEvents:
+DELETE FROM Events;
+
+
+insertEventSubs:
+INSERT INTO EventSubs(eventId, eventSubId)
+VALUES(?, ?);
+
+selectEventSubs:
+SELECT EventSubs.*
+FROM EventSubs
+WHERE eventId IS :eventId;
+
+selectAllEventSubs:
+SELECT EventSubs.*
+FROM EventSubs;
+
+
+clearAllEventSubs:
+DELETE FROM EventSubs;
+
+
+insertProfession:
+INSERT INTO Professions(professionId, professionName, professionImageUrl, professionImageBase64, professionType, professionParent, professionPriority)
+VALUES(?, ?, ?, ?, ?, ?, ?);
+
+selectProfessions:
+SELECT Professions.*
+FROM Professions;
+
+clearAllProfessions:
+DELETE FROM Professions;
+
+selectProfessionsByParentId:
+SELECT Professions.*
+FROM Professions
+WHERE professionParent IS :professionId;
+
+
+insertStudy:
+INSERT INTO Studies(studyId, studyName, studyCost, studyImageUrl, studyImageBase64, studyRefLink, studySalePercent, studyLength, studyLengthType, studyOwner, studyAdditionalText)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+selectStudies:
+SELECT Studies.*
+FROM Studies;
+
+clearAllStudies:
+DELETE FROM Studies;
+
+
+insertStudyProfessions:
+INSERT INTO StudyProfessions(professionId, studyId)
+VALUES(?, ?);
+
+selectStudyProfessions:
+SELECT StudyProfessions.*
+FROM StudyProfessions;
+
+clearAllStudyProfessions:
+DELETE FROM StudyProfessions;
+
+
+insertStudiesPr:
+INSERT INTO StudiesPR(studiesPrId, prText)
+VALUES(?, ?);
+
+selectStudiesPr:
+SELECT StudiesPR.*
+FROM StudiesPR;
+
+
+clearAllStudiesPR:
+DELETE FROM StudiesPR;
+
+
+

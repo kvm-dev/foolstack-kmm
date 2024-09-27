@@ -15,6 +15,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
@@ -25,8 +26,11 @@ android {
         }
     }
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+        create("releaseDev") {
+        }
+        create("debugDev") {
+            isDebuggable = true
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -46,6 +50,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     //di
     implementation(libs.koin.android)
+    implementation(libs.koin.core)
     implementation(projects.common.base.di)
     //navigation
     implementation(libs.navigation)
@@ -58,9 +63,4 @@ dependencies {
     implementation(projects.common.base.viewmodel)
     //tests
     debugImplementation(libs.compose.ui.tooling)
-
-    with(libs.koin) {
-        implementation(core)
-        implementation(android)
-    }
 }

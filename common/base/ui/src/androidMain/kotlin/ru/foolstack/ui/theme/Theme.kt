@@ -36,12 +36,21 @@ var SplashGradient1ColorSchemeColor by mutableStateOf(GreenColor2)
 var SplashGradient2ColorSchemeColor by mutableStateOf(GreenColor3)
 var BottomScreenBackgroundColorSchemeColor by mutableStateOf(BottomScreenLight)
 var BaseTextColorSchemeColor by mutableStateOf(BaseTextColorLight)
-var EnabledButtonFirstBackgroundColorSchemeColor by mutableStateOf(EnabledButtonFirstBackgroundLight)
-var EnabledButtonSecondBackgroundColorSchemeColor by mutableStateOf(
-    EnabledButtonSecondBackgroundLight
-)
+var EnabledButtonSecondContentSchemeColor by mutableStateOf(EnabledButtonSecondContentColorLight)
+var EnabledButtonSecondBackgroundColorSchemeColor by mutableStateOf(EnabledButtonSecondBackgroundLight)
 var EnabledButtonContentColorSchemeColor by mutableStateOf(ContentButtonEnabledLight)
 var DisabledButtonContentColorSchemeColor by mutableStateOf(ContentButtonDisabledLight)
+var FieldsDefaultBorderColorSchemeColor by mutableStateOf(FieldsDefaultBorderColorLight)
+var ErrorSchemeColor by mutableStateOf(ErrorColorLight)
+var FieldsPlaceholderSchemeColor by mutableStateOf(FieldsPlaceholderColorLight)
+var PrimaryTitleSchemeColor by mutableStateOf(PrimaryTitleColorLight)
+var MainYellowSchemeColor by mutableStateOf(MainYellowColorLight)
+var DisabledButtonTextSchemeColor by mutableStateOf(DisabledButtonTextColorLight)
+var LoadingIndicatorSchemeColor by mutableStateOf(LoadingIndicatorColorLight)
+var NavigationDisabledSchemeColor by mutableStateOf(NavigationDisabledLight)
+var NavigationSelectedSchemeColor by mutableStateOf(NavigationSelectedLight)
+var MainBackgroundSchemeColor by mutableStateOf(MainBackgroundLight)
+var DividerSchemeColor by mutableStateOf(DividerLightColor)
 
 
 
@@ -91,10 +100,10 @@ var ColorScheme.BaseText: Color
         BaseTextColorSchemeColor = value
     }
 
-var ColorScheme.EnabledButtonFirstBackground: Color
-    get() = EnabledButtonFirstBackgroundColorSchemeColor
+var ColorScheme.EnabledButtonSecondContentColor
+    get() = EnabledButtonSecondContentSchemeColor
     set(value) {
-        EnabledButtonFirstBackgroundColorSchemeColor = value
+    EnabledButtonSecondContentSchemeColor = value
     }
 
 var ColorScheme.EnabledButtonSecondBackground: Color
@@ -109,17 +118,86 @@ var ColorScheme.EnabledButtonContent: Color
         EnabledButtonContentColorSchemeColor = value
     }
 
+var ColorScheme.FieldsDefaultBorderColor: Color
+    get() = FieldsDefaultBorderColorSchemeColor
+    set(value) {
+        FieldsDefaultBorderColorSchemeColor = value
+    }
+
 var ColorScheme.DisabledButtonContent: Color
     get() = DisabledButtonContentColorSchemeColor
     set(value) {
         DisabledButtonContentColorSchemeColor = value
     }
 
+var ColorScheme.ErrorColor: Color
+    get() = ErrorSchemeColor
+    set(value) {
+        ErrorSchemeColor = value
+    }
+
+var ColorScheme.FieldsPlaceholderColor: Color
+    get() = FieldsPlaceholderSchemeColor
+    set(value) {
+        FieldsPlaceholderSchemeColor = value
+    }
+
+var ColorScheme.PrimaryTitleColor: Color
+    get() = PrimaryTitleSchemeColor
+    set(value) {
+        PrimaryTitleSchemeColor = value
+    }
+var ColorScheme.MainYellow: Color
+    get() = MainYellowSchemeColor
+    set(value) {
+        MainYellowSchemeColor = value
+    }
+
+var ColorScheme.DisabledButtonTextColor: Color
+    get() = DisabledButtonTextSchemeColor
+    set(value) {
+        DisabledButtonTextSchemeColor = value
+    }
+
+var ColorScheme.LoadingIndicatorColor: Color
+    get() = LoadingIndicatorSchemeColor
+    set(value) {
+        LoadingIndicatorSchemeColor = value
+    }
+var ColorScheme.NavigationDisabled: Color
+    get() = NavigationDisabledSchemeColor
+    set(value) {
+        NavigationDisabledSchemeColor = value
+    }
+
+var ColorScheme.NavigationSelected: Color
+    get() = NavigationSelectedSchemeColor
+    set(value) {
+        NavigationSelectedSchemeColor = value
+    }
+
+var ColorScheme.MainBackground: Color
+    get() = MainBackgroundSchemeColor
+    set(value) {
+        MainBackgroundSchemeColor = value
+    }
+
+var ColorScheme.Divider: Color
+    get() = DividerSchemeColor
+    set(value) {
+        DividerSchemeColor = value
+    }
+
+
+
+
+
 @Composable
 fun FoolStackTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+//    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -195,10 +273,10 @@ fun FoolStackTheme(
         BaseTextColorLight
     }
 
-    colorScheme.EnabledButtonFirstBackground = if (darkTheme) {
-        EnabledButtonFirstBackgroundDark
+    colorScheme.EnabledButtonSecondContentColor = if (darkTheme) {
+        EnabledButtonSecondContentColorDark
     } else {
-        EnabledButtonFirstBackgroundLight
+        EnabledButtonSecondContentColorLight
     }
 
     colorScheme.EnabledButtonSecondBackground = if (darkTheme) {
@@ -218,4 +296,70 @@ fun FoolStackTheme(
     } else {
         ContentButtonDisabledLight
     }
+    colorScheme.MainGreen = if (darkTheme) {
+        FieldsDefaultBorderColorDark
+    } else {
+        FieldsDefaultBorderColorLight
+    }
+
+    colorScheme.ErrorColor = if (darkTheme) {
+        ErrorColorDark
+    } else {
+        ErrorColorLight
+    }
+
+    colorScheme.FieldsPlaceholderColor = if (darkTheme) {
+        FieldsPlaceholderColorDark
+    } else {
+        FieldsPlaceholderColorLight
+    }
+
+    colorScheme.PrimaryTitleColor = if (darkTheme) {
+        PrimaryTitleColorDark
+    } else {
+        PrimaryTitleColorLight
+    }
+
+    colorScheme.MainYellow = if (darkTheme) {
+        MainYellowColorDark
+    } else {
+        MainYellowColorLight
+    }
+
+    colorScheme.DisabledButtonTextColor = if (darkTheme) {
+        DisabledButtonTextColorDark
+    } else {
+        DisabledButtonTextColorLight
+    }
+
+    colorScheme.LoadingIndicatorColor = if (darkTheme) {
+        LoadingIndicatorColorDark
+    } else {
+        LoadingIndicatorColorLight
+    }
+
+    colorScheme.NavigationDisabled = if (darkTheme) {
+        NavigationDisabledDark
+    } else {
+        NavigationDisabledLight
+    }
+
+    colorScheme.NavigationSelected = if (darkTheme) {
+        NavigationSelectedDark
+    } else {
+        NavigationSelectedLight
+    }
+
+    colorScheme.MainBackground = if (darkTheme) {
+        MainBackgroundDark
+    } else {
+        MainBackgroundLight
+    }
+
+    colorScheme.Divider = if (darkTheme) {
+        DividerDarkColor
+    } else {
+        DividerLightColor
+    }
+
 }

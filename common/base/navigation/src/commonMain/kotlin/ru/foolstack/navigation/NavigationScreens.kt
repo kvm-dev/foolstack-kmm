@@ -1,7 +1,11 @@
 package ru.foolstack.navigation
 
+import ru.foolstack.events.api.model.EventsDomain
+
 enum class NavigationScreens(val title: String) {
-    SplashScreenNavigation(title = "SplashScreen"),
-    AuthorizationScreenNavigation(title = "AuthorizationScreen"),
-    MainScreenNavigation(title = "MainScreen")
+    SplashScreenNavigation( "SplashScreen"),
+    MainScreenNavigation("Main"),
+    InterviewScreen("Interview"),
+    TestsScreen("Tests"),
+    NewsScreen("News")
 }

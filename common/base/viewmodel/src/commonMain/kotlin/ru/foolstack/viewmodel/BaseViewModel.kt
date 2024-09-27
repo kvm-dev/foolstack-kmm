@@ -10,7 +10,7 @@ open class BaseViewModel : ViewModel() {
     private val _progressState = MutableStateFlow(ProgressState.LOADING)
     val progressState: StateFlow<ProgressState> = _progressState.asStateFlow()
 
-    private fun updateState(state: ProgressState){
+     fun updateState(state: ProgressState){
         _progressState.value = state
     }
 }

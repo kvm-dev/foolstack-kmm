@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ru.foolstack.ui.theme.FoolStackTheme
+import ru.foolstack.ui.theme.MainBackground
 import ru.foolstack.ui.theme.MainGreen
 
 @Composable
@@ -15,6 +16,6 @@ fun BaseBox(){
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.MainGreen))
+                .background(MaterialTheme.colorScheme.MainBackground))
     }
 }

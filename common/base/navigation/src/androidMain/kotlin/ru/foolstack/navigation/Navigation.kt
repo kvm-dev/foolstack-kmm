@@ -1,49 +1,78 @@
 package ru.foolstack.navigation
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import ru.foolstack.authorization.impl.presentation.ui.StartAnotherScreen
-import ru.foolstack.impl.presentation.ui.SplashScreen
+import org.koin.androidx.compose.inject
+import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
+import ru.foolstack.splash.impl.presentation.ui.SplashScreen
+import ru.foolstack.main.impl.presentation.ui.MainScreen
+import ru.foolstack.ui.components.BottomAppBar
+import ru.foolstack.ui.components.BottomIcons
+import ru.foolstack.ui.theme.FoolStackTheme
 
 
 @Composable
 fun StartApplication(
-    navController: NavHostController = rememberNavController()
-) {
-    // Get current back stack entry
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
-    val currentScreen = NavigationScreens.valueOf(
-        backStackEntry?.destination?.route ?: NavigationScreens.SplashScreenNavigation.name
-    )
-    NavHost(
-        navController = navController,
-        startDestination = NavigationScreens.SplashScreenNavigation.name,
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        composable(route = NavigationScreens.SplashScreenNavigation.name) {
-            SplashScreen(
-                authScreen = {
-                    navController.navigate(NavigationScreens.SplashScreenNavigation.name)
+    navController: NavHostController = rememberNavController()) {
+    FoolStackTheme {
+        val getCurrentLanguageUseCase: GetCurrentLanguageUseCase by inject()
+        // Get current back stack entry
+        val backStackEntry by navController.currentBackStackEntryAsState()
+        // Get the name of the current screen
+        val currentScreen = NavigationScreens.valueOf(
+            backStackEntry?.destination?.route ?: NavigationScreens.SplashScreenNavigation.name
+        )
+        val isShowBottomBar = remember { mutableStateOf(false) }
+        val bottomBarSelectedState = remember { mutableStateOf(BottomIcons.MAIN) }
+        Scaffold(
+            bottomBar = {
+                BottomAppBar(
+                    selectedState = bottomBarSelectedState,
+                    isShow = isShowBottomBar,
+                    lang = getCurrentLanguageUseCase.getCurrentLang().lang
+                )
+            }
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize()
+            ) {
+                NavHost(
+                    navController = navController,
+                    startDestination = NavigationScreens.SplashScreenNavigation.name,
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    composable(route = NavigationScreens.SplashScreenNavigation.name) {
+                        SplashScreen(
+                            navigateToMainScreen = {
+                                isShowBottomBar.value = true
+                                navController.navigate(NavigationScreens.MainScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.SplashScreenNavigation.name) {
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    composable(route = NavigationScreens.MainScreenNavigation.name) {
+                        MainScreen()
+                    }
                 }
-            )
-        }
-        composable(route = NavigationScreens.AuthorizationScreenNavigation.name) {
-            StartAnotherScreen(
-                onNextButtonClicked = {
-                    cancelOrderAndNavigateToStart(
-                        navController
-                    )
-                }
-            )
+            }
         }
     }
 }

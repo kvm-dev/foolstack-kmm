@@ -29,12 +29,19 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-            //put your multiplatform dependencies here
+            //navigation lib
+            implementation(libs.navigation)
+            //network
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.encoding)
         }
         androidMain.dependencies {
             //compose
             implementation(libs.compose.foundation)
-            implementation(libs.compose.bom)
+            implementation(project.dependencies.platform(libs.compose.bom))
             implementation(libs.androidx.activity.compose)
             //material-design
             implementation(libs.material)
@@ -43,9 +50,12 @@ kotlin {
             implementation(libs.androidx.foundation.layout.android)
             //animation
             implementation(libs.androidx.animation.core.android)
+            //network
+            implementation(libs.ktor.client.okhttp)
         }
         iosMain.dependencies {
-            //ios
+            //network
+            implementation(libs.ktor.client.darwin)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

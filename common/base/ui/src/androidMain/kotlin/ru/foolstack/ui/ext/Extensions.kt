@@ -7,6 +7,7 @@ import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.getValue
@@ -80,7 +81,7 @@ fun Modifier.bounceClick(onClickEvent: ()->Unit) = composed {
         .clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
-            onClick = { onClickEvent() }
+            onClick = { onClickEvent() },
         )
         .pointerInput(buttonState) {
             awaitPointerEventScope {
@@ -92,5 +93,10 @@ fun Modifier.bounceClick(onClickEvent: ()->Unit) = composed {
                     ButtonState.Pressed
                 }
             }
+            detectTapGestures(
+                onTap = { onClickEvent() },
+                onLongPress = { onClickEvent() },
+                onPress = { onClickEvent() }
+            )
         }
 }

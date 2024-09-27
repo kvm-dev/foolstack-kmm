@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.ir.symbols.wrapInDelegatedSymbol
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -31,15 +30,47 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.androidx.lifecycle.viewmodel.compose)
-            implementation(libs.ktor.client.core)
-            implementation(libs.koin.core)
-            implementation(projects.common.base.viewmodel)
+            //api
             api(projects.common.features.splash.api)
+            //utils
+            implementation(projects.common.base.utils)
+            //language
+            implementation(projects.common.features.language.api)
+            //view model
+            implementation(projects.common.base.viewmodel)
+            //lifecycle
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
+            //network
+            implementation(libs.ktor.client.core)
+            //network connection
+            implementation(projects.common.features.networkconnection.api)
+            //di
+            implementation(libs.koin.core)
+            //navigation
+            implementation(libs.navigation)
+            //profile
+            implementation(projects.common.features.profile.api)
+            //authorization
+            implementation(projects.common.features.authorization.api)
+            //registration
+            implementation(projects.common.features.registration.api)
+            //books
+            implementation(projects.common.features.books.api)
+            //events
+            implementation(projects.common.features.events.api)
+            //interview
+            implementation(projects.common.features.interview.api)
+            //news
+            implementation(projects.common.features.news.api)
+            //study
+            implementation(projects.common.features.study.api)
+            //tests
+            implementation(projects.common.features.tests.api)
         }
         androidMain.dependencies {
             //viewmodel
             implementation(libs.androidx.lifecycle.runtime.compose)
+            //lifecycle
             implementation(libs.androidx.lifecycle.viewmodel)
             //network
             implementation(libs.ktor.client.okhttp)
@@ -47,9 +78,10 @@ kotlin {
             implementation(libs.koin.compose)
             //ui
             implementation(projects.common.base.ui)
+            implementation(libs.material3.android)
             //compose
             implementation(libs.compose.foundation)
-            implementation(libs.compose.bom)
+            implementation(project.dependencies.platform(libs.compose.bom))
             implementation(libs.androidx.activity.compose)
             //material-design
             implementation(libs.material)

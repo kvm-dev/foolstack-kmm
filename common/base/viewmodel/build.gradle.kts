@@ -29,7 +29,6 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-//            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
         }
         commonTest.dependencies {

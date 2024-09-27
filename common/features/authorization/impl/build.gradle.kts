@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -29,34 +31,35 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.androidx.lifecycle.viewmodel.compose)
+            //api
+            api(projects.common.features.authorization.api)
+            //coroutines
+            implementation(libs.kotlinx.coroutines.core)
+            //network
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(projects.common.base.network)
+            //storage
+            implementation(libs.sqldelight.runtime)
+            implementation(projects.common.base.storage)
+            //di
             implementation(libs.koin.core)
-            implementation(projects.common.base.viewmodel)
         }
         androidMain.dependencies {
-            //viewmodel
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.lifecycle.viewmodel)
             //network
-            implementation(libs.ktor.client.okhttp)
-            //di
-            implementation(libs.koin.compose)
-            //ui
-            implementation(projects.common.base.ui)
-            //compose
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.bom)
-            implementation(libs.androidx.activity.compose)
-            //material-design
-            implementation(libs.material)
+            implementation(libs.ktor.client.android)
+            //storage
+            implementation(libs.sqldelight.android.driver)
         }
         iosMain.dependencies {
+            //network
             implementation(libs.ktor.client.darwin)
+            //storage
+            implementation(libs.sqldelight.native.driver)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-            implementation(libs.koin.test)
         }
     }
 }
@@ -71,14 +74,4 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
-}
-dependencies {
-    implementation(libs.androidx.material3.android)
 }

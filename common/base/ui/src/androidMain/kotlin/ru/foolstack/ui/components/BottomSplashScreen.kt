@@ -8,31 +8,69 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.foolstack.ui.theme.BottomScreenBackground
 
 @Composable
-fun BottomSplashScreen(bitmap: ImageBitmap, onclickLogin: ()->Unit, onclickGuest: ()->Unit, titleText: String, baseText:String, generalButtonText: String, guestButtonText: String){
+fun BottomSplashScreen(
+    bottomSplashScreenState: BottomSplashScreenState,
+    splashBitmap: ImageBitmap,
+    logoBitmap: ImageBitmap,
+    onClickGuestScreen: () -> Unit = {},
+    onClickAuthorizationScreen: () -> Unit = {},
+    onChangeEmail: (String) -> Unit = {},
+    onChangeOtp: (String) -> Unit = {},
+    onClickAuthorizationOrRegistrationByEmail: () -> Unit = {},
+    onClickConfirm: (Boolean) -> Unit = {},
+    onClickResend: () -> Unit = {},
+    onClickTryAgain: () -> Unit = {},
+    onClickBackToAuthorizationScreen: () -> Unit = {},
+    onClickBackToEmailScreen: () -> Unit = {},
+    titleText: String = "",
+    descriptionText:String = "",
+    mainButtonText: String = "",
+    secondButtonText: String = "",
+    resendButtonText: String = "",
+    emailText: String = "",
+    errorText: String = "",
+    isEmailError: Boolean = false,
+    isEmailLoading: Boolean = false,
+    otpValue: String = "",
+    isOtpError: Boolean = false,
+    isOtpLoading: Boolean = false,
+    isUserExist: Boolean = false){
     var offset by remember { mutableFloatStateOf(0f) }
     var isAnimated by remember { mutableStateOf(false) }
     val transition = updateTransition(targetState = isAnimated, label = "transition")
@@ -49,8 +87,9 @@ fun BottomSplashScreen(bitmap: ImageBitmap, onclickLogin: ()->Unit, onclickGuest
             state = rememberScrollableState { delta ->
                 offset += delta
                 delta
-            }
-        ),
+            },
+        )
+        .imePadding(),
         verticalArrangement = Arrangement.Bottom) {
         Column(
             modifier = Modifier
@@ -60,20 +99,34 @@ fun BottomSplashScreen(bitmap: ImageBitmap, onclickLogin: ()->Unit, onclickGuest
                 .background(MaterialTheme.colorScheme.BottomScreenBackground),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(110.dp, 10.dp),
-                bitmap = bitmap,
-                contentDescription = "FoolStack"
+            ScrollableContent(
+                bottomSplashScreenState = bottomSplashScreenState,
+                logoBitmap = logoBitmap,
+                splashBitmap = splashBitmap,
+                onClickGuestScreen = onClickGuestScreen,
+                onClickTryAgain = onClickTryAgain,
+                onClickAuthorizationScreen = onClickAuthorizationScreen,
+                onchangeEmail = onChangeEmail,
+                onchangeOtp = onChangeOtp,
+                onClickAuthorizationOrRegistrationByEmail = onClickAuthorizationOrRegistrationByEmail,
+                onClickConfirm = onClickConfirm,
+                onClickResend = onClickResend,
+                onClickBackToAuthorizationScreen = onClickBackToAuthorizationScreen,
+                onClickBackToEmailScreen = onClickBackToEmailScreen,
+                titleText = titleText,
+                descriptionText = descriptionText,
+                mainButtonText = mainButtonText,
+                secondButtonText = secondButtonText,
+                emailText = emailText,
+                errorText = errorText,
+                isEmailError = isEmailError,
+                isEmailLoading = isEmailLoading,
+                otpValue = otpValue,
+                isOtpError = isOtpError,
+                isOtpLoading = isOtpLoading,
+                resendButtonText = resendButtonText,
+                isUserExist = isUserExist
             )
-            Spacer(modifier = Modifier.height(10.dp))
-            Title(text = titleText)
-            Spacer(modifier = Modifier.height(10.dp))
-            BaseText(text = baseText)
-            Spacer(modifier = Modifier.weight(1f))
-            GeneralButton(onClickLogin = onclickLogin, text = generalButtonText)
-            SplashGuestButton(guestButtonText, onClickGuest = { /*TODO*/ })
         }
     }
 
@@ -88,3 +141,136 @@ fun BottomSplashScreen(bitmap: ImageBitmap, onclickLogin: ()->Unit, onclickGuest
     }
     timer.start()
 }
+
+@Composable
+private fun ScrollableContent(
+    bottomSplashScreenState: BottomSplashScreenState,
+    splashBitmap: ImageBitmap,
+    logoBitmap: ImageBitmap,
+    titleText: String,
+    descriptionText: String,
+    onClickGuestScreen: () -> Unit = {},
+    onClickAuthorizationScreen: () -> Unit = {},
+    onchangeEmail: (String) -> Unit = {},
+    onchangeOtp: (String) -> Unit = {},
+    onClickAuthorizationOrRegistrationByEmail: () -> Unit = {},
+    onClickConfirm: (Boolean) -> Unit = {},
+    onClickResend: () -> Unit = {},
+    onClickTryAgain: () -> Unit = {},
+    onClickBackToAuthorizationScreen: () -> Unit = {},
+    onClickBackToEmailScreen: () -> Unit = {},
+    mainButtonText: String = "",
+    secondButtonText: String = "",
+    emailText: String = "",
+    errorText: String = "",
+    isEmailError: Boolean = false,
+    isEmailLoading: Boolean = false,
+    otpValue: String = "",
+    isOtpError: Boolean = false,
+    isOtpLoading: Boolean = false,
+    resendButtonText: String = "",
+    isUserExist: Boolean = false
+) {
+    val scrollState = rememberScrollState()
+    val coroutineScope = rememberCoroutineScope()
+    val keyboardHeight = WindowInsets.ime.getBottom(LocalDensity.current)
+    LaunchedEffect(key1 = keyboardHeight) {
+        coroutineScope.launch {
+            scrollState.scrollBy(keyboardHeight.toFloat())
+        }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(100.dp, 10.dp),
+            bitmap = if(bottomSplashScreenState == BottomSplashScreenState.UNAUTHORIZED ||
+                bottomSplashScreenState == BottomSplashScreenState.NO_CONNECTION) splashBitmap else {logoBitmap},
+            contentDescription = "FoolStack"
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Title(text = titleText)
+        Spacer(modifier = Modifier.height(10.dp))
+        BaseText(text = descriptionText)
+        Spacer(modifier = Modifier.weight(1f))
+        if(bottomSplashScreenState == BottomSplashScreenState.AUTHORIZATION){
+            EmailTextField(
+                value = emailText,
+                placeholder = "Email",
+                onChange = onchangeEmail,
+                isError = isEmailError,
+                errorMessage = errorText,
+                isEnabled = !isEmailLoading
+            )
+        }
+        if(bottomSplashScreenState == BottomSplashScreenState.CONFIRM){
+                Spacer(modifier = Modifier.height(10.dp))
+                OtpTextField(otpText = otpValue, onOtpTextChange = onchangeOtp,
+                    errorMessage = errorText, isError = isOtpError, isEnabled = !isOtpLoading)
+        }
+        when(bottomSplashScreenState){
+            BottomSplashScreenState.UNAUTHORIZED-> {
+                YellowButton(onClick = { onClickAuthorizationScreen() }, text = mainButtonText, isEnabled = true, isLoading = false)
+            }
+
+            BottomSplashScreenState.AUTHORIZATION-> {
+                if(emailText.isEmpty() || isEmailError){
+                    YellowButton(onClick = {}, text = mainButtonText, isEnabled = false, isLoading = false)
+                }
+                else{
+                    YellowButton(onClick = { onClickAuthorizationOrRegistrationByEmail() }, text = mainButtonText, isEnabled = true, isLoading = isEmailLoading)
+                }
+            }
+            BottomSplashScreenState.CONFIRM-> {
+                Spacer(modifier = Modifier.height(40.dp))
+                if(otpValue.isEmpty() || isOtpError || otpValue.length!=4){
+                    YellowButton(onClick = {}, text = mainButtonText, isEnabled = false, isLoading = isEmailLoading)
+                }
+                else{
+                    if(isOtpLoading){
+                        LoadingIndicator()
+                    }
+                    else{
+                        YellowButton(onClick = { onClickConfirm(isUserExist) }, text = mainButtonText, isEnabled = true, isLoading = isEmailLoading)
+                    }
+                }
+                var resendText = resendButtonText
+                var timeLeft by remember { mutableIntStateOf(300) }
+                LaunchedEffect(key1 = timeLeft) {
+                    while (timeLeft > 0) {
+                        delay(1000L)
+                        timeLeft--
+                    }
+                }
+                    resendText = if(timeLeft>0){
+                    resendText.replace("seconds", timeLeft.toString())
+                } else {
+                    resendButtonText.split(" (")[0]
+                }
+                if(!isOtpLoading && isUserExist){
+                    SecondButton(text = resendText, onClick = { timeLeft = 300; onClickResend() }, isEnabled = timeLeft==0)
+                }
+            }
+            BottomSplashScreenState.NO_CONNECTION->{
+             //nothing, without buttons
+            }
+            BottomSplashScreenState.ANY_ERROR->{
+                YellowButton(onClick = {onClickTryAgain()}, text = mainButtonText, isEnabled = true, isLoading = false)
+            }
+        }
+        if(bottomSplashScreenState!= BottomSplashScreenState.NO_CONNECTION){
+            val onclickEvent = if(bottomSplashScreenState == BottomSplashScreenState.AUTHORIZATION){ onClickBackToAuthorizationScreen} else { onClickBackToEmailScreen }
+            SecondButton(text = secondButtonText, onClick = { onclickEvent() }, isEnabled = true)
+        }
+    }
+}
+
+enum class BottomSplashScreenState {
+    UNAUTHORIZED, AUTHORIZATION, CONFIRM, NO_CONNECTION, ANY_ERROR
+}
+
