@@ -53,3 +53,5 @@ include(":common:features:main:api")
 include(":common:features:main:impl")
 
 
+include(":common:features:professions:api")
+include(":common:features:professions:impl")

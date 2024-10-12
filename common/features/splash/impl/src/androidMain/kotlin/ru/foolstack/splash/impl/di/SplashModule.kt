@@ -23,7 +23,8 @@ val splashModule = module {
         authByTokenUseCase = get(),
         confirmAuthAndRegUseCase = get(),
         registrationByEmailUseCase = get(),
-        isUserExistUseCase = get())
+        isUserExistUseCase = get(),
+        getProfessionsUseCase = get())
     }
     viewModelOf(::SplashViewModel)
 }

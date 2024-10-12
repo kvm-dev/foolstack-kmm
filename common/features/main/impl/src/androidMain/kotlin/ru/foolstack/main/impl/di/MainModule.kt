@@ -6,6 +6,11 @@ import ru.foolstack.main.impl.domain.interactor.MainInteractor
 import ru.foolstack.main.impl.presentation.viewmodel.MainViewModel
 
 val mainModule = module {
-    single<MainInteractor> { MainInteractor()}
+    single<MainInteractor> {
+        MainInteractor(getCurrentLanguageUseCase = get(),
+            getNetworkStateUseCase = get(),
+            getProfileUseCase = get(),
+            getEventsUseCase = get(),
+            getTokenFromLocalUseCase = get())}
     viewModelOf(::MainViewModel)
 }

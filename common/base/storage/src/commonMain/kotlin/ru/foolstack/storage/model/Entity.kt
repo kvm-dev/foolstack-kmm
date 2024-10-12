@@ -36,8 +36,20 @@ data class Material(
     @SerialName("materialName") val materialName: String,
     @SerialName("materialText") val materialText: String,
     @SerialName("materialPriority") val materialPriority: Int,
-    @SerialName("knowledgeAreas") val knowledgeAreas: List<Int>,
-    @SerialName("subProfessions") val subProfessions: List<Int>
+    @SerialName("knowledgeAreas") val knowledgeAreas: List<KnowledgeArea>,
+    @SerialName("subProfessions") val subProfessions: List<ProfessionListItem>
+)
+
+@Serializable
+data class KnowledgeArea(
+    @SerialName("areaId") val areaId: Int,
+    @SerialName("areaName") val areaName: String
+)
+
+@Serializable
+data class ProfessionListItem(
+    @SerialName("professionId") val professionId: Int,
+    @SerialName("professionName") val professionName: String
 )
 
 @Serializable
@@ -52,7 +64,7 @@ data class Test(
     @SerialName("testLevel") val testLevel: Int,
     @SerialName("testTimeLimit") val testTimeLimit: Int,
     @SerialName("questions") val questions: List<Question>,
-    @SerialName("professions") val professions: List<Int>
+    @SerialName("professions") val professions: List<ProfessionListItem>
 )
 
 @Serializable
@@ -85,7 +97,13 @@ data class Event(
     @SerialName("eventCost") val eventCost: Int,
     @SerialName("eventImageUrl") val eventImageUrl: String,
     @SerialName("eventImageBase64") val eventImageBase64: String,
-    @SerialName("eventSubs") val eventSubs: List<Int>
+    @SerialName("eventSubs") val eventSubs: List<EventSub>
+)
+
+@Serializable
+data class EventSub(
+    @SerialName("subId") val subId: Int,
+    @SerialName("subName") val subName: String
 )
 
 @Serializable
@@ -123,12 +141,12 @@ data class Book(
     @SerialName("bookRefLink") val bookRefLink: String,
     @SerialName("bookCostWithSale") val bookCostWithSale: Int,
     @SerialName("bookCostWithoutSale") val bookCostWithoutSale: Int,
-    @SerialName("professions") val professions: List<Int>
+    @SerialName("professions") val professions: List<ProfessionListItem>
 )
 
 @Serializable
 data class Professions(
-    @SerialName("professions") val professions: List<Profession>,
+    @SerialName("professions") var professions: List<Profession>,
     @SerialName("errorMsg") val errorMsg: String
 )
 
@@ -162,7 +180,7 @@ data class Study(
     @SerialName("studySalePercent") val studySalePercent: Int,
     @SerialName("studyLength") val studyLength: Int,
     @SerialName("studyLengthType") val studyLengthType: Int,
-    @SerialName("professions") val professions: List<Int>,
+    @SerialName("professions") val professions: List<ProfessionListItem>,
     @SerialName("studyOwner") val studyOwner: String,
     @SerialName("studyAdditionalText")  val studyAdditionalText: String
 )

@@ -4,13 +4,20 @@ import ru.foolstack.storage.model.Studies
 import ru.foolstack.storage.model.Study
 import ru.foolstack.study.api.model.StudiesDomain
 import ru.foolstack.study.api.model.StudyDomain
-import ru.foolstack.study.impl.model.StudiesResponse
+import ru.foolstack.study.api.model.StudyProfessionDomain
+import ru.foolstack.storage.model.ProfessionListItem
 import ru.foolstack.study.impl.model.StudyResponse
-import kotlin.io.encoding.Base64
 
 class Mapper {
 
     fun map(response: StudyResponse, studyImageBase64: String):StudyDomain{
+        val professions = ArrayList<StudyProfessionDomain>()
+        response.professions.forEach { profession->
+            professions.add(StudyProfessionDomain(
+                professionId = profession.professionId,
+                professionName = profession.professionName
+            ))
+        }
     return StudyDomain(
                 studyId = response.studyId,
                 studyName = response.studyName,
@@ -21,7 +28,7 @@ class Mapper {
                 studySalePercent = response.studySalePercent,
                 studyLength = response.studyLength,
                 studyLengthType = response.studyLengthType,
-                professions = response.professions,
+                professions = professions,
                 studyOwner = response.studyOwner,
                 studyAdditionalText = response.studyAdditionalText
             )
@@ -30,6 +37,13 @@ class Mapper {
     fun map(response: StudiesDomain): Studies {
         val studiesList = ArrayList<Study>()
         response.studies.forEach { study->
+            val professions = ArrayList<ProfessionListItem>()
+            study.professions.forEach { profession->
+                professions.add(ProfessionListItem(
+                    professionId = profession.professionId,
+                    professionName = profession.professionName
+                ))
+            }
             studiesList.add(
                 Study(
                 studyId = study.studyId,
@@ -43,7 +57,7 @@ class Mapper {
                 studyImageUrl = study.studyImageUrl,
                 studyImageBase64 = study.studyImageBase64,
                 studyRefLink = study.studyRefLink,
-                professions = study.professions
+                professions = professions
             )
             )
         }
@@ -57,6 +71,13 @@ class Mapper {
     fun map(response: Studies): StudiesDomain {
         val studiesList = ArrayList<StudyDomain>()
         response.studies.forEach { study->
+            val professions = ArrayList<StudyProfessionDomain>()
+            study.professions.forEach { profession->
+                professions.add(StudyProfessionDomain(
+                    professionId = profession.professionId,
+                    professionName = profession.professionName
+                ))
+            }
             studiesList.add(
                 StudyDomain(
                     studyId = study.studyId,
@@ -70,7 +91,7 @@ class Mapper {
                     studyImageUrl = study.studyImageUrl,
                     studyImageBase64 = study.studyImageBase64,
                     studyRefLink = study.studyRefLink,
-                    professions = study.professions
+                    professions = professions
                 )
             )
         }

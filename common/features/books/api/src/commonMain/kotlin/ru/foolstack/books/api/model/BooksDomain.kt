@@ -16,5 +16,10 @@ data class BookDomain(
     val bookRefLink: String,
     val bookCostWithSale: Int,
     val bookCostWithoutSale: Int,
-    val professions: List<Int>
+    val professions: List<BookProfessionDomain>
+)
+
+data class BookProfessionDomain(
+    val professionId: Int,
+    val professionName: String
 )

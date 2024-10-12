@@ -1,16 +1,28 @@
 package ru.foolstack.interview.impl.domain.usecase
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import ru.foolstack.interview.api.domain.usecase.GetMaterialsUseCase
 import ru.foolstack.interview.api.model.MaterialsDomain
 import ru.foolstack.interview.impl.data.repository.MaterialsRepository
+import ru.foolstack.utils.model.ResultState
 
 class GetMaterialsUseCaseImpl(private val repository: MaterialsRepository):GetMaterialsUseCase {
+
+    private val _materials = MutableStateFlow<ResultState<MaterialsDomain>>(
+        ResultState.Idle)
+    override val materialsState = _materials.asStateFlow()
     override suspend fun getMaterials(fromLocal: Boolean): MaterialsDomain {
+        _materials.tryEmit(ResultState.Loading)
         return if(fromLocal){
-           repository.getMaterialsFromLocal()
+            val cachedMaterials = repository.getMaterialsFromLocal()
+            _materials.tryEmit(ResultState.Success(cachedMaterials))
+            cachedMaterials
         }
         else{
-             repository.getMaterialsFromServer()
+            val responseMaterials = repository.getMaterialsFromServer()
+            _materials.tryEmit(ResultState.Success(responseMaterials))
+            responseMaterials
         }
     }
 }

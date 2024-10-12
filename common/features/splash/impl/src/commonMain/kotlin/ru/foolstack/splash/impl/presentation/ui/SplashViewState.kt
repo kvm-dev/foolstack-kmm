@@ -4,6 +4,7 @@ import ru.foolstack.books.api.model.BooksDomain
 import ru.foolstack.events.api.model.EventsDomain
 import ru.foolstack.interview.api.model.MaterialsDomain
 import ru.foolstack.news.api.model.NewsDomain
+import ru.foolstack.professions.api.model.ProfessionsDomain
 import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.study.api.model.StudiesDomain
 import ru.foolstack.tests.api.model.TestsDomain
@@ -35,7 +36,8 @@ sealed class SplashViewState{
         val materials: MaterialsDomain?,
         val news: NewsDomain?,
         val studies: StudiesDomain?,
-        val tests: TestsDomain?
+        val tests: TestsDomain?,
+        val professions: ProfessionsDomain?
     ): SplashViewState()
 
     data class NoConnectionError(

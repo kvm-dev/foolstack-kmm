@@ -54,20 +54,8 @@ kotlin {
             implementation(projects.common.features.profile.api)
             //authorization
             implementation(projects.common.features.authorization.api)
-            //registration
-            implementation(projects.common.features.registration.api)
-            //books
-            implementation(projects.common.features.books.api)
             //events
             implementation(projects.common.features.events.api)
-            //interview
-            implementation(projects.common.features.interview.api)
-            //news
-            implementation(projects.common.features.news.api)
-            //study
-            implementation(projects.common.features.study.api)
-            //tests
-            implementation(projects.common.features.tests.api)
         }
         androidMain.dependencies {
             //viewmodel

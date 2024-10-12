@@ -31,11 +31,13 @@ CREATE TABLE Materials(
 
 CREATE TABLE MaterialsKnowledgeAreas(
    materialId INTEGER NOT NULL,
-   knowledgeArea INTEGER NOT NULL
+   knowledgeAreaId INTEGER NOT NULL,
+   knowledgeAreaName TEXT NOT NULL
 );
 CREATE TABLE MaterialsSubProfessions(
    materialId INTEGER NOT NULL,
-   materialSubProfession INTEGER NOT NULL
+   materialSubProfessionId INTEGER NOT NULL,
+   materialSubProfessionName TEXT NOT NULL
 );
 
 CREATE TABLE Tests(
@@ -60,7 +62,8 @@ CREATE TABLE TestQuestionVariant(
 
 CREATE TABLE TestProfessions(
    testId INTEGER NOT NULL,
-   professionId INTEGER NOT NULL
+   professionId INTEGER NOT NULL,
+   professionName TEXT NOT NULL
 );
 
 CREATE TABLE Events(
@@ -76,7 +79,8 @@ CREATE TABLE Events(
 
 CREATE TABLE EventSubs(
    eventId INTEGER NOT NULL,
-   eventSubId INTEGER NOT NULL
+   eventSubId INTEGER NOT NULL,
+   eventSubName TEXT NOT NULL
 );
 
 CREATE TABLE News(
@@ -108,7 +112,8 @@ CREATE TABLE BooksPR(
 
 CREATE TABLE BookProfessions(
    bookId INTEGER NOT NULL,
-   professionId INTEGER NOT NULL
+   professionId INTEGER NOT NULL,
+   professionName TEXT NOT NULL
 );
 
 CREATE TABLE Professions(
@@ -137,7 +142,8 @@ CREATE TABLE Studies(
 
 CREATE TABLE StudyProfessions(
    studyId INTEGER NOT NULL,
-   professionId INTEGER NOT NULL
+   professionId INTEGER NOT NULL,
+   professionName TEXT NOT NULL
 );
 
 CREATE TABLE StudiesPR(
@@ -234,8 +240,8 @@ DELETE FROM Materials;
 
 
 insertMaterialsKnowledgeArea:
-INSERT INTO MaterialsKnowledgeAreas(materialId, knowledgeArea)
-VALUES(?, ?);
+INSERT INTO MaterialsKnowledgeAreas(materialId, knowledgeAreaId, knowledgeAreaName)
+VALUES(?, ?, ?);
 
 selectMaterialsKnowledgeAreas:
 SELECT MaterialsKnowledgeAreas.*
@@ -247,8 +253,8 @@ DELETE FROM MaterialsKnowledgeAreas;
 
 
 insertMaterialSubProfession:
-INSERT INTO MaterialsSubProfessions(materialId, materialSubProfession)
-VALUES(?, ?);
+INSERT INTO MaterialsSubProfessions(materialId, materialSubProfessionId, materialSubProfessionName)
+VALUES(?, ?, ?);
 
 selectMaterialSubProfessions:
 SELECT MaterialsSubProfessions.*
@@ -297,8 +303,8 @@ DELETE FROM TestQuestionVariant;
 
 
 insertTestProfessions:
-INSERT INTO TestProfessions(professionId, testId)
-VALUES(?, ?);
+INSERT INTO TestProfessions(professionId, professionName, testId)
+VALUES(?, ?, ?);
 
 selectTestProfessions:
 SELECT TestProfessions.*
@@ -322,8 +328,8 @@ DELETE FROM Books;
 
 
 insertBookProfessions:
-INSERT INTO BookProfessions(professionId, bookId)
-VALUES(?, ?);
+INSERT INTO BookProfessions(professionId, professionName ,bookId)
+VALUES(?, ?, ?);
 
 selectBookProfessions:
 SELECT BookProfessions.*
@@ -371,8 +377,8 @@ DELETE FROM Events;
 
 
 insertEventSubs:
-INSERT INTO EventSubs(eventId, eventSubId)
-VALUES(?, ?);
+INSERT INTO EventSubs(eventId, eventSubId, eventSubName)
+VALUES(?, ?, ?);
 
 selectEventSubs:
 SELECT EventSubs.*
@@ -418,8 +424,8 @@ DELETE FROM Studies;
 
 
 insertStudyProfessions:
-INSERT INTO StudyProfessions(professionId, studyId)
-VALUES(?, ?);
+INSERT INTO StudyProfessions(professionId, professionName, studyId)
+VALUES(?, ?, ?);
 
 selectStudyProfessions:
 SELECT StudyProfessions.*

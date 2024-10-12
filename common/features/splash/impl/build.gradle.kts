@@ -50,6 +50,8 @@ kotlin {
             implementation(libs.navigation)
             //profile
             implementation(projects.common.features.profile.api)
+            //professions
+            implementation(projects.common.features.professions.api)
             //authorization
             implementation(projects.common.features.authorization.api)
             //registration

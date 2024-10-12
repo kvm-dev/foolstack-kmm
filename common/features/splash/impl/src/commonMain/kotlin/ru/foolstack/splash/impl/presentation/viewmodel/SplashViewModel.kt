@@ -14,7 +14,9 @@ import ru.foolstack.splash.impl.domain.interactor.SplashInteractor
 import ru.foolstack.splash.impl.presentation.ui.SplashBottomText
 import ru.foolstack.splash.impl.presentation.ui.SplashViewState
 import ru.foolstack.model.ProgressState
+import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.utils.TextFieldValidation
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel() {
@@ -57,6 +59,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                         val news = interactor.getNewsFromServer()
                         val events = interactor.getEventsFromServer()
                         val studies = interactor.getStudiesFromServer()
+                        val professions = interactor.getProfessionsFromServer()
                         if(interactor.validateAuthorizedData(
                             profile = profile,
                             materials = materials,
@@ -64,7 +67,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                             books = books,
                             news = news,
                             events = events,
-                            studies = studies
+                            studies = studies,
+                            professions = professions
                         )){
                             val state = interactor.getAuthorizedState(
                                 local = local,
@@ -75,7 +79,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                                 books = books,
                                 news = news,
                                 events = events,
-                                studies = studies)
+                                studies = studies,
+                                professions = professions)
                             _uiState.update { state }
                             updateState(ProgressState.COMPLETED)
                         }
@@ -101,6 +106,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                         val news = interactor.getNewsFromLocal()
                         val events = interactor.getEventsFromLocal()
                         val studies = interactor.getStudiesFromLocal()
+                        val professions = interactor.getProfessionsFromLocal()
                         if (profile.userId != 0 && materials.materials.isNotEmpty() && tests.tests.isNotEmpty()) {
                            val state = interactor.getAuthorizedState(
                                local = local,
@@ -111,7 +117,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                                news = news,
                                books = books,
                                events = events,
-                               studies = studies
+                               studies = studies,
+                               professions = professions
                                )
                             _uiState.update { state }
                             updateState(ProgressState.COMPLETED)
@@ -251,6 +258,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
             val news = interactor.getNewsFromServer()
             val events = interactor.getEventsFromServer()
             val studies = interactor.getStudiesFromServer()
+            val professions = interactor.getProfessionsFromServer()
             if(isUserExist){
                 val result = interactor.authByEmail(email = emailValue, code  = otpValue)
                 if(result.errorMsg.isEmpty()){
@@ -261,7 +269,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                         books = books,
                         news = news,
                         events = events,
-                        studies = studies
+                        studies = studies,
+                        professions = professions
                     )){
                         val state = interactor.getAuthorizedState(
                             local = local,
@@ -272,7 +281,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                             books = books,
                             news = news,
                             events = events,
-                            studies = studies)
+                            studies = studies,
+                            professions = professions)
                         _uiState.update { state }
                     }
                     else{
@@ -299,7 +309,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                                     books = books,
                                     news = news,
                                     events = events,
-                                    studies = studies
+                                    studies = studies,
+                                    professions = professions
                                 )){
                                 val state = interactor.getAuthorizedState(
                                     local = local,
@@ -310,7 +321,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                                     books = books,
                                     news = news,
                                     events = events,
-                                    studies = studies)
+                                    studies = studies,
+                                    professions = professions)
                                 _uiState.update { state }
                             }
                             else
@@ -367,7 +379,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                             tests = tests,
                             news = news,
                             events = events,
-                            studies = studies)){
+                            studies = studies,
+                            professions = professions)){
                         val state = interactor.getAuthorizedState(
                             local = local,
                             isInternetConnected = isInternetConnected,
@@ -377,7 +390,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                             news = news,
                             events = events,
                             studies = studies,
-                            books = books
+                            books = books,
+                            professions = professions
                             )
                         _uiState.update { state }
                     }

@@ -14,5 +14,10 @@ data class EventDomain(
     val eventCost: Int,
     val eventImageUrl: String,
     val eventImageBase64: String,
-    val eventSubs: List<Int>
+    val eventSubs: List<EventSubDomain>
+)
+
+data class EventSubDomain(
+    val subId: Int,
+    val subName: String
 )

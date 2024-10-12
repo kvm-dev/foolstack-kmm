@@ -6,12 +6,14 @@ import ru.foolstack.storage.model.Tests
 import ru.foolstack.storage.model.Variant
 import ru.foolstack.tests.api.model.QuestionDomain
 import ru.foolstack.tests.api.model.TestDomain
+import ru.foolstack.tests.api.model.TestProfessionDomain
 import ru.foolstack.tests.api.model.TestsDomain
 import ru.foolstack.tests.api.model.VariantDomain
 import ru.foolstack.tests.impl.model.QuestionResponse
 import ru.foolstack.tests.impl.model.TestResponse
 import ru.foolstack.tests.impl.model.TestsResponse
 import ru.foolstack.tests.impl.model.VariantResponse
+import ru.foolstack.storage.model.ProfessionListItem
 
 class Mapper {
     fun mapTestsDomainFromResponse(response: TestsResponse): TestsDomain {
@@ -24,6 +26,13 @@ class Mapper {
     private fun mapTestDomainFromResponse(response: List<TestResponse>): List<TestDomain> {
         val testData = ArrayList<TestDomain>()
         response.forEach { test ->
+            val professions = ArrayList<TestProfessionDomain>()
+            test.professions.forEach { profession->
+                professions.add(TestProfessionDomain(
+                    professionId = profession.professionId,
+                    professionName = profession.professionName
+                ))
+            }
             testData.add(
                 TestDomain(
                     testId = test.testId,
@@ -31,7 +40,7 @@ class Mapper {
                     testLevel = test.testLevel,
                     testTimeLimit = test.testTimeLimit,
                     questions = mapQuestionDomainFromResponse(test.questions),
-                    professions = test.professions
+                    professions = professions
                 )
             )
         }
@@ -77,6 +86,13 @@ class Mapper {
     private fun mapTestDomain(response: List<Test>): List<TestDomain> {
         val testData = ArrayList<TestDomain>()
         response.forEach { test ->
+            val professions = ArrayList<TestProfessionDomain>()
+            test.professions.forEach { profession->
+                professions.add(TestProfessionDomain(
+                    professionId = profession.professionId,
+                    professionName = profession.professionName
+                ))
+            }
             testData.add(
                 TestDomain(
                     testId = test.testId,
@@ -84,7 +100,7 @@ class Mapper {
                     testLevel = test.testLevel,
                     testTimeLimit = test.testTimeLimit,
                     questions = mapQuestionDomain(test.questions),
-                    professions = test.professions
+                    professions = professions
                 )
             )
         }
@@ -128,13 +144,20 @@ class Mapper {
     private fun mapTestFromDomain(response: List<TestDomain>): List<Test>{
         val testData = ArrayList<Test>()
         response.forEach { test->
+            val professions = ArrayList<ProfessionListItem>()
+            test.professions.forEach { profession->
+                professions.add(ProfessionListItem(
+                    professionId = profession.professionId,
+                    professionName = profession.professionName
+                ))
+            }
             testData.add(Test(
                 testId =  test.testId,
                 testName = test.testName,
                 testLevel = test.testLevel,
                 testTimeLimit = test.testTimeLimit,
                 questions = mapQuestionFromDomain(test.questions),
-                professions = test.professions
+                professions = professions
                 )
             )
         }

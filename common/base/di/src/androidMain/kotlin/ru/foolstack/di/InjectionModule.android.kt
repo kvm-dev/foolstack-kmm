@@ -12,6 +12,7 @@ import ru.foolstack.main.impl.di.mainModule
 import ru.foolstack.network.di.networkModule
 import ru.foolstack.networkconnection.impl.di.networkConnectionModule
 import ru.foolstack.news.impl.di.newsModule
+import ru.foolstack.professions.impl.di.professionsModule
 import ru.foolstack.profile.impl.di.profileModule
 import ru.foolstack.registration.impl.di.registrationModule
 import ru.foolstack.storage.di.storageModule
@@ -27,6 +28,7 @@ actual val injectionModule: Module
             splashModule,
             languageModule,
             networkConnectionModule,
+            professionsModule,
             profileModule,
             storageModule,
             networkModule,

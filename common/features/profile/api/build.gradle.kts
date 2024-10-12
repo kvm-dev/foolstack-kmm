@@ -29,6 +29,10 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
+            //base utils
+            implementation(projects.common.base.utils)
+            //coroutines
+            implementation(libs.kotlinx.coroutines.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

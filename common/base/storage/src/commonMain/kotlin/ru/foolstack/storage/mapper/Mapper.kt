@@ -1,13 +1,15 @@
 package ru.foolstack.storage.mapper
 
 import ru.foolstack.storage.model.Book
-import ru.foolstack.storage.model.Books
 import ru.foolstack.storage.model.Event
+import ru.foolstack.storage.model.EventSub
 import ru.foolstack.storage.model.Events
+import ru.foolstack.storage.model.KnowledgeArea
 import ru.foolstack.storage.model.New
 import ru.foolstack.storage.model.News
 import ru.foolstack.storage.model.Professions
 import ru.foolstack.storage.model.Profession
+import ru.foolstack.storage.model.ProfessionListItem
 import ru.foolstack.storage.model.Study
 import ru.foolstack.storage.model.UserAchievement
 import ru.foolstack.storage.model.Variant
@@ -23,6 +25,7 @@ import rufoolstackstorageimplcache.Events as EventsLocal
 import rufoolstackstorageimplcache.News as NewsLocal
 import rufoolstackstorageimplcache.Books as BooksLocal
 import rufoolstackstorageimplcache.Studies as StudyLocal
+import rufoolstackstorageimplcache.EventSubs as EventSubsLocal
 
 class Mapper {
     fun mapAchievement(response: List<UserAchievments>):List<UserAchievement>{
@@ -49,26 +52,35 @@ class Mapper {
         return userPurchasedProfessions
     }
 
-    fun mapKnowledgeAreas(response: List<MaterialsKnowledgeAreas>):List<Int>{
-        val materialKnowledgeAreas = ArrayList<Int>()
+    fun mapKnowledgeAreas(response: List<MaterialsKnowledgeAreas>):List<KnowledgeArea>{
+        val materialKnowledgeAreas = ArrayList<KnowledgeArea>()
         response.forEach {knowledgeArea->
-            materialKnowledgeAreas.add(knowledgeArea.knowledgeArea.toInt())
+            materialKnowledgeAreas.add(KnowledgeArea(
+                areaId = knowledgeArea.knowledgeAreaId.toInt(),
+                areaName = knowledgeArea.knowledgeAreaName
+            ))
         }
         return materialKnowledgeAreas
     }
 
-    fun mapMaterialSubProfessions(response: List<MaterialsSubProfessions>):List<Int>{
-        val materialSubProfessions = ArrayList<Int>()
+    fun mapMaterialSubProfessions(response: List<MaterialsSubProfessions>):List<ProfessionListItem>{
+        val materialSubProfessions = ArrayList<ProfessionListItem>()
         response.forEach {subProfession->
-            materialSubProfessions.add(subProfession.materialSubProfession.toInt())
+            materialSubProfessions.add(ProfessionListItem(
+                professionId = subProfession.materialSubProfessionId.toInt(),
+                professionName = subProfession.materialSubProfessionName
+                ))
         }
         return materialSubProfessions
     }
 
-    fun mapTestProfessions(response: List<TestProfessions>):List<Int>{
-        val testProfessions = ArrayList<Int>()
+    fun mapTestProfessions(response: List<TestProfessions>):List<ProfessionListItem>{
+        val testProfessions = ArrayList<ProfessionListItem>()
         response.forEach { profession->
-            testProfessions.add( profession.professionId.toInt())
+            testProfessions.add(ProfessionListItem(
+                professionId = profession.professionId.toInt(),
+                professionName = profession.professionName
+            ))
         }
         return testProfessions
     }
@@ -113,6 +125,16 @@ class Mapper {
 
         profList.forEach {lvl0->
             lvl0.subProfessions.forEach {lvl1->
+                val subProfs = ArrayList<Profession>()
+                professions.filter { it.professionParent == lvl1.professionId.toLong() }.forEach {
+                    subProfs.add(mapProfession(it))
+                }
+                lvl1.subProfessions = subProfs
+            }
+        }
+
+        profList.forEach {lvl0->
+            lvl0.subProfessions.forEach {lvl1->
                 lvl1.subProfessions.forEach { lvl2->
                     val subProfs = ArrayList<Profession>()
                     professions.filter { it.professionParent == lvl2.professionId.toLong() }.forEach {
@@ -123,48 +145,30 @@ class Mapper {
             }
         }
 
-        profList.forEach { lvl0->
-            lvl0.subProfessions.forEach { lvl1->
+        profList.forEach {lvl0->
+            lvl0.subProfessions.forEach {lvl1->
                 lvl1.subProfessions.forEach { lvl2->
-                    lvl2.subProfessions.forEach {lvl3->
-                        val subProfessions = ArrayList<Profession>()
+                    lvl2.subProfessions.forEach { lvl3->
+                        val subProfs = ArrayList<Profession>()
                         professions.filter { it.professionParent == lvl3.professionId.toLong() }.forEach {
-                            subProfessions.add(mapProfession(it))
+                            subProfs.add(mapProfession(it))
                         }
-                        lvl3.subProfessions = subProfessions
+                        lvl3.subProfessions = subProfs
                     }
                 }
             }
         }
 
-        profList.forEach { lvl0->
-            lvl0.subProfessions.forEach { lvl1->
+        profList.forEach {lvl0->
+            lvl0.subProfessions.forEach {lvl1->
                 lvl1.subProfessions.forEach { lvl2->
-                    lvl2.subProfessions.forEach {lvl3->
+                    lvl2.subProfessions.forEach { lvl3->
                         lvl3.subProfessions.forEach { lvl4->
-                            val subProfessions = ArrayList<Profession>()
+                            val subProfs = ArrayList<Profession>()
                             professions.filter { it.professionParent == lvl4.professionId.toLong() }.forEach {
-                                subProfessions.add(mapProfession(it))
+                                subProfs.add(mapProfession(it))
                             }
-                            lvl4.subProfessions = subProfessions
-                        }
-                    }
-                }
-            }
-        }
-
-        profList.forEach { lvl0->
-            lvl0.subProfessions.forEach { lvl1->
-                lvl1.subProfessions.forEach { lvl2->
-                    lvl2.subProfessions.forEach {lvl3->
-                        lvl3.subProfessions.forEach { lvl4->
-                            lvl4.subProfessions.forEach { lvl5->
-                                val subProfessions = ArrayList<Profession>()
-                                professions.filter { it.professionParent == lvl5.professionId.toLong() }.forEach {
-                                    subProfessions.add(mapProfession(it))
-                                }
-                                lvl5.subProfessions = subProfessions
-                            }
+                            lvl4.subProfessions = subProfs
                         }
                     }
                 }
@@ -185,7 +189,16 @@ class Mapper {
             events = eventsList)
     }
 
-    private fun mapEvent(event:EventsLocal, eventSubs: List<Int>): Event{
+    private fun mapEvent(event:EventsLocal, eventSubs: List<EventSubsLocal>): Event{
+        val subList = ArrayList<EventSub>()
+        eventSubs.forEach {
+            subList.add(
+                EventSub(
+                subId = it.eventSubId.toInt(),
+                subName = it.eventSubName
+            )
+            )
+        }
         return Event(
             eventId = event.eventId.toInt(),
             eventName = event.eventName,
@@ -195,14 +208,18 @@ class Mapper {
             eventCost = event.eventCost.toInt(),
             eventImageUrl = event.eventImageUrl,
             eventImageBase64 = event.eventImageBase64,
-            eventSubs = eventSubs
+            eventSubs = subList
         )
     }
 
-    private fun mapEventSubs(eventSubs: List<EventSubs>): List<Int>{
-        val list = ArrayList<Int>()
+    private fun mapEventSubs(eventSubs: List<EventSubs>): List<EventSubsLocal>{
+        val list = ArrayList<EventSubsLocal>()
         eventSubs.forEach { eventSub->
-            list.add(eventSub.eventSubId.toInt())
+            list.add(EventSubsLocal(
+                eventId = eventSub.eventId,
+                eventSubId = eventSub.eventSubId,
+                eventSubName = eventSub.eventSubName
+            ))
         }
         return list
     }
@@ -231,7 +248,7 @@ class Mapper {
     }
 
 
-     fun mapBook(book: BooksLocal, professions:List<Int>): Book{
+     fun mapBook(book: BooksLocal, professions:List<ProfessionListItem>): Book{
         return Book(
             bookId = book.bookId.toInt(),
             bookName = book.bookName,
@@ -245,7 +262,7 @@ class Mapper {
         )
     }
 
-    fun mapStudy(study: StudyLocal, professions: List<Int>): Study{
+    fun mapStudy(study: StudyLocal, professions: List<ProfessionListItem>): Study{
         return Study(
             studyId = study.studyId.toInt(),
             studyName = study.studyName,

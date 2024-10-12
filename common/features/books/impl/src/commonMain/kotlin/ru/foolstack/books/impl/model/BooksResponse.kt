@@ -20,5 +20,10 @@ data class BookResponse(
     @SerialName("bookRefLink") val bookRefLink: String = "",
     @SerialName("bookCostWithSale") val bookCostWithSale: Int = 0,
     @SerialName("bookCostWithoutSale") val bookCostWithoutSale: Int = 0,
-    @SerialName("professions") val professions: List<Int> = listOf()
+    @SerialName("professions") val professions: List<BookProfessionResponse> = listOf()
+)
+@Serializable
+data class BookProfessionResponse(
+    @SerialName("professionId") val professionId: Int = 0,
+    @SerialName("professionName") val professionName: String = ""
 )

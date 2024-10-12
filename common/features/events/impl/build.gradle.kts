@@ -31,6 +31,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             //api
+            //base utils
+            implementation(projects.common.base.utils)
             api(projects.common.features.events.api)
             //coroutines
             implementation(libs.kotlinx.coroutines.core)

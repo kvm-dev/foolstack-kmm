@@ -4,9 +4,9 @@ import ru.foolstack.events.api.model.EventsDomain
 import ru.foolstack.ui.model.EventItem
 
 class Mapper {
-    fun map(eventsDomain: EventsDomain): List<EventItem>{
+    fun map(eventsDomain: EventsDomain?): List<EventItem>{
         val eventList = ArrayList<EventItem>()
-        eventsDomain.events.forEach {event->
+        eventsDomain?.events?.forEach {event->
             eventList.add(EventItem(
                 eventId = event.eventId,
                 eventName = event.eventName,

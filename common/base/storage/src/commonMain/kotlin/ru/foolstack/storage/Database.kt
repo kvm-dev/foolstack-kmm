@@ -8,6 +8,7 @@ import ru.foolstack.storage.model.Events
 import ru.foolstack.storage.model.Material
 import ru.foolstack.storage.model.Materials
 import ru.foolstack.storage.model.News
+import ru.foolstack.storage.model.Profession
 import ru.foolstack.storage.model.Professions
 import ru.foolstack.storage.model.Profile
 import ru.foolstack.storage.model.Question
@@ -16,6 +17,7 @@ import ru.foolstack.storage.model.Study
 import ru.foolstack.storage.model.Test
 import ru.foolstack.storage.model.Tests
 import rufoolstackstorageimplcache.BookProfessions
+import ru.foolstack.storage.model.ProfessionListItem
 
 internal class Database(databaseDriverFactory: DatabaseDriverFactory, private val mapper: Mapper) {
     private val database = AppDatabase(databaseDriverFactory.createDriver())
@@ -106,13 +108,15 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
             material.knowledgeAreas.forEach {knowledgeArea->
                 dbQuery.insertMaterialsKnowledgeArea(
                     materialId = material.materialId.toLong(),
-                    knowledgeArea = knowledgeArea.toLong()
+                    knowledgeAreaId = knowledgeArea.areaId.toLong(),
+                    knowledgeAreaName = knowledgeArea.areaName
                 )
             }
             material.subProfessions.forEach { subProfession->
                 dbQuery.insertMaterialSubProfession(
                     materialId = material.materialId.toLong(),
-                    materialSubProfession = subProfession.toLong()
+                    materialSubProfessionId = subProfession.professionId.toLong(),
+                    materialSubProfessionName = subProfession.professionName
                 )
             }
         }
@@ -166,7 +170,8 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
             )
             test.professions.forEach { profession->
                 dbQuery.insertTestProfessions(
-                    professionId = profession.toLong(),
+                    professionId = profession.professionId.toLong(),
+                    professionName = profession.professionName,
                     testId = test.testId.toLong()
                 )
             }
@@ -278,7 +283,8 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
             )
             event.eventSubs.forEach {eventSub->
                 dbQuery.insertEventSubs(eventId = event.eventId.toLong(),
-                    eventSubId = eventSub.toLong())
+                    eventSubId = eventSub.subId.toLong(),
+                    eventSubName = eventSub.subName)
             }
         }
     }
@@ -307,9 +313,12 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
         val booksLocal = dbQuery.selectBooks().executeAsList()
         val booksList = ArrayList<Book>()
         booksLocal.forEach { book->
-            val professionsList = ArrayList<Int>()
+            val professionsList = ArrayList<ProfessionListItem>()
             dbQuery.selectBookProfessions().executeAsList().filter { it.bookId == book.bookId }.forEach {
-                professionsList.add(it.professionId.toInt())
+                professionsList.add(ProfessionListItem(
+                    professionId = it.professionId.toInt(),
+                    professionName = it.professionName
+                ))
             }
            booksList.add(mapper.mapBook(
                book = book, professions = professionsList))
@@ -343,10 +352,11 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                 bookCostWithoutSale = book.bookCostWithoutSale.toLong(),
                 bookCostWithSale = book.bookCostWithSale.toLong()
             )
-            booksProfessions.forEach { professionId->
+            booksProfessions.forEach { profession->
                 dbQuery.insertBookProfessions(
                     bookId = book.bookId.toLong(),
-                    professionId = professionId.toLong()
+                    professionId = profession.professionId.toLong(),
+                    professionName = profession.professionName
                 )
             }
         }
@@ -357,9 +367,12 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
         val studiesLocal = dbQuery.selectStudies().executeAsList()
         val studiesList = ArrayList<Study>()
         studiesLocal.forEach { study->
-            val professionsList = ArrayList<Int>()
+            val professionsList = ArrayList<ProfessionListItem>()
             dbQuery.selectStudyProfessions().executeAsList().filter { it.studyId == study.studyId }.forEach {
-                professionsList.add(it.professionId.toInt())
+                professionsList.add(ProfessionListItem(
+                    professionId = it.professionId.toInt(),
+                    professionName = it.professionName
+                ))
             }
             studiesList.add(mapper.mapStudy(
                 study = study, professions = professionsList))
@@ -394,9 +407,10 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                 studyOwner = study.studyOwner,
                 studyAdditionalText = study.studyAdditionalText
             )
-            studiesProfessions.forEach { professionId->
+            studiesProfessions.forEach { profession->
                 dbQuery.insertStudyProfessions(
-                    professionId = professionId.toLong(),
+                    professionId = profession.professionId.toLong(),
+                    professionName = profession.professionName,
                     studyId = study.studyId.toLong()
                 )
             }

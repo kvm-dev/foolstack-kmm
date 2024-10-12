@@ -38,6 +38,7 @@ kotlin {
             implementation(projects.common.features.registration.impl)
             implementation(projects.common.features.language.impl)
             implementation(projects.common.features.networkconnection.impl)
+            implementation(projects.common.features.professions.impl)
             implementation(projects.common.features.profile.impl)
             implementation(projects.common.features.books.impl)
             implementation(projects.common.features.events.impl)

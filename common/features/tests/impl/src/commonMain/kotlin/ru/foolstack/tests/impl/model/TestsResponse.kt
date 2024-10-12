@@ -16,7 +16,7 @@ data class TestResponse(
     @SerialName("testLevel") val testLevel: Int = 0,
     @SerialName("testTimeLimit") val testTimeLimit: Int = 0,
     @SerialName("questions") val questions: List<QuestionResponse> = listOf(),
-    @SerialName("professions") val professions: List<Int> = listOf()
+    @SerialName("professions") val professions: List<TestProfessionResponse> = listOf()
 )
 
 @Serializable
@@ -31,4 +31,9 @@ data class VariantResponse(
     @SerialName("variantId") val variantId: Int = 0,
     @SerialName("variantText") val variantText: String = "",
     @SerialName("isRight") val isRight: Boolean = false
+)
+@Serializable
+data class TestProfessionResponse(
+    @SerialName("professionId") val professionId: Int = 0,
+    @SerialName("professionName") val professionName: String = ""
 )

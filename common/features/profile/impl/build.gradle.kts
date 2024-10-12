@@ -33,6 +33,8 @@ kotlin {
         commonMain.dependencies {
             //api
             api(projects.common.features.profile.api)
+            //utils
+            implementation(projects.common.base.utils)
             //coroutines
             implementation(libs.kotlinx.coroutines.core)
             //network

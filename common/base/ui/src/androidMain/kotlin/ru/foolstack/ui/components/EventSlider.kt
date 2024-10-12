@@ -33,7 +33,7 @@ import ru.foolstack.ui.utils.decodeBase64ToBitmap
 
 
 @Composable
-fun EventSlider(lang: Lang, images: List<EventItem>) {
+fun EventSlider(lang: Lang, events: List<EventItem>) {
     var currentImageIndex by remember { mutableIntStateOf(0) }
     var isAnimating by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -49,7 +49,7 @@ fun EventSlider(lang: Lang, images: List<EventItem>) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                itemsIndexed(images) { index, event ->
+                itemsIndexed(events) { index, event ->
                     Card(
                         modifier = Modifier
                             .width(280.dp)
@@ -78,7 +78,7 @@ fun EventSlider(lang: Lang, images: List<EventItem>) {
                                 contentDescription = event.eventName
                             )
                         }
-                        Text(text = "Bla bla")
+                        Text(text = event.eventName)
 //                        NetworkImage(
 //                            contentDescription = "",
 //                            url = image as String,
@@ -98,7 +98,7 @@ fun EventSlider(lang: Lang, images: List<EventItem>) {
         while (true) {
             delay(5000L)
             if (!isAnimating) {
-                val nextIndex = (currentImageIndex + 1) % images.size
+                val nextIndex = (currentImageIndex + 1) % events.size
                 currentImageIndex = nextIndex
             }
         }

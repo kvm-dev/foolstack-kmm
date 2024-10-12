@@ -20,7 +20,13 @@ data class StudyResponse(
     @SerialName("studySalePercent") val studySalePercent: Int = 0,
     @SerialName("studyLength") val studyLength: Int = 0,
     @SerialName("studyLengthType") val studyLengthType: Int = 0,
-    @SerialName("professions") val professions: List<Int> = listOf(),
+    @SerialName("professions") val professions: List<StudyProfessionResponse> = listOf(),
     @SerialName("studyOwner") val studyOwner: String = "",
     @SerialName("studyAdditionalText") val studyAdditionalText: String = ""
+)
+@Serializable
+
+data class StudyProfessionResponse(
+    @SerialName("professionId") val professionId: Int = 0,
+    @SerialName("professionName") val professionName: String = ""
 )

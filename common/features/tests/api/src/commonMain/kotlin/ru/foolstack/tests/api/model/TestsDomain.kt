@@ -11,7 +11,7 @@ data class TestDomain(
     val testLevel: Int,
     val testTimeLimit: Int,
     val questions: List<QuestionDomain>,
-    val professions: List<Int>
+    val professions: List<TestProfessionDomain>
 )
 
 data class QuestionDomain(
@@ -24,4 +24,9 @@ data class VariantDomain(
     val variantId: Int,
     val variantText: String,
     val isRight: Boolean
+)
+
+data class TestProfessionDomain(
+    val professionId: Int,
+    val professionName: String
 )

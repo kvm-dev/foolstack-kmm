@@ -5,6 +5,8 @@ import android.util.Base64
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 
+
+
 fun String.decodeBase64ToBitmap(): ImageBitmap? {
     return try {
         val imageBytes = Base64.decode(this, Base64.DEFAULT)

@@ -16,7 +16,12 @@ data class StudyDomain(
     val studySalePercent: Int,
     val studyLength: Int,
     val studyLengthType: Int,
-    val professions: List<Int>,
+    val professions: List<StudyProfessionDomain>,
     val studyOwner: String,
     val studyAdditionalText: String
+)
+
+data class StudyProfessionDomain(
+    val professionId: Int,
+    val professionName: String
 )

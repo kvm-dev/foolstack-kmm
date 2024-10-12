@@ -19,6 +19,8 @@ import ru.foolstack.interview.api.model.MaterialsDomain
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
 import ru.foolstack.news.api.domain.usecase.GetNewsUseCase
 import ru.foolstack.news.api.model.NewsDomain
+import ru.foolstack.professions.api.domain.usecase.GetProfessionsUseCase
+import ru.foolstack.professions.api.model.ProfessionsDomain
 import ru.foolstack.profile.api.domain.usecase.GetProfileUseCase
 import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.registration.api.domain.usecase.RegistrationByEmailUseCase
@@ -31,6 +33,7 @@ class SplashInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,
     private val getNetworkStateUseCase: GetNetworkStateUseCase,
     private val getProfileUseCase: GetProfileUseCase,
+    private val getProfessionsUseCase: GetProfessionsUseCase,
     private val getTokenFromLocalUseCase: GetTokenFromLocalUseCase,
     private val getBooksUseCase: GetBooksUseCase,
     private val getEventsUseCase: GetEventsUseCase,
@@ -44,8 +47,6 @@ class SplashInteractor(
     private val registrationByEmailUseCase: RegistrationByEmailUseCase,
     private val confirmAuthAndRegUseCase: ConfirmAuthAndRegUseCase
 ) {
-
-    //methods
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
     fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
@@ -70,6 +71,9 @@ class SplashInteractor(
 
     suspend fun getProfileFromServer() = getProfileUseCase.getProfile()
     suspend fun getProfileFromLocal() = getProfileUseCase.getProfile(fromLocal = true)
+
+    suspend fun getProfessionsFromServer() = getProfessionsUseCase.getProfessions()
+    suspend fun getProfessionsFromLocal() = getProfessionsUseCase.getProfessions(fromLocal = true)
 
     suspend fun isTokenExist() = getTokenFromLocalUseCase.getToken().isNotEmpty()
 
@@ -244,6 +248,7 @@ class SplashInteractor(
     }
 
     suspend fun validateAuthorizedData(profile: ProfileDomain,
+                                       professions: ProfessionsDomain,
                                        books: BooksDomain,
                                        materials: MaterialsDomain,
                                        news: NewsDomain,
@@ -262,7 +267,8 @@ class SplashInteractor(
                 && news.errorMsg.isEmpty()
                 && events.errorMsg.isEmpty()
                 && studies.errorMsg.isEmpty()
-                && tests.errorMsg.isEmpty())
+                && tests.errorMsg.isEmpty()
+                && professions.errorMsg.isEmpty())
     }
 
     fun getUnauthorizedState(): SplashViewState.UnAuthorized{
@@ -333,12 +339,13 @@ class SplashInteractor(
         local: LangResultDomain,
         isInternetConnected: Boolean,
         profile: ProfileDomain,
-        books: BooksDomain? = null,
+        books: BooksDomain,
         materials: MaterialsDomain,
-        news: NewsDomain? = null,
-        events: EventsDomain? = null,
-        studies: StudiesDomain? = null,
-        tests: TestsDomain): SplashViewState.Authorized{
+        news: NewsDomain?,
+        events: EventsDomain,
+        studies: StudiesDomain,
+        tests: TestsDomain,
+        professions: ProfessionsDomain): SplashViewState.Authorized{
         return SplashViewState.Authorized(
             lang = local.lang,
             isHaveToken = true,
@@ -349,7 +356,8 @@ class SplashInteractor(
             materials = materials,
             news = news,
             studies = studies,
-            tests = tests
+            tests = tests,
+            professions = professions
         )
     }
 

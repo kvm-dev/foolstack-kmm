@@ -7,6 +7,6 @@ import ru.foolstack.network.client
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-suspend fun getBase64Bitmap(url: String) = client.get(url).readBytes().toBase64().encodeBase64()
+suspend fun getBase64Bitmap(url: String) = client.get(url).readBytes().toBase64()
 @OptIn(ExperimentalEncodingApi::class)
 private fun ByteArray.toBase64(): String = Base64.encode(this)
