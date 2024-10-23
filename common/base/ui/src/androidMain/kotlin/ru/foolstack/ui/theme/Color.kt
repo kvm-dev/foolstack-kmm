@@ -27,14 +27,16 @@ val LoadingIndicatorColorLight = Color(0xB0000000)
 val NavigationDisabledLight = Color(0xFFCDD2DF)
 val NavigationSelectedLight = Color(0xFF145E5E)
 val DividerLightColor = Color(0xFFF1F1F5)
-
+val ServiceBackgroundLightColor = Color(0xFF0EC1A9)
+val ServiceTextLightColor = Color(0xFF696974)
+val LoadingIndicatorLightBackground = Color(0xA10EC1A9)
 
 val Purple40 = Color(0xFF4CAF50)
 val PurpleGrey40 = Color(0xFF009688)
 val Pink40 = Color(0xFFFFEB3B)
 val MainGreenDark= Color(0xFF009688)
 val NavigationBackgroundDark = Color(0xFF145E5E)
-val MainBackgroundDark = Color(0xFF9C9999)
+val MainBackgroundDark = Color(0xFFFFFFFF)
 val MainOrangeDark = Color(0xFFFC5B31)
 val DisabledColorDark = Color(0xFF707070)
 val BottomScreenDark = Color(0xFFFFFFFF)
@@ -52,7 +54,11 @@ val DisabledButtonTextColorDark = Color(0x52000000)
 val LoadingIndicatorColorDark = Color(0xB0000000)
 val NavigationDisabledDark = Color(0xFFCDD2DF)
 val NavigationSelectedDark = Color(0xFF145E5E)
-val DividerDarkColor = Color(0xFFF1F1F5)
+val DividerDarkColor = Color(0xFF9E9EA2)
+val ServiceBackgroundDarkColor = Color(0xFF0EC1A9)
+val ServiceTextDarkColor = Color(0xFF696974)
+val LoadingIndicatorDarkBackground = Color(0xA10EC1A9)
+
 
 
 

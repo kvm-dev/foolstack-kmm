@@ -37,10 +37,13 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.encoding)
+            //datetime
+            implementation(libs.kotlinx.datetime)
         }
         androidMain.dependencies {
             //compose
             implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
             implementation(project.dependencies.platform(libs.compose.bom))
             implementation(libs.androidx.activity.compose)
             //material-design

@@ -69,6 +69,8 @@ kotlin {
             //ui
             implementation(projects.common.base.ui)
             implementation(libs.material3.android)
+            implementation(libs.compose.material3)
+            implementation(libs.androidx.material3.android)
             //compose
             implementation(libs.compose.foundation)
             implementation(project.dependencies.platform(libs.compose.bom))

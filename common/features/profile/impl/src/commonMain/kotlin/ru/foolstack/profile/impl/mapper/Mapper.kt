@@ -13,7 +13,7 @@ class Mapper {
         userAchievements.forEach {userAchievement ->
             list.add(
                 AchievementDomain(
-                achievementId = userAchievement.userId,
+                achievementId = userAchievement.achievementId,
                 achievementName = userAchievement.achievementName,
                 achievementDescription = userAchievement.achievementDescription,
                 achievementLevel = userAchievement.achievementLevel

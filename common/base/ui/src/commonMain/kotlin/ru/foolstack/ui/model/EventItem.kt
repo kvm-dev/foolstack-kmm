@@ -6,5 +6,6 @@ data class EventItem(
     val eventStartDate: String,
     val eventImageBase64: String,
     val eventTags: List<String>,
-    val eventDescription: String
+    val eventDescription: String,
+    val eventCost: Int
 )

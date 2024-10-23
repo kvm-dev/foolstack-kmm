@@ -28,6 +28,7 @@ profileInstallerVersion = "1.3.1"
 android-security = "1.1.0-alpha03"
 androidx-material3Android = "1.3.0"
 coilComposeCore = "3.0.0-alpha06"
+material3Jvmstubs = "1.4.0-alpha02"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -45,6 +46,7 @@ compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = 
 navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation"}
 #material-design
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
 #tests
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -87,6 +89,7 @@ androidx-material3-android = { group = "androidx.compose.material3", name = "mat
 #profile installer
 androidx-profileinstaller =  { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileInstallerVersion"}
 material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "androidx-material3Android" }
+androidx-material3-jvmstubs = { group = "androidx.compose.material3", name = "material3-jvmstubs", version.ref = "material3Jvmstubs" }
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }

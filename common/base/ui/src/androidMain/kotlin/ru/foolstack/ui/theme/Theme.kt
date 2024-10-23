@@ -18,7 +18,7 @@ import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = MainGreenLight,
-    secondary = MainGreenDark,
+    secondary = MainOrangeDark,
     background = MainBackgroundDark
 )
 
@@ -28,7 +28,7 @@ private val LightColorScheme = lightColorScheme(
     background = MainBackgroundLight,
 )
 //extraColor
-var MainGreenLightColorSchemeColor by mutableStateOf(MainGreenLight)
+var MainGreenColorSchemeColor by mutableStateOf(MainGreenLight)
 var MainOrangeColorSchemeColor by mutableStateOf(MainOrangeLight)
 var DisabledColorSchemeColor by mutableStateOf(DisabledColorLight)
 var SplashGradient0ColorSchemeColor by mutableStateOf(GreenColor1)
@@ -51,14 +51,17 @@ var NavigationDisabledSchemeColor by mutableStateOf(NavigationDisabledLight)
 var NavigationSelectedSchemeColor by mutableStateOf(NavigationSelectedLight)
 var MainBackgroundSchemeColor by mutableStateOf(MainBackgroundLight)
 var DividerSchemeColor by mutableStateOf(DividerLightColor)
+var ServiceBackgroundSchemeColor by mutableStateOf(ServiceBackgroundLightColor)
+var ServiceTextSchemeColor by mutableStateOf(ServiceTextLightColor)
+var LoadingIndicatorBackgroundSchemeColor by mutableStateOf(LoadingIndicatorLightBackground)
 
 
 
 @Suppress("unused")
 var ColorScheme.MainGreen: Color
-    get() = MainGreenLightColorSchemeColor
+    get() = MainGreenColorSchemeColor
     set(value) {
-        MainGreenLightColorSchemeColor = value
+        MainGreenColorSchemeColor = value
     }
 var ColorScheme.MainOrange: Color
     get() = MainOrangeColorSchemeColor
@@ -188,8 +191,23 @@ var ColorScheme.Divider: Color
         DividerSchemeColor = value
     }
 
+var ColorScheme.ServiceBackground: Color
+    get() = ServiceBackgroundSchemeColor
+    set(value) {
+        ServiceBackgroundSchemeColor = value
+    }
 
+var ColorScheme.ServiceText: Color
+    get() = ServiceTextSchemeColor
+    set(value) {
+        ServiceTextSchemeColor = value
+    }
 
+var ColorScheme.LoadingIndicatorBackground: Color
+    get() = LoadingIndicatorBackgroundSchemeColor
+    set(value) {
+        LoadingIndicatorBackgroundSchemeColor = value
+    }
 
 
 @Composable
@@ -234,7 +252,7 @@ fun FoolStackTheme(
     colorScheme.MainOrange = if (darkTheme) {
         MainOrangeDark
     } else {
-        MainOrangeDark
+        MainOrangeLight
     }
 
     colorScheme.DisabledColor = if (darkTheme) {
@@ -360,6 +378,24 @@ fun FoolStackTheme(
         DividerDarkColor
     } else {
         DividerLightColor
+    }
+
+    colorScheme.ServiceBackground = if (darkTheme) {
+        ServiceBackgroundDarkColor
+    } else {
+        ServiceBackgroundLightColor
+    }
+
+    colorScheme.ServiceText = if (darkTheme) {
+        ServiceTextDarkColor
+    } else {
+        ServiceTextLightColor
+    }
+
+    colorScheme.LoadingIndicatorBackground = if (darkTheme) {
+        LoadingIndicatorDarkBackground
+    } else {
+        LoadingIndicatorLightBackground
     }
 
 }

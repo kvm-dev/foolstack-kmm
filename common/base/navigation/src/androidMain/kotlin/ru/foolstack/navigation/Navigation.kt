@@ -1,8 +1,10 @@
 package ru.foolstack.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +23,7 @@ import ru.foolstack.main.impl.presentation.ui.MainScreen
 import ru.foolstack.ui.components.BottomAppBar
 import ru.foolstack.ui.components.BottomIcons
 import ru.foolstack.ui.theme.FoolStackTheme
+import ru.foolstack.ui.theme.MainBackground
 
 
 @Composable
@@ -55,6 +58,7 @@ fun StartApplication(
                     startDestination = NavigationScreens.SplashScreenNavigation.name,
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.MainBackground)
                 ) {
                     composable(route = NavigationScreens.SplashScreenNavigation.name) {
                         SplashScreen(

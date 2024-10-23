@@ -33,7 +33,7 @@ import ru.foolstack.ui.theme.NavigationSelected
 fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<Boolean>, lang: String) {
     if(isShow.value){
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.MainBackground)
         ) {
             HorizontalDivider(modifier = Modifier.padding(horizontal = 20.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.Divider)
             BottomAppBar(modifier = Modifier
