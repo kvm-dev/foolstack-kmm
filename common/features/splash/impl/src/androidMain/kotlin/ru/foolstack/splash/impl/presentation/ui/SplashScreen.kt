@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import org.koin.androidx.compose.koinViewModel
-import ru.foolstack.events.api.model.EventsDomain
 import ru.foolstack.splash.impl.presentation.viewmodel.SplashViewModel
 import ru.foolstack.model.ProgressState
 import ru.foolstack.ui.components.BigAppTitle

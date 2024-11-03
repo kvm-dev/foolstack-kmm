@@ -54,6 +54,9 @@ var DividerSchemeColor by mutableStateOf(DividerLightColor)
 var ServiceBackgroundSchemeColor by mutableStateOf(ServiceBackgroundLightColor)
 var ServiceTextSchemeColor by mutableStateOf(ServiceTextLightColor)
 var LoadingIndicatorBackgroundSchemeColor by mutableStateOf(LoadingIndicatorLightBackground)
+var UnselectedChipBackgroundSchemeColor by mutableStateOf(MainBackgroundLight)
+var UnselectedChipStrokeSchemeColor by mutableStateOf(ServiceBorderLightColor)
+var SelectedChipBackgroundSchemeColor by mutableStateOf(MainYellowColorLight)
 
 
 
@@ -208,6 +211,25 @@ var ColorScheme.LoadingIndicatorBackground: Color
     set(value) {
         LoadingIndicatorBackgroundSchemeColor = value
     }
+
+var ColorScheme.UnselectedChipBackground: Color
+    get() = UnselectedChipBackgroundSchemeColor
+    set(value) {
+        UnselectedChipBackgroundSchemeColor = value
+    }
+
+var ColorScheme.UnselectedChipStroke: Color
+    get() = UnselectedChipStrokeSchemeColor
+    set(value) {
+        UnselectedChipStrokeSchemeColor = value
+    }
+
+var ColorScheme.SelectedChipBackground: Color
+    get() = SelectedChipBackgroundSchemeColor
+    set(value) {
+        SelectedChipBackgroundSchemeColor = value
+    }
+
 
 
 @Composable
@@ -396,6 +418,24 @@ fun FoolStackTheme(
         LoadingIndicatorDarkBackground
     } else {
         LoadingIndicatorLightBackground
+    }
+
+    colorScheme.UnselectedChipBackground = if (darkTheme) {
+        MainBackgroundDark
+    } else {
+        MainBackgroundLight
+    }
+
+    colorScheme.UnselectedChipStroke = if (darkTheme) {
+        ServiceBorderDarkColor
+    } else {
+        ServiceBorderLightColor
+    }
+
+    colorScheme.SelectedChipBackground = if (darkTheme) {
+        MainYellowColorDark
+    } else {
+        MainYellowColorLight
     }
 
 }

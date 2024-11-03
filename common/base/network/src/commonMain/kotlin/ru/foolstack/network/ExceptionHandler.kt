@@ -11,6 +11,6 @@ import io.ktor.http.HttpStatusCode
             HttpStatusCode.RequestTimeout -> NetworkError.RequestTimeOut().message
             HttpStatusCode.InternalServerError -> NetworkError.InternalServerError().message
             HttpStatusCode.ExpectationFailed -> NetworkError.ExpectationFailed().message
-            else->NetworkError.Unauthorized().message
+            else->NetworkError.UnknownError().message
         }
     }

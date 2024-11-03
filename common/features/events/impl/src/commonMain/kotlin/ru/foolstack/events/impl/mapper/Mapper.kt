@@ -7,6 +7,9 @@ import ru.foolstack.events.impl.model.EventResponse
 import ru.foolstack.storage.model.Event
 import ru.foolstack.storage.model.Events
 import ru.foolstack.storage.model.EventSub
+import ru.foolstack.ui.model.EventItem
+import ru.foolstack.ui.model.EventsChip
+import ru.foolstack.ui.utils.timestampToDateString
 
 class Mapper {
 
@@ -85,5 +88,44 @@ class Mapper {
         return Events(
             events = events,
             errorMsg = "")
+    }
+
+    private fun mapToEventChip(sub: EventSubDomain): EventsChip {
+        return EventsChip(
+            id = sub.subId,
+            name = sub.subName
+        )
+    }
+
+    fun mapToChips(eventList: List<EventDomain>): List<EventsChip>{
+        val list = HashSet<EventsChip>()
+        eventList.forEach { event->
+            event.eventSubs.forEach {sub->
+                list.add(mapToEventChip(sub))
+            }
+        }
+        return list.toList()
+    }
+
+    fun mapToEventItems(eventsDomain: EventsDomain?): List<EventItem>{
+        val eventList = ArrayList<EventItem>()
+        eventsDomain?.events?.forEach {event->
+            val tags = ArrayList<String>()
+            event.eventSubs.forEach {
+                tags.add(it.subName)
+            }
+            eventList.add(
+                EventItem(
+                eventId = event.eventId,
+                eventName = event.eventName,
+                eventStartDate = event.eventDateStart.timestampToDateString(),
+                eventImageBase64 = event.eventImageBase64,
+                eventTags = tags,
+                eventDescription = event.eventDescription,
+                eventCost = event.eventCost
+            )
+            )
+        }
+        return eventList
     }
 }

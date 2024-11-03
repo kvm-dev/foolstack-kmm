@@ -25,13 +25,8 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
     private val _profileState = MutableStateFlow<ResultState<ProfileDomain>>(
         ResultState.Loading
     )
-    private val _eventsState = MutableStateFlow<ResultState<EventsDomain>>(
-        ResultState.Loading
-    )
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
     val profileState: StateFlow<ResultState<ProfileDomain>> = _profileState.asStateFlow()
-    val eventsState: StateFlow<ResultState<EventsDomain>> = _eventsState.asStateFlow()
-
 //    fun initViewModel() = with(viewModelScope) {
 //        viewModelScope.launch {
 //            interactor.profileState.combine(interactor.eventsState) { profile, events  ->
@@ -59,7 +54,6 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
             interactor.profileState.combine(interactor.eventsState) { profile, events  ->
                 if(profile is ResultState.Success && events is ResultState.Success){
                     _profileState.value = profile
-                    _eventsState.value = events
                     val profileData = profile.data
                     val eventsData = events.data
                     if(profileData !=null && eventsData !=null){

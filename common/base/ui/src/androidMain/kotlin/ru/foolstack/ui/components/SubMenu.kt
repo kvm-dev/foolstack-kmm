@@ -32,7 +32,7 @@ import ru.foolstack.ui.R
 import ru.foolstack.ui.model.Lang
 
 @Composable
-fun SubMenu(lang: Lang) {
+fun SubMenu(lang: Lang,  onClickEvents: () -> Unit = {}) {
     var isAnimating by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val events =  if(lang== Lang.RU){ "События" } else{ "Events" }
@@ -41,7 +41,6 @@ fun SubMenu(lang: Lang) {
     Column(modifier = Modifier
         .wrapContentWidth()
         .height(160.dp)) {
-        Title(text = if(lang== Lang.RU){ "Ближайшие мероприятия" } else{ "Events" })
         Box(modifier = Modifier
             .height(160.dp)
             .wrapContentWidth()
@@ -54,7 +53,7 @@ fun SubMenu(lang: Lang) {
                 ) {
                     Card(
                         modifier = Modifier
-                           .width(68.dp)
+                           .wrapContentWidth()
                             .clickable {
                                 if (!isAnimating) {
                                     isAnimating = true
@@ -64,6 +63,7 @@ fun SubMenu(lang: Lang) {
                                         delay(delayMillis / 2)
                                         delay(delayMillis)
                                         isAnimating = false
+                                        onClickEvents()
                                     }
                                 }
                             },
@@ -76,7 +76,8 @@ fun SubMenu(lang: Lang) {
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
                                         .width(68.dp)
-                                        .height(68.dp),
+                                        .height(68.dp)
+                                        .align(Alignment.CenterHorizontally),
                                     painter = painterResource(R.drawable.events_icon),
                                     contentDescription = events
                                 )
@@ -86,7 +87,7 @@ fun SubMenu(lang: Lang) {
                     Spacer(modifier = Modifier.weight(1f))
                     Card(
                         modifier = Modifier
-                            .width(68.dp)
+                            .wrapContentWidth()
                             .clickable {
                                 if (!isAnimating) {
                                     isAnimating = true
@@ -108,7 +109,8 @@ fun SubMenu(lang: Lang) {
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .width(68.dp)
-                                    .height(68.dp),
+                                    .height(68.dp)
+                                    .align(Alignment.CenterHorizontally),
                                 painter = painterResource(R.drawable.books_icon),
                                 contentDescription = books
                             )
@@ -118,7 +120,7 @@ fun SubMenu(lang: Lang) {
                     Spacer(modifier = Modifier.weight(1f))
                     Card(
                         modifier = Modifier
-                            .width(68.dp)
+                            .wrapContentWidth()
                             .clickable {
                                 if (!isAnimating) {
                                     isAnimating = true
@@ -140,7 +142,8 @@ fun SubMenu(lang: Lang) {
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .width(68.dp)
-                                    .height(68.dp),
+                                    .height(68.dp)
+                                    .align(Alignment.CenterHorizontally),
                                 painter = painterResource(R.drawable.study_icon),
                                 contentDescription = studies
                             )

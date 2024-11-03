@@ -1,6 +1,12 @@
 package ru.foolstack.main.impl.presentation.ui
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +26,7 @@ import ru.foolstack.main.impl.presentation.viewmodel.MainViewModel
 import ru.foolstack.model.ProgressState
 import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.ui.components.AchievementsSlider
-import ru.foolstack.ui.components.EventSlider
+import ru.foolstack.ui.components.EventHorizontalSlider
 import ru.foolstack.ui.components.MainTopBar
 import ru.foolstack.ui.components.UserType
 import ru.foolstack.ui.model.AchievementItem
@@ -34,6 +40,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.foolstack.ui.components.SubMenu
@@ -42,10 +50,12 @@ import ru.foolstack.ui.theme.MainYellow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(mainViewModel: MainViewModel = koinViewModel()) {
+fun MainScreen(mainViewModel: MainViewModel = koinViewModel(),
+               onClickEvents: () -> Unit = {},) {
     var isRefreshing by remember { mutableStateOf(false) }
     val state = rememberPullToRefreshState()
     val coroutineScope = rememberCoroutineScope()
+
     val onRefresh: () -> Unit = {
         isRefreshing = true
         coroutineScope.launch {
@@ -85,10 +95,13 @@ fun MainScreen(mainViewModel: MainViewModel = koinViewModel()) {
                                   .fillMaxSize()
                                   .verticalScroll(rememberScrollState())) {
                               Box(
-                                  Modifier.align(Alignment.CenterHorizontally).graphicsLayer {
-                                      scaleX = scaleFraction()
-                                      scaleY = scaleFraction()
-                                  }
+                                  Modifier
+                                      .align(Alignment.CenterHorizontally)
+                                      .graphicsLayer {
+                                          scaleX = scaleFraction()
+                                          scaleY = scaleFraction()
+                                      }
+                                      .zIndex(1F)
                               ) {
                                   PullToRefreshDefaults.Indicator(state = state, isRefreshing = isRefreshing, color = MaterialTheme.colorScheme.MainYellow, containerColor = MaterialTheme.colorScheme.LoadingIndicatorBackground)
                               }
@@ -98,7 +111,7 @@ fun MainScreen(mainViewModel: MainViewModel = koinViewModel()) {
                                       ?: "",
                                   lang = Lang.RU
                               )
-                              EventSlider(
+                              EventHorizontalSlider(
                                   lang = Lang.RU,
                                   events = Mapper().map((authStatus as MainViewState.AuthorizedClient).events)
                               )
@@ -170,13 +183,13 @@ fun MainScreen(mainViewModel: MainViewModel = koinViewModel()) {
                               )
 //                              AchievementsSlider(lang = Lang.RU, achievements = Mapper().map(achievementList = (authStatus as MainViewState.AuthorizedClient).profile?.userAchievements?: listOf()))
                               AchievementsSlider(lang = Lang.RU, achievements = testList)
-                              SubMenu(lang = Lang.RU)
+                              SubMenu(lang = Lang.RU, onClickEvents = onClickEvents)
                           }
                       }
                       is MainViewState.GuestClient-> {
                           Column {
                               MainTopBar(userType = UserType.CLIENT, lang = Lang.RU)
-                              EventSlider(lang = Lang.RU, events = Mapper().map((authStatus as MainViewState.GuestClient).events))
+                              EventHorizontalSlider(lang = Lang.RU, events = Mapper().map((authStatus as MainViewState.GuestClient).events))
                           }
                       }
 

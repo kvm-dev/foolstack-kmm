@@ -194,7 +194,7 @@ private fun ScrollableContent(
             contentDescription = "FoolStack"
         )
         Spacer(modifier = Modifier.height(10.dp))
-        Title(text = titleText)
+        Title(text = titleText, modifier = Modifier)
         Spacer(modifier = Modifier.height(10.dp))
         BaseText(text = descriptionText)
         Spacer(modifier = Modifier.weight(1f))
@@ -215,28 +215,28 @@ private fun ScrollableContent(
         }
         when(bottomSplashScreenState){
             BottomSplashScreenState.UNAUTHORIZED-> {
-                YellowButton(onClick = { onClickAuthorizationScreen() }, text = mainButtonText, isEnabled = true, isLoading = false)
+                YellowButton(onClick = { onClickAuthorizationScreen() }, text = mainButtonText, isEnabled = true, isLoading = false, modifier = Modifier)
             }
 
             BottomSplashScreenState.AUTHORIZATION-> {
                 if(emailText.isEmpty() || isEmailError){
-                    YellowButton(onClick = {}, text = mainButtonText, isEnabled = false, isLoading = false)
+                    YellowButton(onClick = {}, text = mainButtonText, isEnabled = false, isLoading = false, modifier = Modifier)
                 }
                 else{
-                    YellowButton(onClick = { onClickAuthorizationOrRegistrationByEmail() }, text = mainButtonText, isEnabled = true, isLoading = isEmailLoading)
+                    YellowButton(onClick = { onClickAuthorizationOrRegistrationByEmail() }, text = mainButtonText, isEnabled = true, isLoading = isEmailLoading, modifier = Modifier)
                 }
             }
             BottomSplashScreenState.CONFIRM-> {
                 Spacer(modifier = Modifier.height(40.dp))
                 if(otpValue.isEmpty() || isOtpError || otpValue.length!=4){
-                    YellowButton(onClick = {}, text = mainButtonText, isEnabled = false, isLoading = isEmailLoading)
+                    YellowButton(onClick = {}, text = mainButtonText, isEnabled = false, isLoading = isEmailLoading, modifier = Modifier)
                 }
                 else{
                     if(isOtpLoading){
                         LoadingIndicator()
                     }
                     else{
-                        YellowButton(onClick = { onClickConfirm(isUserExist) }, text = mainButtonText, isEnabled = true, isLoading = isEmailLoading)
+                        YellowButton(onClick = { onClickConfirm(isUserExist) }, text = mainButtonText, isEnabled = true, isLoading = isEmailLoading, modifier = Modifier)
                     }
                 }
                 var resendText = resendButtonText
@@ -260,7 +260,7 @@ private fun ScrollableContent(
              //nothing, without buttons
             }
             BottomSplashScreenState.ANY_ERROR->{
-                YellowButton(onClick = {onClickTryAgain()}, text = mainButtonText, isEnabled = true, isLoading = false)
+                YellowButton(onClick = {onClickTryAgain()}, text = mainButtonText, isEnabled = true, isLoading = false, modifier = Modifier)
             }
         }
         if(bottomSplashScreenState!= BottomSplashScreenState.NO_CONNECTION){

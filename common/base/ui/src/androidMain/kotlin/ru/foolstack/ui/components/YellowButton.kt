@@ -33,6 +33,7 @@ import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
 fun YellowButton(
+    modifier: Modifier,
     text: String,
     onClick: () -> Unit,
     isEnabled: Boolean,
@@ -41,7 +42,7 @@ fun YellowButton(
     val shape = RoundedCornerShape(10.dp)
     if (!isLoading) {
         Button(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             shape = shape,

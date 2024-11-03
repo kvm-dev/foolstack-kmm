@@ -30,6 +30,7 @@ val DividerLightColor = Color(0xFFF1F1F5)
 val ServiceBackgroundLightColor = Color(0xFF0EC1A9)
 val ServiceTextLightColor = Color(0xFF696974)
 val LoadingIndicatorLightBackground = Color(0xA10EC1A9)
+val ServiceBorderLightColor = Color(0xFFBFBFC2)
 
 val Purple40 = Color(0xFF4CAF50)
 val PurpleGrey40 = Color(0xFF009688)
@@ -58,6 +59,7 @@ val DividerDarkColor = Color(0xFF9E9EA2)
 val ServiceBackgroundDarkColor = Color(0xFF0EC1A9)
 val ServiceTextDarkColor = Color(0xFF696974)
 val LoadingIndicatorDarkBackground = Color(0xA10EC1A9)
+val ServiceBorderDarkColor = Color(0xFFE2E2EA)
 
 
 

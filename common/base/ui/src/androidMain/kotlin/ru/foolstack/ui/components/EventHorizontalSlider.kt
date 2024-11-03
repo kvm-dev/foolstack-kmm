@@ -19,7 +19,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,7 +44,7 @@ import ru.foolstack.ui.utils.decodeBase64ToBitmap
 
 
 @Composable
-fun EventSlider(lang: Lang, events: List<EventItem>, isLoading: Boolean = false) {
+fun EventHorizontalSlider(lang: Lang, events: List<EventItem>, isLoading: Boolean = false) {
     val emptyText = if(lang== Lang.RU){ "В ближайшее время мероприятий\nне планируется" } else{ "There are not events planned\nin the near future" }
     var currentImageIndex by remember { mutableIntStateOf(0) }
     var isAnimating by remember { mutableStateOf(false) }
@@ -54,7 +53,7 @@ fun EventSlider(lang: Lang, events: List<EventItem>, isLoading: Boolean = false)
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(height.dp)) {
-        Title(text = if(lang==Lang.RU){ "Ближайшие мероприятия" } else{ "Events" })
+        Title(modifier = Modifier, text = if(lang==Lang.RU){ "Ближайшие мероприятия" } else{ "Events" })
         Box(modifier = Modifier
             .weight(1f)
             .height(160.dp)
@@ -68,7 +67,7 @@ fun EventSlider(lang: Lang, events: List<EventItem>, isLoading: Boolean = false)
                         .height(180.dp),
                     horizontalArrangement = Arrangement.Absolute.SpaceBetween
                 ) {
-                    repeat(3) {
+                    repeat(10) {
                         ShimmerEffect(
                             modifier = Modifier
                                 .size(width = 280.dp, height = 180.dp)
@@ -92,13 +91,13 @@ fun EventSlider(lang: Lang, events: List<EventItem>, isLoading: Boolean = false)
                     } else {
                         "$"
                     }
-                    if (event.eventCost > 0) {
-                        cost = "${event.eventCost} $symbol"
+                    cost = if (event.eventCost > 0) {
+                        "${event.eventCost} $symbol"
                     } else {
                         if (lang == Lang.RU) {
-                            cost = "бесплатно"
+                            "бесплатно"
                         } else {
-                            cost = "free"
+                            "free"
                         }
                     }
                     var subTags = ""
@@ -155,7 +154,7 @@ fun EventSlider(lang: Lang, events: List<EventItem>, isLoading: Boolean = false)
                                         text = event.eventStartDate, modifier = Modifier
                                             .align(Alignment.End)
                                     )
-                                    ServiceText(modifier = Modifier.align(Alignment.End), text = cost)
+                                    ServiceText(modifier = Modifier.align(Alignment.CenterHorizontally), text = cost)
                                 }
                             }
 

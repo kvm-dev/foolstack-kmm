@@ -49,6 +49,7 @@ kotlin {
             //material-design
             implementation(libs.material)
             implementation(libs.androidx.material3.android)
+            implementation(libs.material3.android)
             //layouts
             implementation(libs.androidx.foundation.layout.android)
             //animation

@@ -26,8 +26,8 @@ actual val client: HttpClient
     get() = HttpClient(OkHttp) {
     //Timeout plugin to set up timeout milliseconds for client
     install(HttpTimeout) {
-        socketTimeoutMillis = 60_000
-        requestTimeoutMillis = 60_000
+        socketTimeoutMillis = 180_000
+        requestTimeoutMillis = 180_000
     }
     //Logging plugin combined with kermit(KMP Logger library)
     install(Logging) {

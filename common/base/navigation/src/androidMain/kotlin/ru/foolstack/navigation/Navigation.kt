@@ -1,5 +1,9 @@
 package ru.foolstack.navigation
 
+import android.content.Context
+import android.content.ContextWrapper
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +15,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.inject
+import ru.foolstack.events.impl.presentation.ui.EventsScreen
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.splash.impl.presentation.ui.SplashScreen
 import ru.foolstack.main.impl.presentation.ui.MainScreen
@@ -29,6 +35,8 @@ import ru.foolstack.ui.theme.MainBackground
 @Composable
 fun StartApplication(
     navController: NavHostController = rememberNavController()) {
+    val context = LocalContext.current
+    val activity = context.findActivity()
     FoolStackTheme {
         val getCurrentLanguageUseCase: GetCurrentLanguageUseCase by inject()
         // Get current back stack entry
@@ -73,12 +81,32 @@ fun StartApplication(
                         )
                     }
                     composable(route = NavigationScreens.MainScreenNavigation.name) {
-                        MainScreen()
+                        isShowBottomBar.value = true
+                        BackHandler(onBack = { activity?.finish()})
+                        MainScreen(onClickEvents = {
+                            isShowBottomBar.value = false
+                            navController.navigate(NavigationScreens.EventsScreenNavigation.name) {
+                                popUpTo(NavigationScreens.EventsScreenNavigation.name) {
+                                    inclusive = false
+                                }
+                            }
+                        })
+                    }
+
+                    composable(route = NavigationScreens.EventsScreenNavigation.name) {
+                        isShowBottomBar.value = false
+                        EventsScreen()
                     }
                 }
             }
         }
     }
+}
+
+fun Context.findActivity(): ComponentActivity? = when (this) {
+    is ComponentActivity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }
 
 fun cancelOrderAndNavigateToStart(

@@ -36,16 +36,21 @@ class AuthorizationApi(private val client: HttpClient) {
     }
 
     suspend fun authByToken(userToken: String): AuthByTokenResponse{
-        val result = with(client) {
-            post("$baseUrl${AuthorizationEndpoints.authByToken}"){
-                header(HttpHeaders.Authorization, userToken)
+        val defaultResult: AuthByTokenResponse = try {
+            val result = with(client) {
+                post("$baseUrl${AuthorizationEndpoints.authByToken}") {
+                    header(HttpHeaders.Authorization, userToken)
+                }
             }
+            if (result.status == HttpStatusCode.OK) {
+                result.body<AuthByTokenResponse>()
+            } else {
+                AuthByTokenResponse(errorMsg = exceptionHandler(result.status))
+            }
+        } catch (e: Throwable){
+            AuthByTokenResponse(errorMsg = e.message?: "Unknown error")
         }
-        return if(result.status == HttpStatusCode.OK) {
-            result.body<AuthByTokenResponse>()
-        } else{
-            AuthByTokenResponse(errorMsg = exceptionHandler(result.status))
-        }
+        return defaultResult
     }
 
     suspend fun confirmAuthAndReg(email: String, code: String): ConfirmAuthAndRegResponse{

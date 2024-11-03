@@ -14,10 +14,10 @@ import ru.foolstack.ui.theme.PrimaryTitleColor
 import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
-fun Title(text: String){
-    Text(modifier = Modifier.padding(bottom = 10.dp, start = 16.dp, end = 16.dp),
+fun Title(text: String, modifier: Modifier){
+    Text(modifier = modifier.padding(bottom = 10.dp, start = 16.dp, end = 16.dp),
         text =text, fontFamily = montserratFamily, fontWeight = FontWeight.Normal, style = TextStyle(
-            fontSize = 18.sp,
+            fontSize = 22.sp,
             color = MaterialTheme.colorScheme.PrimaryTitleColor,
             textAlign = TextAlign.Center
         )
