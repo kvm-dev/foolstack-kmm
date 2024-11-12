@@ -64,6 +64,8 @@ kotlin {
             implementation(projects.common.features.events.api)
         }
             androidMain.dependencies {
+                //utils
+                implementation(projects.common.base.utils)
                 //viewmodel
                 implementation(libs.androidx.lifecycle.runtime.compose)
                 //lifecycle

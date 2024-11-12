@@ -22,6 +22,9 @@ class NetworkDataSource(private val api: BooksApi, private val mapper: Mapper){
            books = bookList,
            maxSalePercent = result.maxSalePercent,
            prText = result.prText,
+           subscribeText = result.subscribeText,
+           subscribeMinCost = result.subscribeMinCost,
+           subscribeLink = result.subscribeLink,
            errorMsg = result.errorMsg
        )
     }

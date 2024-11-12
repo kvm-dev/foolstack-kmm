@@ -128,6 +128,9 @@ data class Books(
     @SerialName("books") val books: List<Book>,
     @SerialName("maxSalePercent") val maxSalePercent: Int,
     @SerialName("prText") val prText: String,
+    @SerialName("subscribeText") val subscribeText: String,
+    @SerialName("subscribeMinCost") val subscribeMinCost: Int,
+    @SerialName("subscribeLink") val subscribeLink: String,
     @SerialName("errorMsg") val errorMsg: String
 )
 

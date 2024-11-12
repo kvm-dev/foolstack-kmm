@@ -8,6 +8,9 @@ data class BooksResponse(
     @SerialName("books") val books: List<BookResponse> = listOf(),
     @SerialName("maxSalePercent") val maxSalePercent: Int = 0,
     @SerialName("prText") val prText: String = "",
+    @SerialName("subscribeText") val subscribeText: String = "",
+    @SerialName("subscribeMinCost") val subscribeMinCost: Int = 0,
+    @SerialName("subscribeLink") val subscribeLink: String = "",
     @SerialName("errorMsg") val errorMsg: String
 )
 

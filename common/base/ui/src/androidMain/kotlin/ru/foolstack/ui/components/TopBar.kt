@@ -24,24 +24,39 @@ import ru.foolstack.ui.theme.PrimaryTitleColor
 import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
-fun TopBar(screenTitle: String, onBackPressed:  () -> Unit){
+fun TopBar(screenTitle: String, onBackPressed:  () -> Unit, isDark: Boolean = true, isTitleVisible: Boolean = true){
     FoolStackTheme {
         Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp).fillMaxWidth()) {
-            Image(
-                painterResource(R.drawable.back_arrow),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(24.dp)
-                    .clickable {
-                    onBackPressed()
-                }
-            )
-            Text(modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).align(Alignment.Center), text = screenTitle,
-                color = MaterialTheme.colorScheme.PrimaryTitleColor,
-                textAlign = TextAlign.Center,
-                fontFamily = montserratFamily, fontWeight = FontWeight.Black, style = TextStyle(
-                    fontSize = 14.sp)
-            )
+            if(isDark){
+                Image(
+                    painterResource(R.drawable.back_arrow),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(24.dp)
+                        .clickable {
+                            onBackPressed()
+                        }
+                )
+            }
+            else{
+                Image(
+                    painterResource(R.drawable.back_arrow_white),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(24.dp)
+                        .clickable {
+                            onBackPressed()
+                        }
+                )
+            }
+            if(isTitleVisible){
+                Text(modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).align(Alignment.Center), text = screenTitle,
+                    color = MaterialTheme.colorScheme.PrimaryTitleColor,
+                    textAlign = TextAlign.Center,
+                    fontFamily = montserratFamily, fontWeight = FontWeight.Black, style = TextStyle(
+                        fontSize = 14.sp)
+                )
+            }
         }
     }
 }

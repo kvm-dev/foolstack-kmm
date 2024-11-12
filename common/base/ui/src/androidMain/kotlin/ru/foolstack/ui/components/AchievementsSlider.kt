@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -42,7 +43,7 @@ fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoadin
     val emptyText = if(lang== Lang.RU){ "Только зарегистрированные\nпользователи могут\nполучать достижения" } else{ "Only registered users\ncan receive\nachievements" }
     val currentImageIndex by remember { mutableIntStateOf(0) }
     var isAnimating by remember { mutableStateOf(false) }
-    Column(modifier = Modifier.fillMaxWidth().height(216.dp).padding(top = 14.dp)) {
+    Column(modifier = Modifier.fillMaxWidth().height(226.dp).padding(top = 14.dp)) {
         Title(modifier = Modifier, text = if(lang== Lang.RU){ "Твои достижения" } else{ "Your achievements" })
         Box(modifier = Modifier
             .weight(1f)
@@ -77,6 +78,7 @@ fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoadin
 
                     Card(
                         modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
                             .width(160.dp)
                             .height(140.dp)
                             .clickable {
@@ -134,7 +136,7 @@ fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoadin
                                             painter = painterResource(R.drawable.star),
                                             contentDescription = "level",
                                             modifier = Modifier
-                                                .width(10.dp)
+                                                .width(20.dp)
                                                 .padding(end = 5.dp),
                                             contentScale = ContentScale.Inside
                                         )
@@ -142,7 +144,7 @@ fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoadin
                                             painter = painterResource(R.drawable.star),
                                             contentDescription = "level",
                                             modifier = Modifier
-                                                .width(10.dp)
+                                                .width(20.dp)
                                                 .padding(start = 5.dp),
                                             contentScale = ContentScale.Inside
                                         )
@@ -153,7 +155,7 @@ fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoadin
                                             painter = painterResource(R.drawable.star),
                                             contentDescription = "level",
                                             modifier = Modifier
-                                                .width(10.dp)
+                                                .width(20.dp)
                                                 .padding(horizontal = 2.dp),
                                             contentScale = ContentScale.Inside
                                         )
@@ -161,7 +163,7 @@ fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoadin
                                             painter = painterResource(R.drawable.star),
                                             contentDescription = "level",
                                             modifier = Modifier
-                                                .width(10.dp)
+                                                .width(20.dp)
                                                 .padding(horizontal = 2.dp),
                                             contentScale = ContentScale.Inside
                                         )
@@ -169,7 +171,7 @@ fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoadin
                                             painter = painterResource(R.drawable.star),
                                             contentDescription = "level",
                                             modifier = Modifier
-                                                .width(10.dp)
+                                                .width(20.dp)
                                                 .padding(horizontal = 2.dp),
                                             contentScale = ContentScale.Inside
                                         )

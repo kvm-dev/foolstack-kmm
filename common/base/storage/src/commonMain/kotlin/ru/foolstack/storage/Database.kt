@@ -327,6 +327,9 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
             books = booksList,
             maxSalePercent = booksPr.maxSalePercent.toInt(),
             prText = booksPr.prText,
+            subscribeMinCost = booksPr.subscribeMinCost.toInt(),
+            subscribeText = booksPr.subscribeText,
+            subscribeLink = booksPr.subscribeLink,
             errorMsg = ""
         )
     }
@@ -338,7 +341,10 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
         dbQuery.insertBooksPr(
             bookPrId = 0L,
             maxSalePercent = books.maxSalePercent.toLong(),
-            prText = books.prText
+            prText = books.prText,
+            subscribeText = books.subscribeText,
+            subscribeMinCost = books.subscribeMinCost.toLong(),
+            subscribeLink = books.subscribeLink
         )
         books.books.forEach { book->
             val booksProfessions = book.professions

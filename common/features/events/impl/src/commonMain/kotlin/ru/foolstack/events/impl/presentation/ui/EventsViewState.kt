@@ -12,6 +12,7 @@ sealed class EventsViewState {
     data class SuccessState(
         val isHaveConnection: Boolean,
         val lang: LangResultDomain,
-        val events: EventsDomain?
+        val events: EventsDomain?,
+        val selectedFilters: List<String>
     ): EventsViewState()
 }

@@ -21,6 +21,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,12 +45,15 @@ import ru.foolstack.ui.utils.decodeBase64ToBitmap
 
 
 @Composable
-fun EventHorizontalSlider(lang: Lang, events: List<EventItem>, isLoading: Boolean = false) {
+fun EventHorizontalSlider(lang: Lang,
+                          events: List<EventItem>,
+                          isLoading: Boolean = false,
+                          onClickEvent: () -> Unit,
+                          selectId: MutableState<Int>) {
     val emptyText = if(lang== Lang.RU){ "В ближайшее время мероприятий\nне планируется" } else{ "There are not events planned\nin the near future" }
     var currentImageIndex by remember { mutableIntStateOf(0) }
     var isAnimating by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-    val height = if(isLoading){ 250 } else{ if(events.isNotEmpty()){ 310 } else{ 260 } }
+    val height = if(isLoading){ 250 } else{ if(events.isNotEmpty()){ 320 } else{ 260 } }
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(height.dp)) {
@@ -109,36 +113,42 @@ fun EventHorizontalSlider(lang: Lang, events: List<EventItem>, isLoading: Boolea
                     }
                     Card(
                         modifier = Modifier
+                            .clip(RoundedCornerShape(4.dp))
                             .width(280.dp)
                             .clickable {
-                                if (index != currentImageIndex && !isAnimating) {
-                                    isAnimating = true
-                                    coroutineScope.launch {
-                                        val delayMillis = 500L
-                                        // Wait for the card to change color before animating
-                                        delay(delayMillis / 2)
-                                        currentImageIndex = index
-                                        delay(delayMillis)
-                                        isAnimating = false
-                                    }
-                                }
+                                selectId.value = event.eventId
+                                onClickEvent()
                             },
                         colors = CardDefaults.cardColors(
                             containerColor = Color.Transparent,
                         ),
                     ) {
                         Column {
-                            event.eventImageBase64.decodeBase64ToBitmap()?.let {
+                            if(event.eventImageBase64.isNotEmpty()){
+                                event.eventImageBase64.decodeBase64ToBitmap()?.let {
+                                    Image(
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .width(280.dp)
+                                            .height(180.dp)
+                                            .clip(RoundedCornerShape(10.dp)),
+                                        bitmap = it,
+                                        contentDescription = event.eventName
+                                    )
+                                }
+                            }
+                            else{
                                 Image(
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
                                         .width(280.dp)
                                         .height(180.dp)
                                         .clip(RoundedCornerShape(10.dp)),
-                                    bitmap = it,
+                                    painter = painterResource(R.drawable.bug_icon),
                                     contentDescription = event.eventName
                                 )
                             }
+
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()

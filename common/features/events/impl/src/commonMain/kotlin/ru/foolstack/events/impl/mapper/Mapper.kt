@@ -8,7 +8,7 @@ import ru.foolstack.storage.model.Event
 import ru.foolstack.storage.model.Events
 import ru.foolstack.storage.model.EventSub
 import ru.foolstack.ui.model.EventItem
-import ru.foolstack.ui.model.EventsChip
+import ru.foolstack.ui.model.Chip
 import ru.foolstack.ui.utils.timestampToDateString
 
 class Mapper {
@@ -90,15 +90,15 @@ class Mapper {
             errorMsg = "")
     }
 
-    private fun mapToEventChip(sub: EventSubDomain): EventsChip {
-        return EventsChip(
+    private fun mapToEventChip(sub: EventSubDomain): Chip {
+        return Chip(
             id = sub.subId,
             name = sub.subName
         )
     }
 
-    fun mapToChips(eventList: List<EventDomain>): List<EventsChip>{
-        val list = HashSet<EventsChip>()
+    fun mapToChips(eventList: List<EventDomain>): List<Chip>{
+        val list = HashSet<Chip>()
         eventList.forEach { event->
             event.eventSubs.forEach {sub->
                 list.add(mapToEventChip(sub))

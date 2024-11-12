@@ -31,6 +31,13 @@ val ServiceBackgroundLightColor = Color(0xFF0EC1A9)
 val ServiceTextLightColor = Color(0xFF696974)
 val LoadingIndicatorLightBackground = Color(0xA10EC1A9)
 val ServiceBorderLightColor = Color(0xFFBFBFC2)
+val CardTextLightColor = Color(0xFF696974)
+val GreenButtonContainerLightColor = Color(0xFF208C78)
+val GreenButtonContentLightColor = Color(0xFFFFFFFF)
+val SalePriceLightColor = Color(0xFF3C9755)
+val InputTextLightColor = Color(0xB0000000)
+val HintTextLightColor = Color(0xFFB5B5BE)
+val BannerBackgroundLightColor = Color(0x360C9755)
 
 val Purple40 = Color(0xFF4CAF50)
 val PurpleGrey40 = Color(0xFF009688)
@@ -60,6 +67,14 @@ val ServiceBackgroundDarkColor = Color(0xFF0EC1A9)
 val ServiceTextDarkColor = Color(0xFF696974)
 val LoadingIndicatorDarkBackground = Color(0xA10EC1A9)
 val ServiceBorderDarkColor = Color(0xFFE2E2EA)
+val CardTextDarkColor = Color(0xFF696974)
+val GreenButtonContainerDarkColor = Color(0xFF208C78)
+val GreenButtonContentDarkColor = Color(0xFFFFFFFF)
+val SalePriceDarkColor = Color(0xFF3C9755)
+val InputTextDarkColor = Color(0xB0000000)
+val HintTextDarkColor = Color(0xFFB5B5BE)
+val BannerBackgroundDarkColor = Color(0x360C9755)
+
 
 
 

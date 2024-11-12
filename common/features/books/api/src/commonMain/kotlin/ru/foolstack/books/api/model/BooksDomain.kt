@@ -4,6 +4,9 @@ data class BooksDomain(
     val books: List<BookDomain>,
     val maxSalePercent: Int,
     val prText: String,
+    val subscribeText: String,
+    val subscribeMinCost: Int,
+    val subscribeLink: String,
     val errorMsg: String
 )
 

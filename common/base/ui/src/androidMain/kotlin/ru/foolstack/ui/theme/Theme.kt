@@ -57,6 +57,15 @@ var LoadingIndicatorBackgroundSchemeColor by mutableStateOf(LoadingIndicatorLigh
 var UnselectedChipBackgroundSchemeColor by mutableStateOf(MainBackgroundLight)
 var UnselectedChipStrokeSchemeColor by mutableStateOf(ServiceBorderLightColor)
 var SelectedChipBackgroundSchemeColor by mutableStateOf(MainYellowColorLight)
+var CardTextSchemeColor by mutableStateOf(CardTextLightColor)
+var GreenButtonContentSchemeColor by mutableStateOf(GreenButtonContentLightColor)
+var GreenButtonContainerSchemeColor by mutableStateOf(GreenButtonContainerLightColor)
+var SalePriceSchemeColor by mutableStateOf(SalePriceLightColor)
+var InputTextSchemeColor by mutableStateOf(InputTextLightColor)
+var HintTextSchemeColor by mutableStateOf(HintTextLightColor)
+var BannerBackgroundSchemeColor by mutableStateOf(BannerBackgroundLightColor)
+
+
 
 
 
@@ -229,6 +238,52 @@ var ColorScheme.SelectedChipBackground: Color
     set(value) {
         SelectedChipBackgroundSchemeColor = value
     }
+
+var ColorScheme.CardText: Color
+    get() = CardTextSchemeColor
+    set(value) {
+        CardTextSchemeColor = value
+    }
+
+var ColorScheme.GreenButtonContent: Color
+    get() = GreenButtonContentSchemeColor
+    set(value) {
+        GreenButtonContentSchemeColor = value
+    }
+
+var ColorScheme.GreenButtonContainer: Color
+    get() = GreenButtonContainerSchemeColor
+    set(value) {
+        GreenButtonContainerSchemeColor = value
+    }
+
+var ColorScheme.SalePrice: Color
+    get() = SalePriceSchemeColor
+    set(value) {
+        SalePriceSchemeColor = value
+    }
+
+var ColorScheme.InputText: Color
+    get() = InputTextSchemeColor
+    set(value) {
+        InputTextSchemeColor = value
+    }
+
+var ColorScheme.HintText: Color
+    get() = HintTextSchemeColor
+    set(value) {
+        HintTextSchemeColor = value
+    }
+
+var ColorScheme.BannerBackground: Color
+    get() = BannerBackgroundSchemeColor
+    set(value) {
+        BannerBackgroundSchemeColor = value
+    }
+
+
+
+
 
 
 
@@ -437,5 +492,49 @@ fun FoolStackTheme(
     } else {
         MainYellowColorLight
     }
+
+    colorScheme.CardText = if (darkTheme) {
+        CardTextDarkColor
+    } else {
+        CardTextLightColor
+    }
+
+    colorScheme.GreenButtonContent = if (darkTheme) {
+        GreenButtonContentDarkColor
+    } else {
+        GreenButtonContentLightColor
+    }
+
+    colorScheme.GreenButtonContainer = if (darkTheme) {
+        GreenButtonContainerDarkColor
+    } else {
+        GreenButtonContainerLightColor
+    }
+
+    colorScheme.SalePrice = if (darkTheme) {
+        SalePriceDarkColor
+    } else {
+        SalePriceLightColor
+    }
+
+    colorScheme.InputText = if (darkTheme) {
+        InputTextDarkColor
+    } else {
+        InputTextLightColor
+    }
+
+    colorScheme.HintText = if (darkTheme) {
+        HintTextDarkColor
+    } else {
+        HintTextLightColor
+    }
+
+    colorScheme.BannerBackground = if (darkTheme) {
+        BannerBackgroundDarkColor
+    } else {
+        BannerBackgroundLightColor
+    }
+
+
 
 }

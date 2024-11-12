@@ -107,7 +107,10 @@ CREATE TABLE Books(
 CREATE TABLE BooksPR(
    bookPrId INTEGER NOT NULL,
    maxSalePercent INTEGER NOT NULL,
-   prText TEXT NOT NULL
+   prText TEXT NOT NULL,
+   subscribeText TEXT NOT NULL,
+   subscribeMinCost INTEGER NOT NULL,
+   subscribeLink TEXT NOT NULL
 );
 
 CREATE TABLE BookProfessions(
@@ -340,8 +343,8 @@ DELETE FROM BookProfessions;
 
 
 insertBooksPr:
-INSERT INTO BooksPR(bookPrId, maxSalePercent, prText)
-VALUES(?, ?, ?);
+INSERT INTO BooksPR(bookPrId, maxSalePercent, prText, subscribeText, subscribeMinCost, subscribeLink)
+VALUES(?, ?, ?, ?, ?, ?);
 
 selectBooksPr:
 SELECT BooksPR.*

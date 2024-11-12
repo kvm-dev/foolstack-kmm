@@ -20,23 +20,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import ru.foolstack.ui.model.EventItem
-import ru.foolstack.ui.model.EventsChip
+import ru.foolstack.ui.model.Chip
 import ru.foolstack.ui.model.Lang
 import ru.foolstack.ui.utils.decodeBase64ToBitmap
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -44,19 +35,28 @@ import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
+import ru.foolstack.ui.R
 import ru.foolstack.ui.theme.LoadingIndicatorBackground
 import ru.foolstack.ui.theme.MainYellow
 
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun EventVerticalSlider(lang: Lang, events: List<EventItem>,
-                        chips: List<EventsChip>,
-                        selectedChips: SnapshotStateList<String>,
-                        onBackPressed: () -> Unit,
-                        onRefresh: () -> Unit,
-                        isRefreshing: Boolean) {
+fun EventVerticalSlider(
+    lang: Lang,
+    events: List<EventItem>,
+    chips: List<Chip>,
+    selectedChips: List<String>,
+    onBackPressed: () -> Unit,
+    onRefresh: () -> Unit,
+    isRefreshing: Boolean,
+    onClickEvent: () -> Unit,
+    selectId: MutableState<Int>,
+    selectedChip: MutableState<String>,
+    onclickChip: () -> Unit,
+) {
     val filteredEvents = HashSet<EventItem>()
     selectedChips.filter { it.isNotEmpty() }.forEach { chip->
         events.forEach { event->
@@ -65,9 +65,6 @@ fun EventVerticalSlider(lang: Lang, events: List<EventItem>,
             }
         }
     }
-    var currentImageIndex by remember { mutableIntStateOf(0) }
-    var isAnimating by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
     val state = rememberPullToRefreshState()
 
     val scaleFraction = {
@@ -97,7 +94,7 @@ fun EventVerticalSlider(lang: Lang, events: List<EventItem>,
                                 PullToRefreshDefaults.Indicator(state = state, isRefreshing = isRefreshing, color = MaterialTheme.colorScheme.MainYellow, containerColor = MaterialTheme.colorScheme.LoadingIndicatorBackground)
                             }
                             TopBar(screenTitle = if(lang == Lang.RU){"События"}else{"Events"}, onBackPressed = onBackPressed)
-                            ChipSelector(chips = chips, selectedChips = selectedChips)
+                            ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
                         }
                     }
                     itemsIndexed(filteredEvents.toList()) { index, event ->
@@ -128,33 +125,35 @@ fun EventVerticalSlider(lang: Lang, events: List<EventItem>,
                         Card(
                             modifier = Modifier
                                 .clickable {
-                                    if (index != currentImageIndex && !isAnimating) {
-                                        isAnimating = true
-                                        coroutineScope.launch {
-                                            val delayMillis = 500L
-                                            // Wait for the card to change color before animating
-                                            delay(delayMillis / 2)
-                                            currentImageIndex = index
-                                            delay(delayMillis)
-                                            isAnimating = false
-                                        }
-                                    }
+                                    selectId.value = event.eventId
+                                    onClickEvent()
                                 }
                                 .padding(horizontal = 20.dp, vertical = 18.dp),
-                            colors = CardDefaults.cardColors(
+                                colors = CardDefaults.cardColors(
                                 containerColor = Color.Transparent,
                             ),
                         ) {
                             Column {
-                                event.eventImageBase64.decodeBase64ToBitmap()?.let {
-                                    Image(
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier
-                                            .clip(RoundedCornerShape(10.dp)),
-                                        bitmap = it,
-                                        contentDescription = event.eventName
-                                    )
+                                if(event.eventImageBase64.isNotEmpty()){
+                                    event.eventImageBase64.decodeBase64ToBitmap()?.let {
+                                        Image(
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(10.dp)),
+                                            bitmap = it,
+                                            contentDescription = event.eventName
+                                        )
+                                    }
                                 }
+                                else{
+                                        Image(
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(10.dp)),
+                                            painter = painterResource(R.drawable.bug_icon),
+                                            contentDescription = event.eventName
+                                        )
+                                    }
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -179,10 +178,6 @@ fun EventVerticalSlider(lang: Lang, events: List<EventItem>,
                             }
                         }
                     }
-                    stickyHeader {
-
-                    }
-
                 }
 
 }

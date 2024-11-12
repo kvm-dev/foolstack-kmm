@@ -15,11 +15,11 @@ class MainInteractor(
     private val getNetworkStateUseCase: GetNetworkStateUseCase,
     private val getProfileUseCase: GetProfileUseCase,
     private val getTokenFromLocalUseCase: GetTokenFromLocalUseCase,
-    private val getEventsUseCase: GetEventsUseCase,
-){
+    private val getEventsUseCase: GetEventsUseCase){
     val eventsState = getEventsUseCase.eventsState
 
     val profileState = getProfileUseCase.profileState
+
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
     fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
@@ -33,7 +33,7 @@ class MainInteractor(
 
     fun checkState(
         profile: ProfileDomain,
-        events: EventsDomain
+        events: EventsDomain,
     ):MainViewState{
         val lang = getCurrentLang()
         val isConnected = isConnectionAvailable()

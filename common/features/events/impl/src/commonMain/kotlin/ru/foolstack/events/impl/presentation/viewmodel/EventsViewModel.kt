@@ -1,6 +1,7 @@
 package ru.foolstack.events.impl.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,5 +38,33 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
             updateState(ProgressState.LOADING)
             initViewModel()
         }
+    }
+
+    fun updateFilters(subName: String){
+        if(subName.isNotEmpty()){
+            val current = uiState.value as EventsViewState.SuccessState
+            val selectedFilters = HashSet<String>()
+            current.selectedFilters.forEach { sub->
+                selectedFilters.add(sub)
+            }
+            if(selectedFilters.contains(subName)){
+                selectedFilters.remove(subName)
+            }
+            else{
+                selectedFilters.add(subName)
+            }
+
+            _uiState.update { current.copy(selectedFilters = selectedFilters.toList()) }
+        }
+    }
+
+    fun navigateToEvent(navController: NavController, eventId: Int, eventDestination: String){
+        val route = "$eventDestination/{eventId}"
+        navController.navigate(
+            route.replace(
+                oldValue = "{eventId}",
+                newValue = eventId.toString()
+            )
+        )
     }
 }

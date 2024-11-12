@@ -4,7 +4,6 @@ import ru.foolstack.events.api.domain.usecase.GetEventsUseCase
 import ru.foolstack.events.api.model.EventsDomain
 import ru.foolstack.events.impl.presentation.ui.EventsViewState
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
-import ru.foolstack.language.api.model.LangResultDomain
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
 import ru.foolstack.utils.model.ResultState
 
@@ -17,10 +16,9 @@ class EventsInteractor(
 
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
-    fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
+    private fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
     suspend fun getEventsFromServer() = getEventsUseCase.getEvents()
-    suspend fun getEventsFromLocal() = getEventsUseCase.getEvents(fromLocal = true)
 
     fun checkState(state: ResultState<EventsDomain>):EventsViewState{
         val lang = getCurrentLang()
@@ -35,10 +33,15 @@ class EventsInteractor(
                 return if(state.data?.errorMsg?.isNotEmpty() == true){
                     EventsViewState.ErrorState(lang = lang)
                 } else{
-                    EventsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), events = state.data, lang = lang)
+                    val filtersList = HashSet<String>()
+                    state.data?.events?.forEach { event->
+                        event.eventSubs.forEach { sub->
+                            filtersList.add(sub.subName)
+                        }
+                    }
+                    EventsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), events = state.data, selectedFilters = filtersList.toList(), lang = lang)
                 }
             }
-
         }
     }
 }

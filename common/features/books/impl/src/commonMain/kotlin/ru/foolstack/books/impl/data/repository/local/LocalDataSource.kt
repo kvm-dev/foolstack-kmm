@@ -16,6 +16,9 @@ class LocalDataSource(private val databaseSdk: DatabaseSdk, private val mapper: 
             books = booksList,
             maxSalePercent = books.maxSalePercent,
             prText = books.prText,
+            subscribeMinCost = books.subscribeMinCost,
+            subscribeText = books.subscribeText,
+            subscribeLink = books.subscribeLink,
             errorMsg = books.errorMsg
         )
     }

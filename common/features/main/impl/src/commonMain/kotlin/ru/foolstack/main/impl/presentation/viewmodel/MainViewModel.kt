@@ -1,6 +1,7 @@
 package ru.foolstack.main.impl.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,26 +28,6 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
     )
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
     val profileState: StateFlow<ResultState<ProfileDomain>> = _profileState.asStateFlow()
-//    fun initViewModel() = with(viewModelScope) {
-//        viewModelScope.launch {
-//            interactor.profileState.combine(interactor.eventsState) { profile, events  ->
-//                if(profile is ResultState.Success && events is ResultState.Success){
-//                    val profileData = profile.data
-//                    val eventsData = events.data
-//                    if(profileData !=null && eventsData !=null){
-//                        _uiState.update { interactor.checkState(profile = profileData, events = eventsData) }
-//                    }
-//                    else{
-//                        _uiState.update { MainViewState.Loading }
-//                    }
-//                    updateState(ProgressState.COMPLETED)
-//            }
-//                else{
-//                    //show Dialog error and go to Authorization
-//                }
-//            }
-//        }
-//    }
 
     fun initViewModel() = with(viewModelScope) {
         if(progressState.value == ProgressState.LOADING){
@@ -70,6 +51,16 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
             }.collect()
         }
         }
+    }
+
+    fun navigateToEvent(navController: NavController, eventId: Int, eventDestination: String){
+        val route = "$eventDestination/{eventId}"
+        navController.navigate(
+            route.replace(
+                oldValue = "{eventId}",
+                newValue = eventId.toString()
+            )
+        )
     }
 
 }

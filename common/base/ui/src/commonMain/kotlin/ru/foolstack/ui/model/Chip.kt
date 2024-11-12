@@ -1,6 +1,6 @@
 package ru.foolstack.ui.model
 
-data class EventsChip(
+data class Chip(
     val id: Int,
     val name: String
 )

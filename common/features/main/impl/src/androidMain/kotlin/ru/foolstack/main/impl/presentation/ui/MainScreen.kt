@@ -35,6 +35,7 @@ import ru.foolstack.utils.model.ResultState
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.foolstack.ui.components.SubMenu
@@ -50,8 +52,13 @@ import ru.foolstack.ui.theme.MainYellow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(mainViewModel: MainViewModel = koinViewModel(),
-               onClickEvents: () -> Unit = {},) {
+fun MainScreen(
+    mainViewModel: MainViewModel = koinViewModel(),
+    onClickEvents: () -> Unit = {},
+    onClickBooks: () -> Unit = {},
+    navController: NavController,
+    eventDestination: String) {
+    val eventId  = remember { mutableIntStateOf(0) }
     var isRefreshing by remember { mutableStateOf(false) }
     val state = rememberPullToRefreshState()
     val coroutineScope = rememberCoroutineScope()
@@ -113,7 +120,15 @@ fun MainScreen(mainViewModel: MainViewModel = koinViewModel(),
                               )
                               EventHorizontalSlider(
                                   lang = Lang.RU,
-                                  events = Mapper().map((authStatus as MainViewState.AuthorizedClient).events)
+                                  events = Mapper().map((authStatus as MainViewState.AuthorizedClient).events),
+                                  selectId = eventId,
+                                  onClickEvent = {
+                                      mainViewModel.navigateToEvent(
+                                          navController = navController,
+                                          eventId = eventId.intValue,
+                                          eventDestination = eventDestination
+                                      )
+                                  },
                               )
 
                               val testList = ArrayList<AchievementItem>()
@@ -183,13 +198,25 @@ fun MainScreen(mainViewModel: MainViewModel = koinViewModel(),
                               )
 //                              AchievementsSlider(lang = Lang.RU, achievements = Mapper().map(achievementList = (authStatus as MainViewState.AuthorizedClient).profile?.userAchievements?: listOf()))
                               AchievementsSlider(lang = Lang.RU, achievements = testList)
-                              SubMenu(lang = Lang.RU, onClickEvents = onClickEvents)
+                              SubMenu(
+                                  lang = Lang.RU,
+                                  onClickEvents = onClickEvents,
+                                  onClickBooks = onClickBooks)
                           }
                       }
                       is MainViewState.GuestClient-> {
                           Column {
                               MainTopBar(userType = UserType.CLIENT, lang = Lang.RU)
-                              EventHorizontalSlider(lang = Lang.RU, events = Mapper().map((authStatus as MainViewState.GuestClient).events))
+                              EventHorizontalSlider(lang = Lang.RU, events = Mapper().map((authStatus as MainViewState.GuestClient).events),
+                                  selectId = eventId,
+                                  onClickEvent = {
+                                      mainViewModel.navigateToEvent(
+                                          navController = navController,
+                                          eventId = eventId.intValue,
+                                          eventDestination = eventDestination
+                                      )
+                                  }
+                              )
                           }
                       }
 

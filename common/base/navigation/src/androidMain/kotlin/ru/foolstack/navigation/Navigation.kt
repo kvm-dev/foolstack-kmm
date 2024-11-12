@@ -2,6 +2,7 @@ package ru.foolstack.navigation
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -17,12 +18,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import org.koin.androidx.compose.inject
+import ru.foolstack.books.impl.presentation.BookCardScreen
+import ru.foolstack.books.impl.presentation.BooksScreen
 import ru.foolstack.events.impl.presentation.ui.EventsScreen
+import ru.foolstack.events.impl.presentation.ui.EventCardScreen
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.splash.impl.presentation.ui.SplashScreen
 import ru.foolstack.main.impl.presentation.ui.MainScreen
@@ -42,9 +48,6 @@ fun StartApplication(
         // Get current back stack entry
         val backStackEntry by navController.currentBackStackEntryAsState()
         // Get the name of the current screen
-        val currentScreen = NavigationScreens.valueOf(
-            backStackEntry?.destination?.route ?: NavigationScreens.SplashScreenNavigation.name
-        )
         val isShowBottomBar = remember { mutableStateOf(false) }
         val bottomBarSelectedState = remember { mutableStateOf(BottomIcons.MAIN) }
         Scaffold(
@@ -80,6 +83,7 @@ fun StartApplication(
                             }
                         )
                     }
+
                     composable(route = NavigationScreens.MainScreenNavigation.name) {
                         isShowBottomBar.value = true
                         BackHandler(onBack = { activity?.finish()})
@@ -90,12 +94,57 @@ fun StartApplication(
                                     inclusive = false
                                 }
                             }
-                        })
+                        },
+                            onClickBooks = {
+                                isShowBottomBar.value = false
+                                navController.navigate(NavigationScreens.BooksScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.BooksScreenNavigation.name) {
+                                        inclusive = false
+                                    }
+                                }
+                            },
+                            navController = navController, eventDestination = NavigationScreens.EventScreenNavigation.name )
                     }
 
                     composable(route = NavigationScreens.EventsScreenNavigation.name) {
                         isShowBottomBar.value = false
-                        EventsScreen()
+                        EventsScreen(navController = navController, eventDestination = NavigationScreens.EventScreenNavigation.name)
+                    }
+
+                    composable(route = "${NavigationScreens.EventScreenNavigation.name}/{eventId}") {
+                            navBackStackEntry ->
+                        val eventId = navBackStackEntry.arguments?.getString("eventId")
+                        eventId?.let { id->
+                            isShowBottomBar.value = false
+                            EventCardScreen(eventId = id.toInt())
+                        }
+                    }
+
+                    composable(route = NavigationScreens.BooksScreenNavigation.name) {
+                        isShowBottomBar.value = false
+                        BooksScreen(navController = navController, bookDestination = NavigationScreens.BookScreenNavigation.name)
+                    }
+
+                    composable(route = "${NavigationScreens.BookScreenNavigation.name}/{bookId}/{prText}/{maxSalePercent}/{bookSubscribeText}/{bookSubscribeMinCost}/{bookSubscribeLink}") {
+                            navBackStackEntry ->
+                        Log.d("чего внутри", "${navBackStackEntry.arguments.toString()}")
+                        val bookId = navBackStackEntry.arguments?.getString("bookId")
+                        val prText = navBackStackEntry.arguments?.getString("prText")?:""
+                        val maxSalePercent = navBackStackEntry.arguments?.getString("maxSalePercent")?:"0"
+                        val bookSubscribeText = navBackStackEntry.arguments?.getString("bookSubscribeText")?:""
+                        val bookSubscribeMinCost = navBackStackEntry.arguments?.getString("bookSubscribeMinCost")?:"0"
+                        val bookSubscribeLink = navBackStackEntry.arguments?.getString("bookSubscribeLink")?.replace("**", "//")?:""
+                        bookId?.let { id->
+                            isShowBottomBar.value = false
+                            BookCardScreen(
+                                bookId = id.toInt(),
+                                prText = prText,
+                                maxSalePercent = maxSalePercent.toInt(),
+                                bookSubscribeText = bookSubscribeText,
+                                bookSubscribeMinCost = bookSubscribeMinCost.toInt(),
+                                bookSubscribeLink = bookSubscribeLink
+                                )
+                        }
                     }
                 }
             }
