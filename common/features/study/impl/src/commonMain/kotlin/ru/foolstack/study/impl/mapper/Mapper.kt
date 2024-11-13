@@ -1,5 +1,7 @@
 package ru.foolstack.study.impl.mapper
 
+import ru.foolstack.events.api.model.EventDomain
+import ru.foolstack.events.api.model.EventSubDomain
 import ru.foolstack.storage.model.Studies
 import ru.foolstack.storage.model.Study
 import ru.foolstack.study.api.model.StudiesDomain
@@ -7,6 +9,8 @@ import ru.foolstack.study.api.model.StudyDomain
 import ru.foolstack.study.api.model.StudyProfessionDomain
 import ru.foolstack.storage.model.ProfessionListItem
 import ru.foolstack.study.impl.model.StudyResponse
+import ru.foolstack.ui.model.Chip
+import ru.foolstack.ui.model.StudyItem
 
 class Mapper {
 
@@ -100,5 +104,49 @@ class Mapper {
             prText = response.prText,
             errorMsg = response.errorMsg
         )
+    }
+
+    fun mapToStudiesItems(studies: List<StudyDomain>):List<StudyItem>{
+        val items = HashSet<StudyItem>()
+
+        studies.forEach { item->
+            val tags = HashSet<String>()
+            item.professions.forEach { tag->
+                tags.add(tag.professionName)
+            }
+            items.add(
+                StudyItem(
+                studyId = item.studyId,
+                studyName = item.studyName,
+                studySalePercent = item.studySalePercent,
+                studyLength = item.studyLength,
+                studyLengthType = item.studyLengthType,
+                studyAdditionalText = item.studyAdditionalText,
+                studyCost = item.studyCost,
+                studyImageBase64 = item.studyImageBase64,
+                studyTags = tags.toList(),
+                studyRefLink = item.studyRefLink,
+                studyOwner = item.studyOwner
+            )
+            )
+        }
+        return items.toList()
+    }
+
+    private fun mapToStudyChip(sub: StudyProfessionDomain): Chip {
+        return Chip(
+            id = sub.professionId,
+            name = sub.professionName
+        )
+    }
+
+    fun mapToChips(studiesList: List<StudyDomain>): List<Chip>{
+        val list = HashSet<Chip>()
+        studiesList.forEach { study->
+            study.professions.forEach {sub->
+                list.add(mapToStudyChip(sub))
+            }
+        }
+        return list.toList()
     }
 }

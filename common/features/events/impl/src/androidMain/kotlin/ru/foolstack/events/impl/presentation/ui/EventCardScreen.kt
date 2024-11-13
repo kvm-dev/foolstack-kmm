@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,7 +38,7 @@ import ru.foolstack.ui.components.CardBigDescription
 import ru.foolstack.ui.components.CardText
 import ru.foolstack.ui.components.CardTitle
 import ru.foolstack.ui.components.GreenButton
-import ru.foolstack.ui.components.ServiceDate
+import ru.foolstack.ui.components.ServiceSubLabel
 import ru.foolstack.ui.components.ServiceTitleText
 import ru.foolstack.ui.components.ShimmerEffect
 import ru.foolstack.ui.components.Title
@@ -198,7 +197,7 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                                                     "free"
                                                 }
                                             }
-                                            ServiceDate(
+                                            ServiceSubLabel(
                                                 text = successState.event.eventDateStart.timestampToDateString(),
                                                 modifier = Modifier
                                             )

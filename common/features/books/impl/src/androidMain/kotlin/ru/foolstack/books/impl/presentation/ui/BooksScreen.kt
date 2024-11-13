@@ -1,4 +1,4 @@
-package ru.foolstack.books.impl.presentation
+package ru.foolstack.books.impl.presentation.ui
 
 import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
@@ -39,7 +39,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import ru.foolstack.books.impl.mapper.Mapper
-import ru.foolstack.books.impl.presentation.ui.BooksViewState
 import ru.foolstack.books.impl.presentation.viewmodel.BooksViewModel
 import ru.foolstack.language.api.model.LangResultDomain
 import ru.foolstack.model.ProgressState

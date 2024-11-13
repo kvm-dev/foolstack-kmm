@@ -1,6 +1,5 @@
 package ru.foolstack.ui.components
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,7 +47,6 @@ import ru.foolstack.ui.theme.MainYellow
 import ru.foolstack.ui.utils.decodeBase64ToBitmap
 import java.util.Locale
 
-@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BooksVerticalSlider(
@@ -132,7 +130,7 @@ fun BooksVerticalSlider(
                             onClickBook()
                         }
                         .padding(horizontal = 20.dp, vertical = 18.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White,),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
                 ) {
                     Column(
                         modifier = Modifier

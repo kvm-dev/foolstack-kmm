@@ -37,7 +37,8 @@ import ru.foolstack.ui.model.Lang
 fun SubMenu(
     lang: Lang,
     onClickEvents: () -> Unit = {},
-    onClickBooks: () -> Unit = {}) {
+    onClickBooks: () -> Unit = {},
+    onClickStudies: () -> Unit = {}) {
     var isAnimating by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val events =  if(lang== Lang.RU){ "События" } else{ "Events" }
@@ -137,6 +138,7 @@ fun SubMenu(
                                         delay(delayMillis / 2)
                                         delay(delayMillis)
                                         isAnimating = false
+                                        onClickStudies()
                                     }
                                 }
                             },

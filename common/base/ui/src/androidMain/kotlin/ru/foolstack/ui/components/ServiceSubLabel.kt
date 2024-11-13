@@ -3,7 +3,6 @@ package ru.foolstack.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import ru.foolstack.ui.theme.ServiceBackground
 import ru.foolstack.ui.theme.montserratFamily
 @Composable
-fun ServiceDate(text: String, modifier: Modifier){
+fun ServiceSubLabel(text: String, modifier: Modifier){
     Box(modifier = modifier
         .clip(RoundedCornerShape(7.dp))
         .background(

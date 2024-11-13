@@ -1,7 +1,5 @@
 package ru.foolstack.ui.components
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -41,7 +39,6 @@ import ru.foolstack.ui.R
 import ru.foolstack.ui.theme.LoadingIndicatorBackground
 import ru.foolstack.ui.theme.MainYellow
 
-@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun EventVerticalSlider(
@@ -97,10 +94,9 @@ fun EventVerticalSlider(
                             ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
                         }
                     }
-                    itemsIndexed(filteredEvents.toList()) { index, event ->
-                        var cost = ""
-                        var symbol = ""
-                        symbol = if (lang == Lang.RU) {
+                    itemsIndexed(filteredEvents.toList()) { _, event ->
+                        val cost: String
+                        val symbol: String = if (lang == Lang.RU) {
                             "₽"
                         } else {
                             "$"
@@ -117,7 +113,6 @@ fun EventVerticalSlider(
                         var subTags = ""
                         event.eventTags.forEach { tag ->
                             subTags += "$tag/"
-                            Log.d("event tags", "$tag")
                         }
                         if (subTags.isNotEmpty()) {
                             subTags = subTags.substring(0, subTags.length - 1)
@@ -157,17 +152,17 @@ fun EventVerticalSlider(
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(top = 10.dp)
+                                        .padding(top = 10.dp, end = 4.dp)
                                         .align(Alignment.End)
                                 ) {
                                     Column(modifier = Modifier
                                         .weight(2F)
                                         .padding(end = 2.dp)) {
                                         ServiceTag(subTags)
-                                        ServiceTitle(event.eventName)
+                                        ServiceTitle(modifier = Modifier.padding(end = 4.dp), text = event.eventName)
                                     }
                                     Column {
-                                        ServiceDate(
+                                        ServiceSubLabel(
                                             text = event.eventStartDate, modifier = Modifier
                                                 .align(Alignment.End)
                                         )
@@ -179,5 +174,4 @@ fun EventVerticalSlider(
                         }
                     }
                 }
-
-}
+            }
