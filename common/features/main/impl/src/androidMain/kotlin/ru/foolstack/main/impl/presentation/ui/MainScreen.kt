@@ -56,6 +56,7 @@ fun MainScreen(
     mainViewModel: MainViewModel = koinViewModel(),
     onClickEvents: () -> Unit = {},
     onClickBooks: () -> Unit = {},
+    onclickStudies: () -> Unit = {},
     navController: NavController,
     eventDestination: String) {
     val eventId  = remember { mutableIntStateOf(0) }
@@ -201,7 +202,8 @@ fun MainScreen(
                               SubMenu(
                                   lang = Lang.RU,
                                   onClickEvents = onClickEvents,
-                                  onClickBooks = onClickBooks)
+                                  onClickBooks = onClickBooks,
+                                  onClickStudies = onclickStudies)
                           }
                       }
                       is MainViewState.GuestClient-> {

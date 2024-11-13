@@ -7,6 +7,7 @@ enum class NavigationScreens(val title: String) {
     EventScreenNavigation("Event"),
     BooksScreenNavigation("Books"),
     BookScreenNavigation("Book"),
+    StudiesScreenNavigation("Studies"),
     InterviewScreen("Interview"),
     TestsScreen("Tests"),
     NewsScreen("News")

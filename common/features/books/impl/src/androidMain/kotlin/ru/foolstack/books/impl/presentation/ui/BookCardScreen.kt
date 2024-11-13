@@ -1,4 +1,4 @@
-package ru.foolstack.books.impl.presentation
+package ru.foolstack.books.impl.presentation.ui
 
 import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -24,35 +23,25 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
-import ru.foolstack.books.impl.presentation.ui.BookCardViewState
 import ru.foolstack.books.impl.presentation.viewmodel.BookCardViewModel
 import ru.foolstack.language.api.model.LangResultDomain
 import ru.foolstack.model.ProgressState
-import ru.foolstack.storage.model.Book
 import ru.foolstack.ui.R
 import ru.foolstack.ui.components.BookPrBlock
 import ru.foolstack.ui.components.BookSaleText
 import ru.foolstack.ui.components.BookTitle
-import ru.foolstack.ui.components.CardBigDescription
 import ru.foolstack.ui.components.CardText
-import ru.foolstack.ui.components.CardTitle
 import ru.foolstack.ui.components.GreenButton
-import ru.foolstack.ui.components.ServiceDate
-import ru.foolstack.ui.components.ServiceTitleText
 import ru.foolstack.ui.components.ShimmerEffect
 import ru.foolstack.ui.components.Title
 import ru.foolstack.ui.components.TopBar
 import ru.foolstack.ui.components.YellowButton
 import ru.foolstack.ui.model.Lang
-import ru.foolstack.ui.utils.decodeBase64ToBitmap
-import ru.foolstack.ui.utils.timestampToDateString
 
 @Composable
 fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookId: Int, prText: String, maxSalePercent: Int, bookSubscribeText: String, bookSubscribeMinCost: Int, bookSubscribeLink: String) {

@@ -18,20 +18,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import org.koin.androidx.compose.inject
-import ru.foolstack.books.impl.presentation.BookCardScreen
-import ru.foolstack.books.impl.presentation.BooksScreen
+import ru.foolstack.books.impl.presentation.ui.BookCardScreen
+import ru.foolstack.books.impl.presentation.ui.BooksScreen
 import ru.foolstack.events.impl.presentation.ui.EventsScreen
 import ru.foolstack.events.impl.presentation.ui.EventCardScreen
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.splash.impl.presentation.ui.SplashScreen
 import ru.foolstack.main.impl.presentation.ui.MainScreen
+import ru.foolstack.study.impl.presentation.ui.StudiesScreen
 import ru.foolstack.ui.components.BottomAppBar
 import ru.foolstack.ui.components.BottomIcons
 import ru.foolstack.ui.theme.FoolStackTheme
@@ -103,6 +102,14 @@ fun StartApplication(
                                     }
                                 }
                             },
+                            onclickStudies = {
+                                isShowBottomBar.value = false
+                                navController.navigate(NavigationScreens.StudiesScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.StudiesScreenNavigation.name) {
+                                        inclusive = false
+                                    }
+                                }
+                            },
                             navController = navController, eventDestination = NavigationScreens.EventScreenNavigation.name )
                     }
 
@@ -127,7 +134,6 @@ fun StartApplication(
 
                     composable(route = "${NavigationScreens.BookScreenNavigation.name}/{bookId}/{prText}/{maxSalePercent}/{bookSubscribeText}/{bookSubscribeMinCost}/{bookSubscribeLink}") {
                             navBackStackEntry ->
-                        Log.d("чего внутри", "${navBackStackEntry.arguments.toString()}")
                         val bookId = navBackStackEntry.arguments?.getString("bookId")
                         val prText = navBackStackEntry.arguments?.getString("prText")?:""
                         val maxSalePercent = navBackStackEntry.arguments?.getString("maxSalePercent")?:"0"
@@ -145,6 +151,11 @@ fun StartApplication(
                                 bookSubscribeLink = bookSubscribeLink
                                 )
                         }
+                    }
+
+                    composable(route = NavigationScreens.StudiesScreenNavigation.name) {
+                        isShowBottomBar.value = false
+                        StudiesScreen(navController = navController)
                     }
                 }
             }

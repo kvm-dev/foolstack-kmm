@@ -36,6 +36,7 @@ kotlin {
             implementation(projects.common.features.main.impl)
             implementation(projects.common.features.events.impl)
             implementation(projects.common.features.books.impl)
+            implementation(projects.common.features.study.impl)
             implementation(projects.common.features.language.api)
             //di
             implementation(libs.koin.core)

@@ -26,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +35,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import ru.foolstack.ui.R
 import ru.foolstack.ui.model.EventItem
 import ru.foolstack.ui.model.Lang
@@ -157,10 +155,10 @@ fun EventHorizontalSlider(lang: Lang,
                             ) {
                                 Column(modifier = Modifier.weight(2F).padding(end = 2.dp)) {
                                     ServiceTag(subTags)
-                                    ServiceTitle(event.eventName)
+                                    ServiceTitle(modifier = Modifier, text = event.eventName)
                                 }
                                 Column {
-                                    ServiceDate(
+                                    ServiceSubLabel(
                                         text = event.eventStartDate, modifier = Modifier
                                             .align(Alignment.End)
                                     )
