@@ -7,6 +7,7 @@ sealed class StudiesViewState {
 
     data class LoadingState(val lang: LangResultDomain): StudiesViewState()
 
+
     data class ErrorState(val lang: LangResultDomain): StudiesViewState()
 
     data class SuccessState(

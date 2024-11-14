@@ -100,12 +100,12 @@ fun StudiesVerticalSlider(
 
         item{
             ServiceDescription(
-                modifier = Modifier,
+                modifier = Modifier
+                    .padding(horizontal = 32.dp),
                 text = prText)
         }
 
         itemsIndexed(filteredStudies.toList()) { _, study ->
-            val cost: String
             val symbol: String = if (lang == Lang.RU) {
                 "₽"
             } else {

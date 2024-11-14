@@ -1,4 +1,4 @@
-package ru.foolstack.books.impl.presentation.viewmodel
+package ru.foolstack.news.impl.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -6,27 +6,27 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.foolstack.books.impl.domain.interactor.BookCardInteractor
-import ru.foolstack.books.impl.presentation.ui.BookCardViewState
 import ru.foolstack.model.ProgressState
+import ru.foolstack.news.impl.domain.interactor.NewsCardInteractor
+import ru.foolstack.news.impl.presentation.ui.NewsCardViewState
 import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
-class BookCardViewModel(private val interactor: BookCardInteractor) : BaseViewModel() {
-    private val _uiState = MutableStateFlow<BookCardViewState>(
-        BookCardViewState.Idle(lang = interactor.getCurrentLang()))
+class NewsCardViewModel(private val interactor: NewsCardInteractor) : BaseViewModel() {
+    private val _uiState = MutableStateFlow<NewsCardViewState>(
+        NewsCardViewState.Idle(lang = interactor.getCurrentLang()))
 
-    val uiState: StateFlow<BookCardViewState> = _uiState.asStateFlow()
+    val uiState: StateFlow<NewsCardViewState> = _uiState.asStateFlow()
 
-    fun initViewModel(bookId: Int) {
+    fun initViewModel(newsId: Int) {
         if(progressState.value == ProgressState.LOADING){
             viewModelScope.launch {
-                interactor.booksState.collect{ resultState->
+                interactor.newsState.collect{ resultState->
                     if(resultState is ResultState.Success){
-                        _uiState.update { BookCardViewState.SuccessState(
+                        _uiState.update { NewsCardViewState.SuccessState(
                             isHaveConnection = interactor.isConnectionAvailable(),
                             lang = interactor.getCurrentLang(),
-                            book = resultState.data?.books?.find { it.bookId == bookId }) }
+                            singleNewsDomain = resultState.data?.news?.find { it.newsId == newsId }) }
                         updateState(ProgressState.COMPLETED)
                     }
                 }
@@ -34,7 +34,7 @@ class BookCardViewModel(private val interactor: BookCardInteractor) : BaseViewMo
         }
     }
 
-    fun onClickLink(url: String){
-        interactor.openInBrowser(url)
+    fun shareLink(url: String){
+        interactor.shareLink(url)
     }
 }

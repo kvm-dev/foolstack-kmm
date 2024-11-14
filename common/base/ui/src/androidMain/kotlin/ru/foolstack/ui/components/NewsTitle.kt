@@ -7,19 +7,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import ru.foolstack.ui.theme.PrimaryTitleColor
+import ru.foolstack.ui.theme.InputText
 import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
-fun ServiceTitle(text: String, modifier: Modifier){
+fun NewsTitle(text: String, modifier: Modifier){
     Text(modifier = modifier,
-        text = text, fontFamily = montserratFamily, fontWeight = FontWeight.Bold, style = TextStyle(
-            fontSize = 18.sp,
-            color = MaterialTheme.colorScheme.PrimaryTitleColor,
+        text = text,
+        fontFamily = montserratFamily,
+        fontWeight = FontWeight.SemiBold,
+        style = TextStyle(
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.InputText,
             textAlign = TextAlign.Start
-        ),
-        overflow = TextOverflow.Ellipsis
+        )
     )
 }

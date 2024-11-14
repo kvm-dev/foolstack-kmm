@@ -5,17 +5,12 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -23,7 +18,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
@@ -37,7 +31,6 @@ import ru.foolstack.ui.components.BookSaleText
 import ru.foolstack.ui.components.BookTitle
 import ru.foolstack.ui.components.CardText
 import ru.foolstack.ui.components.GreenButton
-import ru.foolstack.ui.components.ShimmerEffect
 import ru.foolstack.ui.components.Title
 import ru.foolstack.ui.components.TopBar
 import ru.foolstack.ui.components.YellowButton
@@ -53,50 +46,7 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
             Log.d("realy bookCard Complete", "yes")
             val bookState by bookCardViewModel.uiState.collectAsState()
             when (bookState) {
-                is BookCardViewState.LoadingState -> {
-                    Log.d("bookCard in state is", "Loading")
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 40.dp)
-                    ) {
-                        TopBar(
-                            screenTitle = if ((bookState as BookCardViewState.LoadingState).lang is LangResultDomain.Ru) {
-                                "Книга"
-                            } else {
-                                "Book"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .padding(start = 20.dp),
-                            horizontalArrangement = Arrangement.Absolute.SpaceBetween
-                        ) {
-                            repeat(6) {
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .size(width = 120.dp, height = 38.dp)
-                                        .padding(horizontal = 2.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(34)),
-                                    durationMillis = 1000
-                                )
-                            }
-                        }
-                        repeat(10) {
-                            ShimmerEffect(
-                                modifier = Modifier
-                                    .height(220.dp)
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 18.dp)
-                                    .background(Color.LightGray, RoundedCornerShape(10)),
-                                durationMillis = 1000
-                            )
-                        }
-                    }
-                }
-
-                is BookCardViewState.ErrorState -> {
+                is BookCardViewState.Idle -> {
                     Log.d("bookCard in state is", "Error")
                     Box(
                         modifier = Modifier
@@ -105,7 +55,7 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                             .padding(top = 40.dp)
                     ) {
                         TopBar(
-                            screenTitle = if ((bookState as BookCardViewState.ErrorState).lang is LangResultDomain.Ru) {
+                            screenTitle = if ((bookState as BookCardViewState.Idle).lang is LangResultDomain.Ru) {
                                 "Книга"
                             } else {
                                 "Book"
@@ -121,7 +71,7 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                             )
                             Title(
                                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                                text = if ((bookState as BookCardViewState.ErrorState).lang is LangResultDomain.Ru) {
+                                text = if ((bookState as BookCardViewState.Idle).lang is LangResultDomain.Ru) {
                                     "Что-то пошло не так..."
                                 } else {
                                     "Something went wrong..."
@@ -129,7 +79,7 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                             )
                             YellowButton(
                                 onClick = { backDispatcher.onBackPressed() },
-                                text = if ((bookState as BookCardViewState.ErrorState).lang is LangResultDomain.Ru) {
+                                text = if ((bookState as BookCardViewState.Idle).lang is LangResultDomain.Ru) {
                                     "Вернуться к литературе"
                                 } else {
                                     "Return to books"
@@ -137,7 +87,8 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                                 isEnabled = true,
                                 isLoading = false,
                                 modifier = Modifier
-                                    .padding(top = 30.dp)
+                                    .padding(top = 30.dp, start = 16.dp, end = 16.dp)
+                                    .fillMaxWidth()
                             )
                         }
                     }

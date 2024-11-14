@@ -215,28 +215,63 @@ private fun ScrollableContent(
         }
         when(bottomSplashScreenState){
             BottomSplashScreenState.UNAUTHORIZED-> {
-                YellowButton(onClick = { onClickAuthorizationScreen() }, text = mainButtonText, isEnabled = true, isLoading = false, modifier = Modifier)
+                YellowButton(
+                    onClick = { onClickAuthorizationScreen() },
+                    text = mainButtonText,
+                    isEnabled = true,
+                    isLoading = false,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth())
             }
 
             BottomSplashScreenState.AUTHORIZATION-> {
                 if(emailText.isEmpty() || isEmailError){
-                    YellowButton(onClick = {}, text = mainButtonText, isEnabled = false, isLoading = false, modifier = Modifier)
+                    YellowButton(
+                        onClick = {},
+                        text = mainButtonText,
+                        isEnabled = false,
+                        isLoading = false,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth())
                 }
                 else{
-                    YellowButton(onClick = { onClickAuthorizationOrRegistrationByEmail() }, text = mainButtonText, isEnabled = true, isLoading = isEmailLoading, modifier = Modifier)
+                    YellowButton(
+                        onClick = { onClickAuthorizationOrRegistrationByEmail() },
+                        text = mainButtonText,
+                        isEnabled = true,
+                        isLoading = isEmailLoading,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth())
                 }
             }
             BottomSplashScreenState.CONFIRM-> {
                 Spacer(modifier = Modifier.height(40.dp))
                 if(otpValue.isEmpty() || isOtpError || otpValue.length!=4){
-                    YellowButton(onClick = {}, text = mainButtonText, isEnabled = false, isLoading = isEmailLoading, modifier = Modifier)
+                    YellowButton(
+                        onClick = {},
+                        text = mainButtonText,
+                        isEnabled = false,
+                        isLoading = isEmailLoading,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth())
                 }
                 else{
                     if(isOtpLoading){
                         LoadingIndicator()
                     }
                     else{
-                        YellowButton(onClick = { onClickConfirm(isUserExist) }, text = mainButtonText, isEnabled = true, isLoading = isEmailLoading, modifier = Modifier)
+                        YellowButton(
+                            onClick = { onClickConfirm(isUserExist) },
+                            text = mainButtonText,
+                            isEnabled = true,
+                            isLoading = isEmailLoading,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth())
                     }
                 }
                 var resendText = resendButtonText
@@ -260,7 +295,14 @@ private fun ScrollableContent(
              //nothing, without buttons
             }
             BottomSplashScreenState.ANY_ERROR->{
-                YellowButton(onClick = {onClickTryAgain()}, text = mainButtonText, isEnabled = true, isLoading = false, modifier = Modifier)
+                YellowButton(
+                    onClick = { onClickTryAgain() },
+                    text = mainButtonText,
+                    isEnabled = true,
+                    isLoading = false,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth())
             }
         }
         if(bottomSplashScreenState!= BottomSplashScreenState.NO_CONNECTION){

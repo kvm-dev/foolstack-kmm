@@ -14,7 +14,6 @@ import ru.foolstack.ui.theme.montserratFamily
 fun CardTitle(text: String, modifier: Modifier){
     Text(
         modifier = modifier,
-        maxLines = 2,
         text = text, fontFamily = montserratFamily, fontWeight = FontWeight.Bold, style = TextStyle(
             fontSize = 18.sp,
             color = Color.Black,

@@ -48,7 +48,7 @@ var MainYellowSchemeColor by mutableStateOf(MainYellowColorLight)
 var DisabledButtonTextSchemeColor by mutableStateOf(DisabledButtonTextColorLight)
 var LoadingIndicatorSchemeColor by mutableStateOf(LoadingIndicatorColorLight)
 var NavigationDisabledSchemeColor by mutableStateOf(NavigationDisabledLight)
-var NavigationSelectedSchemeColor by mutableStateOf(NavigationSelectedLight)
+var MainDarkGreenSchemeColor by mutableStateOf(MainDarkGreenLightColor)
 var MainBackgroundSchemeColor by mutableStateOf(MainBackgroundLight)
 var DividerSchemeColor by mutableStateOf(DividerLightColor)
 var ServiceBackgroundSchemeColor by mutableStateOf(ServiceBackgroundLightColor)
@@ -185,10 +185,10 @@ var ColorScheme.NavigationDisabled: Color
         NavigationDisabledSchemeColor = value
     }
 
-var ColorScheme.NavigationSelected: Color
-    get() = NavigationSelectedSchemeColor
+var ColorScheme.MainDarkGreen: Color
+    get() = MainDarkGreenSchemeColor
     set(value) {
-        NavigationSelectedSchemeColor = value
+        MainDarkGreenSchemeColor = value
     }
 
 var ColorScheme.MainBackground: Color
@@ -439,10 +439,10 @@ fun FoolStackTheme(
         NavigationDisabledLight
     }
 
-    colorScheme.NavigationSelected = if (darkTheme) {
-        NavigationSelectedDark
+    colorScheme.MainDarkGreen = if (darkTheme) {
+        MainDarkGreenDarkColor
     } else {
-        NavigationSelectedLight
+        MainDarkGreenLightColor
     }
 
     colorScheme.MainBackground = if (darkTheme) {

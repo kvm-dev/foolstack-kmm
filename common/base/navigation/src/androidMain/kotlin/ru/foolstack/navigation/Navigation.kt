@@ -2,7 +2,6 @@ package ru.foolstack.navigation
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -30,6 +29,8 @@ import ru.foolstack.events.impl.presentation.ui.EventCardScreen
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.splash.impl.presentation.ui.SplashScreen
 import ru.foolstack.main.impl.presentation.ui.MainScreen
+import ru.foolstack.news.impl.presentation.ui.NewsCardScreen
+import ru.foolstack.news.impl.presentation.ui.NewsScreen
 import ru.foolstack.study.impl.presentation.ui.StudiesScreen
 import ru.foolstack.ui.components.BottomAppBar
 import ru.foolstack.ui.components.BottomIcons
@@ -54,7 +55,19 @@ fun StartApplication(
                 BottomAppBar(
                     selectedState = bottomBarSelectedState,
                     isShow = isShowBottomBar,
-                    lang = getCurrentLanguageUseCase.getCurrentLang().lang
+                    lang = getCurrentLanguageUseCase.getCurrentLang().lang,
+                    onClickMain = {
+                        isShowBottomBar.value = true
+                        navController.navigate(NavigationScreens.MainScreenNavigation.name) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onClickNews = {
+                        isShowBottomBar.value = true
+                        navController.navigate(NavigationScreens.NewsListScreenNavigation.name) {
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
         ) {
@@ -85,27 +98,28 @@ fun StartApplication(
 
                     composable(route = NavigationScreens.MainScreenNavigation.name) {
                         isShowBottomBar.value = true
+                        bottomBarSelectedState.value = BottomIcons.MAIN
                         BackHandler(onBack = { activity?.finish()})
                         MainScreen(onClickEvents = {
                             isShowBottomBar.value = false
-                            navController.navigate(NavigationScreens.EventsScreenNavigation.name) {
-                                popUpTo(NavigationScreens.EventsScreenNavigation.name) {
+                            navController.navigate(NavigationScreens.EventsListScreenNavigation.name) {
+                                popUpTo(NavigationScreens.EventsListScreenNavigation.name) {
                                     inclusive = false
                                 }
                             }
                         },
                             onClickBooks = {
                                 isShowBottomBar.value = false
-                                navController.navigate(NavigationScreens.BooksScreenNavigation.name) {
-                                    popUpTo(NavigationScreens.BooksScreenNavigation.name) {
+                                navController.navigate(NavigationScreens.BooksListScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.BooksListScreenNavigation.name) {
                                         inclusive = false
                                     }
                                 }
                             },
                             onclickStudies = {
                                 isShowBottomBar.value = false
-                                navController.navigate(NavigationScreens.StudiesScreenNavigation.name) {
-                                    popUpTo(NavigationScreens.StudiesScreenNavigation.name) {
+                                navController.navigate(NavigationScreens.StudiesListScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.StudiesListScreenNavigation.name) {
                                         inclusive = false
                                     }
                                 }
@@ -113,7 +127,7 @@ fun StartApplication(
                             navController = navController, eventDestination = NavigationScreens.EventScreenNavigation.name )
                     }
 
-                    composable(route = NavigationScreens.EventsScreenNavigation.name) {
+                    composable(route = NavigationScreens.EventsListScreenNavigation.name) {
                         isShowBottomBar.value = false
                         EventsScreen(navController = navController, eventDestination = NavigationScreens.EventScreenNavigation.name)
                     }
@@ -127,7 +141,7 @@ fun StartApplication(
                         }
                     }
 
-                    composable(route = NavigationScreens.BooksScreenNavigation.name) {
+                    composable(route = NavigationScreens.BooksListScreenNavigation.name) {
                         isShowBottomBar.value = false
                         BooksScreen(navController = navController, bookDestination = NavigationScreens.BookScreenNavigation.name)
                     }
@@ -153,9 +167,24 @@ fun StartApplication(
                         }
                     }
 
-                    composable(route = NavigationScreens.StudiesScreenNavigation.name) {
+                    composable(route = NavigationScreens.StudiesListScreenNavigation.name) {
                         isShowBottomBar.value = false
                         StudiesScreen(navController = navController)
+                    }
+
+                    composable(route = NavigationScreens.NewsListScreenNavigation.name) {
+                        isShowBottomBar.value = true
+                        bottomBarSelectedState.value = BottomIcons.NEWS
+                        NewsScreen(navController = navController, newsDestination = NavigationScreens.NewsScreenNavigation.name)
+                    }
+
+                    composable(route = "${NavigationScreens.NewsScreenNavigation.name}/{newsId}") {
+                            navBackStackEntry ->
+                        val eventId = navBackStackEntry.arguments?.getString("newsId")
+                        eventId?.let { id->
+                            isShowBottomBar.value = false
+                            NewsCardScreen(newsId = id.toInt())
+                        }
                     }
                 }
             }

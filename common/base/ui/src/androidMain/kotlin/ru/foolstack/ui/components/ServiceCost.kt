@@ -13,7 +13,10 @@ import ru.foolstack.ui.theme.montserratFamily
 @Composable
 fun ServiceCost(text: String){
     Text(
-        text =text, fontFamily = montserratFamily, fontWeight = FontWeight.Bold, style = TextStyle(
+        text = text,
+        fontFamily = montserratFamily,
+        fontWeight = FontWeight.Bold,
+        style = TextStyle(
             fontSize = 10.sp,
             color = MaterialTheme.colorScheme.ServiceText,
             textAlign = TextAlign.Start

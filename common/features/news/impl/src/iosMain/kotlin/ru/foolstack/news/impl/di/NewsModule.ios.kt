@@ -2,4 +2,5 @@ package ru.foolstack.news.impl.di
 
 import org.koin.core.module.Module
 
-expect val newsModule: Module
+actual val newsModule: Module
+    get() = TODO("Not yet implemented")

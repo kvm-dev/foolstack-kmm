@@ -11,5 +11,5 @@ data class StudyItem(
     val studyImageBase64: String,
     val studyTags: List<String>,
     val studyRefLink: String,
-    val studyOwner: String,
+    val studyOwner: String
 )
