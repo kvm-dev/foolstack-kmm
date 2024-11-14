@@ -1,11 +1,11 @@
 package ru.foolstack.news.api.model
 
 data class NewsDomain(
-    val news: List<NewDomain>,
+    val news: List<SingleNewsDomain>,
     val errorMsg: String
 )
 
-data class NewDomain(
+data class SingleNewsDomain(
     val newsId: Int,
     val newsName: String,
     val newsText: String,

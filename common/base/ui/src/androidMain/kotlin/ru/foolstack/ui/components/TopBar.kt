@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,10 +25,11 @@ import ru.foolstack.ui.theme.PrimaryTitleColor
 import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
-fun TopBar(screenTitle: String, onBackPressed:  () -> Unit, isDark: Boolean = true, isTitleVisible: Boolean = true){
+fun TopBar(screenTitle: String, onBackPressed:  () -> Unit, isDark: Boolean = true, isTitleVisible: Boolean = true, isArrowVisible: Boolean = true){
     FoolStackTheme {
         Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp).fillMaxWidth()) {
-            if(isDark){
+            if (isArrowVisible) {
+            if (isDark) {
                 Image(
                     painterResource(R.drawable.back_arrow),
                     contentDescription = "",
@@ -37,8 +39,7 @@ fun TopBar(screenTitle: String, onBackPressed:  () -> Unit, isDark: Boolean = tr
                             onBackPressed()
                         }
                 )
-            }
-            else{
+            } else {
                 Image(
                     painterResource(R.drawable.back_arrow_white),
                     contentDescription = "",
@@ -49,12 +50,14 @@ fun TopBar(screenTitle: String, onBackPressed:  () -> Unit, isDark: Boolean = tr
                         }
                 )
             }
+        }
             if(isTitleVisible){
                 Text(modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).align(Alignment.Center), text = screenTitle,
                     color = MaterialTheme.colorScheme.PrimaryTitleColor,
                     textAlign = TextAlign.Center,
                     fontFamily = montserratFamily, fontWeight = FontWeight.Black, style = TextStyle(
-                        fontSize = 14.sp)
+                        fontSize = 14.sp,
+                        fontStyle = FontStyle.Italic)
                 )
             }
         }

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,16 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import ru.foolstack.ui.R
 import ru.foolstack.ui.theme.Divider
 import ru.foolstack.ui.theme.MainBackground
 import ru.foolstack.ui.theme.NavigationDisabled
-import ru.foolstack.ui.theme.NavigationSelected
+import ru.foolstack.ui.theme.MainDarkGreen
 
 @Composable
-fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<Boolean>, lang: String) {
+fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<Boolean>, lang: String, onClickMain: () -> Unit, onClickNews: () -> Unit) {
     if(isShow.value){
         Column(
             modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.MainBackground)
@@ -56,6 +54,7 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                 interactionSource = remember { MutableInteractionSource() }
                             ){
                               selectedState.value = BottomIcons.MAIN
+                              onClickMain()
                             }
                         ) {
                                 val icon = painterResource(id = R.drawable.home)
@@ -64,9 +63,9 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                     Icon(
                                         painter = icon,
                                         contentDescription = null,
-                                        tint = if (selectedState.value == BottomIcons.MAIN) MaterialTheme.colorScheme.NavigationSelected else MaterialTheme.colorScheme.NavigationDisabled
+                                        tint = if (selectedState.value == BottomIcons.MAIN) MaterialTheme.colorScheme.MainDarkGreen else MaterialTheme.colorScheme.NavigationDisabled
                                     )
-                                    Text(color = if (selectedState.value == BottomIcons.MAIN) MaterialTheme.colorScheme.NavigationSelected else MaterialTheme.colorScheme.NavigationDisabled, text = if(lang=="RU"){BottomIcons.MAIN.rusTitle} else {BottomIcons.MAIN.engTitle})
+                                    Text(color = if (selectedState.value == BottomIcons.MAIN) MaterialTheme.colorScheme.MainDarkGreen else MaterialTheme.colorScheme.NavigationDisabled, text = if(lang=="RU"){BottomIcons.MAIN.rusTitle} else {BottomIcons.MAIN.engTitle})
                                 }
                         }
                         Row(modifier = Modifier
@@ -84,9 +83,9 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                 Icon(
                                     painter = icon,
                                     contentDescription = null,
-                                    tint = if (selectedState.value == BottomIcons.INTERVIEW) MaterialTheme.colorScheme.NavigationSelected else MaterialTheme.colorScheme.NavigationDisabled
+                                    tint = if (selectedState.value == BottomIcons.INTERVIEW) MaterialTheme.colorScheme.MainDarkGreen else MaterialTheme.colorScheme.NavigationDisabled
                                 )
-                                Text(color = if (selectedState.value == BottomIcons.INTERVIEW) MaterialTheme.colorScheme.NavigationSelected else MaterialTheme.colorScheme.NavigationDisabled, text = if(lang=="RU"){BottomIcons.INTERVIEW.rusTitle} else {BottomIcons.INTERVIEW.engTitle})
+                                Text(color = if (selectedState.value == BottomIcons.INTERVIEW) MaterialTheme.colorScheme.MainDarkGreen else MaterialTheme.colorScheme.NavigationDisabled, text = if(lang=="RU"){BottomIcons.INTERVIEW.rusTitle} else {BottomIcons.INTERVIEW.engTitle})
                             }
                         }
                         Row(modifier = Modifier
@@ -104,9 +103,9 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                 Icon(
                                     painter = icon,
                                     contentDescription = null,
-                                    tint = if (selectedState.value == BottomIcons.TESTS) MaterialTheme.colorScheme.NavigationSelected else MaterialTheme.colorScheme.NavigationDisabled
+                                    tint = if (selectedState.value == BottomIcons.TESTS) MaterialTheme.colorScheme.MainDarkGreen else MaterialTheme.colorScheme.NavigationDisabled
                                 )
-                                Text(color = if (selectedState.value == BottomIcons.TESTS) MaterialTheme.colorScheme.NavigationSelected else MaterialTheme.colorScheme.NavigationDisabled, text = if(lang=="RU"){BottomIcons.TESTS.rusTitle} else {BottomIcons.TESTS.engTitle})
+                                Text(color = if (selectedState.value == BottomIcons.TESTS) MaterialTheme.colorScheme.MainDarkGreen else MaterialTheme.colorScheme.NavigationDisabled, text = if(lang=="RU"){BottomIcons.TESTS.rusTitle} else {BottomIcons.TESTS.engTitle})
                             }
                         }
                         Row(modifier = Modifier
@@ -116,6 +115,7 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                 interactionSource = remember { MutableInteractionSource() }
                             ){
                                 selectedState.value = BottomIcons.NEWS
+                                onClickNews()
                             }
                         ) {
                                 val icon = painterResource(id = R.drawable.news)
@@ -124,9 +124,9 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                 Icon(
                                     painter = icon,
                                     contentDescription = null,
-                                    tint = if (selectedState.value == BottomIcons.NEWS) MaterialTheme.colorScheme.NavigationSelected else MaterialTheme.colorScheme.NavigationDisabled
+                                    tint = if (selectedState.value == BottomIcons.NEWS) MaterialTheme.colorScheme.MainDarkGreen else MaterialTheme.colorScheme.NavigationDisabled
                                 )
-                                Text(color = if (selectedState.value == BottomIcons.NEWS) MaterialTheme.colorScheme.NavigationSelected else MaterialTheme.colorScheme.NavigationDisabled, text = if(lang=="RU"){BottomIcons.NEWS.rusTitle} else {BottomIcons.NEWS.engTitle})
+                                Text(color = if (selectedState.value == BottomIcons.NEWS) MaterialTheme.colorScheme.MainDarkGreen else MaterialTheme.colorScheme.NavigationDisabled, text = if(lang=="RU"){BottomIcons.NEWS.rusTitle} else {BottomIcons.NEWS.engTitle})
                             }
                         }
                     }

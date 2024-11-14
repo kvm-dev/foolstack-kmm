@@ -42,9 +42,7 @@ fun YellowButton(
     val shape = RoundedCornerShape(10.dp)
     if (!isLoading) {
         Button(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            modifier = modifier,
             shape = shape,
             onClick = { onClick() },
             enabled = isEnabled,

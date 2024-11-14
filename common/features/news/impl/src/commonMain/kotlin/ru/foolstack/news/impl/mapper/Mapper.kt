@@ -1,16 +1,16 @@
 package ru.foolstack.news.impl.mapper
 
-import ru.foolstack.news.api.model.NewDomain
+import ru.foolstack.news.api.model.SingleNewsDomain
 import ru.foolstack.news.api.model.NewsDomain
 import ru.foolstack.news.impl.model.NewResponse
-import ru.foolstack.news.impl.model.NewsResponse
 import ru.foolstack.storage.model.New
 import ru.foolstack.storage.model.News
+import ru.foolstack.ui.model.NewsItem
 
 class Mapper {
 
-     fun map(response:NewResponse, base64Image: String):NewDomain{
-                return NewDomain(
+     fun map(response:NewResponse, base64Image: String):SingleNewsDomain{
+                return SingleNewsDomain(
                     newsId = response.newsId,
                     newsName = response.newsName,
                     newsText = response.newsText,
@@ -21,10 +21,10 @@ class Mapper {
         }
 
     fun map(response: News):NewsDomain{
-        val newsList = ArrayList<NewDomain>()
+        val newsList = ArrayList<SingleNewsDomain>()
         response.news.forEach { new->
             newsList.add(
-                NewDomain(
+                SingleNewsDomain(
                 newsId = new.newsId,
                 newsName = new.newsName,
                 newsDate = new.newsDate,
@@ -58,5 +58,20 @@ class Mapper {
             news = newsList,
             errorMsg = response.errorMsg
         )
+    }
+
+    fun mapToNewsItems(news: NewsDomain): List<NewsItem>{
+        val newsList = HashSet<NewsItem>()
+        news.news.forEach { newsItem->
+            newsList.add(NewsItem(
+                newsId = newsItem.newsId,
+                newsName = newsItem.newsName,
+                newsText = newsItem.newsText,
+                newsDate = newsItem.newsDate,
+                newsLink = newsItem.newsLink,
+                newsImageBase64 = newsItem.newsImageBase64
+            ))
+        }
+        return newsList.toList()
     }
 }

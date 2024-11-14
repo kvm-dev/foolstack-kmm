@@ -15,7 +15,10 @@ import ru.foolstack.ui.theme.montserratFamily
 fun ServiceText(text: String, modifier: Modifier){
     Text(
         modifier = modifier,
-        text =text, fontFamily = montserratFamily, fontWeight = FontWeight.Bold, style = TextStyle(
+        text = text,
+        fontFamily = montserratFamily,
+        fontWeight = FontWeight.Bold,
+        style = TextStyle(
             fontSize = 10.sp,
             color = MaterialTheme.colorScheme.ServiceText,
             textAlign = TextAlign.Start

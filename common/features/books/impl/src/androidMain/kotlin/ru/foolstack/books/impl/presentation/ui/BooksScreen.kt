@@ -223,7 +223,8 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
                                 isEnabled = true,
                                 isLoading = false,
                                 modifier = Modifier
-                                    .padding(top = 30.dp)
+                                    .padding(top = 30.dp, start = 16.dp, end = 16.dp)
+                                    .fillMaxWidth()
                             )
                         }
                     }
@@ -298,7 +299,8 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
                                     isEnabled = true,
                                     isLoading = false,
                                     modifier = Modifier
-                                        .padding(top = 30.dp)
+                                        .padding(top = 30.dp, start = 16.dp, end = 16.dp)
+                                        .fillMaxWidth()
                                 )
                             }
                         }

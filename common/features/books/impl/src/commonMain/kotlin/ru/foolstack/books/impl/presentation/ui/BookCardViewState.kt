@@ -5,9 +5,7 @@ import ru.foolstack.language.api.model.LangResultDomain
 
 sealed class BookCardViewState {
 
-    data class LoadingState(val lang: LangResultDomain): BookCardViewState()
-
-    data class ErrorState(val lang: LangResultDomain): BookCardViewState()
+    data class Idle(val lang: LangResultDomain) : BookCardViewState()
 
     data class SuccessState(
         val isHaveConnection: Boolean,

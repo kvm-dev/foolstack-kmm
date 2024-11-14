@@ -196,7 +196,8 @@ fun EventsScreen(eventsViewModel: EventsViewModel = koinViewModel(), navControll
                                 isEnabled = true,
                                 isLoading = false,
                                 modifier = Modifier
-                                    .padding(top = 30.dp)
+                                    .padding(top = 30.dp, start = 16.dp, end = 16.dp)
+                                    .fillMaxWidth()
                             )
                         }
                     }
@@ -268,7 +269,8 @@ fun EventsScreen(eventsViewModel: EventsViewModel = koinViewModel(), navControll
                                     isEnabled = true,
                                     isLoading = false,
                                     modifier = Modifier
-                                        .padding(top = 30.dp)
+                                        .padding(top = 30.dp, start = 16.dp, end = 16.dp)
+                                        .fillMaxWidth()
                                 )
                             }
                         }

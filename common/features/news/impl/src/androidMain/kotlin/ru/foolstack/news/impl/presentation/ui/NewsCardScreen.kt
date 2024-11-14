@@ -1,4 +1,4 @@
-package ru.foolstack.events.impl.presentation.ui
+package ru.foolstack.news.impl.presentation.ui
 
 import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,36 +28,33 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
-import ru.foolstack.events.impl.presentation.viewmodel.EventCardViewModel
 import ru.foolstack.language.api.model.LangResultDomain
 import ru.foolstack.model.ProgressState
+import ru.foolstack.news.impl.presentation.viewmodel.NewsCardViewModel
 import ru.foolstack.ui.R
-import ru.foolstack.ui.components.CardBigDescription
 import ru.foolstack.ui.components.CardText
 import ru.foolstack.ui.components.CardTitle
-import ru.foolstack.ui.components.GreenButton
 import ru.foolstack.ui.components.ServiceSubLabel
-import ru.foolstack.ui.components.ServiceTitleText
+import ru.foolstack.ui.components.ShareButton
 import ru.foolstack.ui.components.Title
 import ru.foolstack.ui.components.TopBar
 import ru.foolstack.ui.components.YellowButton
 import ru.foolstack.ui.utils.decodeBase64ToBitmap
 import ru.foolstack.ui.utils.timestampToDateString
 
-
 @Composable
-fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), eventId: Int) {
+fun NewsCardScreen(newsCardViewModel: NewsCardViewModel = koinViewModel(), newsId: Int) {
     val backDispatcher =
         checkNotNull(LocalOnBackPressedDispatcherOwner.current).onBackPressedDispatcher
-    val viewModelState by eventCardViewModel.progressState.collectAsState()
+    val viewModelState by newsCardViewModel.progressState.collectAsState()
     when (viewModelState) {
         ProgressState.COMPLETED -> {
-            Log.d("realy eventCard Complete", "yes")
-            val eventState by eventCardViewModel.uiState.collectAsState()
-            when (eventState) {
+            Log.d("realy newsCard Complete", "yes")
+            val newsState by newsCardViewModel.uiState.collectAsState()
+            when (newsState) {
 
-                is EventCardViewState.Idle -> {
-                    Log.d("event in state is", "Error")
+                is NewsCardViewState.Idle -> {
+                    Log.d("newsCard in state is", "Error")
                     Box(
                         modifier = Modifier
                             .background(MaterialTheme.colorScheme.background)
@@ -64,10 +62,10 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                             .padding(top = 40.dp)
                     ) {
                         TopBar(
-                            screenTitle = if ((eventState as EventCardViewState.Idle).lang is LangResultDomain.Ru) {
-                                "Событие"
+                            screenTitle = if ((newsState as NewsCardViewState.Idle).lang is LangResultDomain.Ru) {
+                                "Новость"
                             } else {
-                                "Event"
+                                "News"
                             }, onBackPressed = { backDispatcher.onBackPressed() })
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = R.drawable.bug_icon)
@@ -80,7 +78,7 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                             )
                             Title(
                                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                                text = if ((eventState as EventCardViewState.Idle).lang is LangResultDomain.Ru) {
+                                text = if ((newsState as NewsCardViewState.Idle).lang is LangResultDomain.Ru) {
                                     "Что-то пошло не так..."
                                 } else {
                                     "Something went wrong..."
@@ -88,10 +86,10 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                             )
                             YellowButton(
                                 onClick = { backDispatcher.onBackPressed() },
-                                text = if ((eventState as EventCardViewState.Idle).lang is LangResultDomain.Ru) {
-                                    "Вернуться к событиям"
+                                text = if ((newsState as NewsCardViewState.Idle).lang is LangResultDomain.Ru) {
+                                    "Вернуться к новостям"
                                 } else {
-                                    "Return to events"
+                                    "Return to news"
                                 },
                                 isEnabled = true,
                                 isLoading = false,
@@ -103,9 +101,9 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                     }
                 }
 
-                is EventCardViewState.SuccessState -> {
-                    Log.d("eventCard in state is", "Success")
-                    val successState = (eventState as EventCardViewState.SuccessState)
+                is NewsCardViewState.SuccessState -> {
+                    Log.d("newsCard in state is", "Success")
+                    val successState = (newsState as NewsCardViewState.SuccessState)
                     Box(
                         modifier = Modifier
                             .background(MaterialTheme.colorScheme.background)
@@ -117,49 +115,35 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                                 .fillMaxWidth()
                                 .height(320.dp)
                                 .wrapContentHeight()) {
-                                successState.event?.eventImageBase64?.decodeBase64ToBitmap()?.let {
+                                successState.singleNewsDomain?.newsImageBase64?.decodeBase64ToBitmap()?.let {
                                     Image(
                                         contentScale = ContentScale.Crop,
-                                        modifier = Modifier.fillMaxSize().
-                                        height(320.dp),
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .height(320.dp),
                                         bitmap = it,
-                                        contentDescription = successState.event.eventName
+                                        contentDescription = successState.singleNewsDomain.newsName
                                     )
                                     TopBar(
-                                        screenTitle = successState.event.eventName ?: "",
+                                        screenTitle = successState.singleNewsDomain.newsName ?: "",
                                         onBackPressed = { backDispatcher.onBackPressed() },
                                         isDark = false,
                                         isTitleVisible = false,
                                     )
                                     Column(modifier = Modifier
                                         .align(Alignment.BottomStart)
-                                        .fillMaxWidth()
-                                        .padding(top = 150.dp)) {
-                                        Row(modifier = Modifier.padding(start = 6.dp)) {
-                                            var cost = ""
-                                            var symbol = ""
-                                            symbol = if (successState.lang is LangResultDomain.Ru) {
-                                                "₽"
-                                            } else {
-                                                "$"
-                                            }
-                                            cost = if (successState.event.eventCost > 0) {
-                                                "${successState.event.eventCost} $symbol"
-                                            } else {
-                                                if (successState.lang is LangResultDomain.Ru) {
-                                                    "бесплатно"
-                                                } else {
-                                                    "free"
-                                                }
-                                            }
+                                        .fillMaxWidth()) {
+                                        Row(modifier = Modifier.padding(start = 6.dp, end = 6.dp)) {
                                             ServiceSubLabel(
-                                                text = successState.event.eventDateStart.timestampToDateString(),
-                                                modifier = Modifier
+                                                text = successState.singleNewsDomain.newsDate.timestampToDateString(),
+                                                modifier = Modifier.align(Alignment.CenterVertically)
                                             )
-                                            ServiceTitleText(
+                                            Spacer(modifier = Modifier.weight(1F))
+                                            ShareButton(
                                                 modifier = Modifier
-                                                    .padding(start = 4.dp)
-                                                    .align(Alignment.CenterVertically), text = cost
+                                                    .align(Alignment.CenterVertically)
+                                                    .padding(start = 4.dp),
+                                                onClick = { newsCardViewModel.shareLink(successState.singleNewsDomain.newsLink)}
                                             )
                                         }
                                         Box(
@@ -178,7 +162,7 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                                                 .align(Alignment.CenterHorizontally)
                                         ) {
                                             CardTitle(
-                                                text = successState.event.eventName, modifier = Modifier
+                                                modifier = Modifier
                                                     .wrapContentHeight()
                                                     .padding(
                                                         top = 24.dp,
@@ -186,7 +170,8 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                                                         start = 24.dp,
                                                         end = 24.dp
                                                     )
-                                                    .align(Alignment.Center)
+                                                    .align(Alignment.CenterStart),
+                                                text = successState.singleNewsDomain.newsName,
                                             )
                                         }
                                     }
@@ -198,35 +183,11 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                                     .align(Alignment.CenterHorizontally)
                                     .verticalScroll(rememberScrollState())
                             ) {
-                                CardBigDescription(
-                                    text = if (successState.lang is LangResultDomain.Ru) {
-                                        "Подробности"
-                                    } else {
-                                        "Details"
-                                    },
-                                    modifier = Modifier
-                                        .align(Alignment.Start)
-                                        .padding(horizontal = 20.dp)
-                                )
                                 CardText(
-                                    text = successState.event?.eventDescription ?: "",
+                                    text = successState.singleNewsDomain?.newsText ?: "",
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 10.dp)
-                                )
-
-                                GreenButton(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(top = 64.dp, bottom = 34.dp, start = 20.dp, end = 20.dp),
-                                    text = if (successState.lang is LangResultDomain.Ru) {
-                                        "Стать участником"
-                                    } else {
-                                        "Join event"
-                                    },
-                                    isEnabled = true,
-                                    isLoading = false,
-                                    onClick = { eventCardViewModel.onClickJoinEvent(url = successState.event?.eventRefLink?:"")},
+                                        .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
                                 )
                             }
                         }
@@ -236,8 +197,8 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
         }
 
         else -> {
-            Log.d("eventCard realy complete", "no")
-            eventCardViewModel.initViewModel(eventId = eventId)
+            Log.d("newsCard realy complete", "no")
+            newsCardViewModel.initViewModel(newsId = newsId)
         }
     }
 }

@@ -9,21 +9,27 @@ import kotlinx.coroutines.launch
 import ru.foolstack.events.impl.domain.interactor.EventCardInteractor
 import ru.foolstack.events.impl.presentation.ui.EventCardViewState
 import ru.foolstack.model.ProgressState
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class EventCardViewModel(private val interactor: EventCardInteractor) : BaseViewModel() {
     private val _uiState = MutableStateFlow<EventCardViewState>(
-        EventCardViewState.LoadingState(lang = interactor.getCurrentLang())
-    )
+        EventCardViewState.Idle(lang = interactor.getCurrentLang()))
+
 
     val uiState: StateFlow<EventCardViewState> = _uiState.asStateFlow()
 
-    fun initViewModel(eventId: Int) = with(viewModelScope) {
+    fun initViewModel(eventId: Int) {
         if(progressState.value == ProgressState.LOADING){
             viewModelScope.launch {
                 interactor.eventsState.collect{ resultState->
-                    _uiState.update { interactor.checkState(state = resultState, eventId = eventId) }
-                    updateState(ProgressState.COMPLETED)
+                    if(resultState is ResultState.Success){
+                        _uiState.update { EventCardViewState.SuccessState(
+                            isHaveConnection = interactor.isConnectionAvailable(),
+                            lang = interactor.getCurrentLang(),
+                            event = resultState.data?.events?.find { it.eventId == eventId }) }
+                        updateState(ProgressState.COMPLETED)
+                    }
                 }
             }
         }

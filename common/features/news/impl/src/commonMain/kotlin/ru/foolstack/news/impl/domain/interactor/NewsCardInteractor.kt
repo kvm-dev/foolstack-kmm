@@ -1,23 +1,23 @@
-package ru.foolstack.books.impl.domain.interactor
+package ru.foolstack.news.impl.domain.interactor
 
-import ru.foolstack.books.api.domain.usecase.GetBooksUseCase
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
-import ru.foolstack.utils.BrowserUtils
+import ru.foolstack.news.api.domain.usecase.GetNewsUseCase
+import ru.foolstack.utils.ShareUtils
 
-class BookCardInteractor(
+class NewsCardInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,
     private val getNetworkStateUseCase: GetNetworkStateUseCase,
-    getBooksUseCase: GetBooksUseCase,
-    private val browserUtils: BrowserUtils
+    getNewsUseCase: GetNewsUseCase,
+    private val shareUtils: ShareUtils
 ){
-    val booksState = getBooksUseCase.booksState
+    val newsState = getNewsUseCase.newsState
 
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
     fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
-    fun openInBrowser(url: String){
-        browserUtils.openInBrowser(url)
+    fun shareLink(url: String){
+        shareUtils.shareLink(url)
     }
 }

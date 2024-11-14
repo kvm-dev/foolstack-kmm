@@ -28,7 +28,10 @@ fun StudySale(text: String, modifier: Modifier){
             shape = shape
         )) {
         Text(modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-            text =text, fontFamily = montserratFamily, fontWeight = FontWeight.Bold, style = TextStyle(
+            text = text,
+            fontFamily = montserratFamily,
+            fontWeight = FontWeight.Bold,
+            style = TextStyle(
                 fontSize = 12.sp,
                 color = Color.White,
                 textAlign = TextAlign.Center
