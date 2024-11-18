@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import ru.foolstack.events.impl.domain.interactor.EventCardInteractor
 import ru.foolstack.events.impl.presentation.ui.EventCardViewState
 import ru.foolstack.model.ProgressState
@@ -19,9 +20,9 @@ class EventCardViewModel(private val interactor: EventCardInteractor) : BaseView
 
     val uiState: StateFlow<EventCardViewState> = _uiState.asStateFlow()
 
-    fun initViewModel(eventId: Int) {
+    fun initViewModel(eventId: Int) = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
-            viewModelScope.launch {
+            launch {
                 interactor.eventsState.collect{ resultState->
                     if(resultState is ResultState.Success){
                         _uiState.update { EventCardViewState.SuccessState(

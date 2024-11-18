@@ -28,7 +28,7 @@ import ru.foolstack.ui.theme.NavigationDisabled
 import ru.foolstack.ui.theme.MainDarkGreen
 
 @Composable
-fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<Boolean>, lang: String, onClickMain: () -> Unit, onClickNews: () -> Unit) {
+fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<Boolean>, lang: String, onClickMain: () -> Unit, onClickNews: () -> Unit, onClickInterviews: () -> Unit) {
     if(isShow.value){
         Column(
             modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.MainBackground)
@@ -75,6 +75,7 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                 interactionSource = remember { MutableInteractionSource() }
                             ){
                                 selectedState.value = BottomIcons.INTERVIEW
+                                onClickInterviews()
                             }
                         ) {
                                 val icon = painterResource(id = R.drawable.interview)

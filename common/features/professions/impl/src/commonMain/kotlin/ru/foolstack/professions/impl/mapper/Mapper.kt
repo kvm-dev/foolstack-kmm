@@ -1,12 +1,12 @@
 package ru.foolstack.professions.impl.mapper
 
-import ru.foolstack.network.utils.getBase64Bitmap
 import ru.foolstack.professions.api.model.ProfessionDomain
 import ru.foolstack.professions.api.model.ProfessionsDomain
 import ru.foolstack.professions.impl.model.ProfessionResponse
-import ru.foolstack.professions.impl.model.ProfessionsResponse
 import ru.foolstack.storage.model.Profession
 import ru.foolstack.storage.model.Professions
+import ru.foolstack.ui.model.ProfessionItem
+import ru.foolstack.ui.model.SubProfessionItem
 
 class Mapper {
 
@@ -329,4 +329,92 @@ class Mapper {
             professionImageBase64 = profession.professionImageBase64
         )
     }
+
+    fun mapToMainProfessionsItems(professionsDomain: ProfessionsDomain?): List<ProfessionItem>{
+        val professions = hashSetOf<ProfessionItem>()
+
+            professionsDomain?.professions?.filter { it.professionParent == 0 && it.professionType == 0 && it.professionImageBase64.isNotEmpty() }?.forEach { mainProfession->
+                professions.add(ProfessionItem(
+                    professionId = mainProfession.professionId,
+                    professionName = mainProfession.professionName,
+                    professionImageBase64 = mainProfession.professionImageBase64
+                ))
+            }
+        return professions.toList().sortedBy { it.professionId }
+        }
+
+    fun mapToSubProfessionsItems(subProfessions: ProfessionDomain?): List<SubProfessionItem>{
+        val uniqSubProfessionList = HashSet<SubProfessionItem>()
+
+        subProfessions?.subProfessions?.forEach { subProfession->
+            val lvl1SubProfessions = mutableListOf<SubProfessionItem>()
+            if(subProfession.subProfessions.isNotEmpty()){
+                subProfession.subProfessions.forEach { lvl1->
+                    val lvl2SubProfessions = mutableListOf<SubProfessionItem>()
+                    if(lvl1.subProfessions.isNotEmpty()){
+                        lvl1.subProfessions.forEach { lvl2->
+                            val lvl3SubProfessions = mutableListOf<SubProfessionItem>()
+                            if(lvl2.subProfessions.isNotEmpty()){
+                                lvl2.subProfessions.forEach { lvl3->
+                                    val lvl4SubProfessions = mutableListOf<SubProfessionItem>()
+                                    if(lvl3.subProfessions.isNotEmpty()){
+                                        lvl3.subProfessions.forEach { lvl4->
+                                            val lvl5SubProfessions = mutableListOf<SubProfessionItem>()
+                                            if(lvl4.subProfessions.isNotEmpty()){
+                                                lvl4.subProfessions.forEach { lvl5->
+                                                    lvl5SubProfessions.add(
+                                                        SubProfessionItem(
+                                                        professionId = lvl5.professionId,
+                                                        professionName = lvl5.professionName,
+                                                        subProfessions = listOf()
+                                                    )
+                                                    )
+                                                }
+                                            }
+                                            lvl4SubProfessions.add(
+                                                SubProfessionItem(
+                                                professionId = lvl4.professionId,
+                                                professionName = lvl4.professionName,
+                                                subProfessions = lvl5SubProfessions
+                                            )
+                                            )
+                                        }
+                                    }
+                                    lvl3SubProfessions.add(SubProfessionItem(
+                                        professionId = lvl3.professionId,
+                                        professionName = lvl3.professionName,
+                                        subProfessions = lvl4SubProfessions
+                                    ))
+                                }
+                            }
+                            lvl2SubProfessions.add(
+                                SubProfessionItem(
+                                professionId = lvl2.professionId,
+                                professionName = lvl2.professionName,
+                                subProfessions = lvl3SubProfessions
+                            )
+                            )
+                        }
+                    }
+
+                    lvl1SubProfessions.add(SubProfessionItem(
+                        professionId = lvl1.professionId,
+                        professionName = lvl1.professionName,
+                        subProfessions = lvl2SubProfessions
+
+                    ))
+                }
+            }
+            uniqSubProfessionList.add(
+                SubProfessionItem(
+                professionId = subProfession.professionId,
+                professionName = subProfession.professionName,
+                subProfessions = lvl1SubProfessions
+
+            )
+            )
+        }
+        return uniqSubProfessionList.toList()
+    }
+
 }

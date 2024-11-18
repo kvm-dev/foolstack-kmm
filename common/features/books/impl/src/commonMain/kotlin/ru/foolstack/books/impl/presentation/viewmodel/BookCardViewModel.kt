@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import ru.foolstack.books.impl.domain.interactor.BookCardInteractor
 import ru.foolstack.books.impl.presentation.ui.BookCardViewState
 import ru.foolstack.model.ProgressState
@@ -18,9 +19,9 @@ class BookCardViewModel(private val interactor: BookCardInteractor) : BaseViewMo
 
     val uiState: StateFlow<BookCardViewState> = _uiState.asStateFlow()
 
-    fun initViewModel(bookId: Int) {
+    fun initViewModel(bookId: Int) = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
-            viewModelScope.launch {
+            launch {
                 interactor.booksState.collect{ resultState->
                     if(resultState is ResultState.Success){
                         _uiState.update { BookCardViewState.SuccessState(

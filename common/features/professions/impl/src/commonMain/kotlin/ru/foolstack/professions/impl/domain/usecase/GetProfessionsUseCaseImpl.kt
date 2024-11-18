@@ -24,4 +24,8 @@ class GetProfessionsUseCaseImpl(private val repository: ProfessionsRepository):G
             responseProfessions
         }
     }
+
+    override suspend fun getProfessionId() = repository.getProfessionId()
+
+    override suspend fun saveProfessionId(professionId: Int)  = repository.saveProfessionId(professionId)
 }

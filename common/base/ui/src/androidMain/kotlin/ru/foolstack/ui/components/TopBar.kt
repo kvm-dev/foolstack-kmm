@@ -26,7 +26,6 @@ import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
 fun TopBar(screenTitle: String, onBackPressed:  () -> Unit, isDark: Boolean = true, isTitleVisible: Boolean = true, isArrowVisible: Boolean = true){
-    FoolStackTheme {
         Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp).fillMaxWidth()) {
             if (isArrowVisible) {
             if (isDark) {
@@ -61,5 +60,4 @@ fun TopBar(screenTitle: String, onBackPressed:  () -> Unit, isDark: Boolean = tr
                 )
             }
         }
-    }
 }

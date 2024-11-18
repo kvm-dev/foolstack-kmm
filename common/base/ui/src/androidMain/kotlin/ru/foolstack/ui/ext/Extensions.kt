@@ -10,6 +10,7 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -26,6 +27,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import ru.foolstack.ui.model.MaterialSectionItem
 
 fun Modifier.clickableWithoutRipple(
 ) = composed(
@@ -125,3 +127,19 @@ fun Modifier.scrollEnabled(
         ): Offset = if(enabled) Offset.Zero else available
     }
 )
+
+fun LazyListScope.MaterialSection(
+    sectionData: MaterialSectionItem,
+    isExpanded: Boolean,
+    onHeaderClick: () -> Unit
+) {
+
+    item {
+        ru.foolstack.ui.components.MaterialSection(
+            materialHeader = sectionData.headerText,
+            materialText = sectionData.materialText,
+            isExpanded = isExpanded,
+            onHeaderClicked = onHeaderClick
+        )
+    }
+}

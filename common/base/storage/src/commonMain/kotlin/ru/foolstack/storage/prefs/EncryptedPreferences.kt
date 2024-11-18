@@ -8,4 +8,6 @@ expect class EncryptedPreferences(context: PlatformContext) {
     fun saveToken(userToken: String)
     fun saveRefreshToken(refreshToken: String)
     fun getRefreshToken():String
+    fun getProfessionId(): Int
+    fun saveProfessionId(professionId:Int)
 }

@@ -18,4 +18,8 @@ class ProfessionsRepository(private val networkDataSource: NetworkDataSource, pr
     suspend fun getProfessionsFromLocal():ProfessionsDomain{
         return localDataSource.getProfessions()
     }
+
+    suspend fun getProfessionId() = localDataSource.getProfessionId()
+
+    suspend fun saveProfessionId(professionId: Int) = localDataSource.saveProfessionId(professionId)
 }

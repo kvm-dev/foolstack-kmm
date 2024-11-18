@@ -17,4 +17,11 @@ actual class EncryptedPreferences actual constructor(context: PlatformContext) {
     actual fun getRefreshToken(): String {
         return ""
     }
+
+    actual fun getProfessionId(): Int {
+        return 0
+    }
+
+    actual fun saveProfessionId(professionId: Int) {
+    }
 }

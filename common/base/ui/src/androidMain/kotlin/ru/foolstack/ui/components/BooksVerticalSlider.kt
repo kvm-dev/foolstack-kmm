@@ -130,7 +130,7 @@ fun BooksVerticalSlider(
                             onClickBook()
                         }
                         .padding(horizontal = 20.dp, vertical = 18.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Column(
                         modifier = Modifier

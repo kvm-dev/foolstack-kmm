@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import ru.foolstack.model.ProgressState
 import ru.foolstack.news.impl.domain.interactor.NewsCardInteractor
 import ru.foolstack.news.impl.presentation.ui.NewsCardViewState
@@ -18,9 +19,9 @@ class NewsCardViewModel(private val interactor: NewsCardInteractor) : BaseViewMo
 
     val uiState: StateFlow<NewsCardViewState> = _uiState.asStateFlow()
 
-    fun initViewModel(newsId: Int) {
+    fun initViewModel(newsId: Int) = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
-            viewModelScope.launch {
+            launch {
                 interactor.newsState.collect{ resultState->
                     if(resultState is ResultState.Success){
                         _uiState.update { NewsCardViewState.SuccessState(

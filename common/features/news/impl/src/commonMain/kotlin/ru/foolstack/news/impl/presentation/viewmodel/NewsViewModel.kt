@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import ru.foolstack.model.ProgressState
 import ru.foolstack.news.impl.domain.interactor.NewsInteractor
 import ru.foolstack.news.impl.presentation.ui.NewsViewState
@@ -19,9 +20,9 @@ class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
 
     val uiState: StateFlow<NewsViewState> = _uiState.asStateFlow()
 
-    fun initViewModel() = with(viewModelScope) {
+    fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
-            viewModelScope.launch {
+            launch {
                 interactor.newsState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)
@@ -30,10 +31,10 @@ class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
         }
     }
 
-    fun refresh() = with(viewModelScope){
+    fun refresh() = with(viewModelScope + coroutineExceptionHandler){
         val lang = interactor.getCurrentLang()
         _uiState.update { NewsViewState.LoadingState(lang = lang) }
-        viewModelScope.launch {
+        launch {
             interactor.getNewsFromServer()
             updateState(ProgressState.LOADING)
             initViewModel()

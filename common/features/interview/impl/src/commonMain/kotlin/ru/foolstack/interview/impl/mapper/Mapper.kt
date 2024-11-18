@@ -10,7 +10,7 @@ import ru.foolstack.storage.model.KnowledgeArea
 import ru.foolstack.storage.model.Material
 import ru.foolstack.storage.model.Materials
 import ru.foolstack.storage.model.ProfessionListItem
-import rufoolstackstorageimplcache.MaterialsKnowledgeAreas
+import ru.foolstack.ui.model.MaterialSectionItem
 
 class Mapper {
 
@@ -120,6 +120,19 @@ class Mapper {
             ))
         }
         return materialData
+    }
+
+    fun mapToMaterialsExpandedItems(listMaterialsDomain: List<MaterialDomain>):List<MaterialSectionItem>{
+        val list = hashSetOf<MaterialSectionItem>()
+        listMaterialsDomain.forEach { material->
+            list.add(MaterialSectionItem(
+                materialId = material.materialId,
+                headerText = material.materialName,
+                materialText = material.materialText
+            ))
+        }
+
+        return list.toList()
     }
 
 
