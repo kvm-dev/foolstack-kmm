@@ -84,7 +84,7 @@ fun StudiesScreen(studiesViewModel: StudiesViewModel = koinViewModel(), navContr
                                 "Обучение"
                             } else {
                                 "Education"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -168,7 +168,7 @@ fun StudiesScreen(studiesViewModel: StudiesViewModel = koinViewModel(), navContr
                                 "Обучение"
                             } else {
                                 "Education"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = R.drawable. bug_icon)
                             Image(
@@ -241,7 +241,7 @@ fun StudiesScreen(studiesViewModel: StudiesViewModel = koinViewModel(), navContr
                                     "Обучение"
                                 } else {
                                     "Education"
-                                }, onBackPressed = { backDispatcher.onBackPressed() })
+                                }, action = { backDispatcher.onBackPressed() })
                             val emptyText = if (successState.lang is LangResultDomain.Ru) {
                                 "На данный момент нет\nобразовательных программ"
                             } else {

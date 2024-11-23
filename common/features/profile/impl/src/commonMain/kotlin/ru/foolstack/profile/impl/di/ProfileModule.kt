@@ -1,8 +1,6 @@
 package ru.foolstack.profile.impl.di
 
-import io.ktor.client.HttpClient
 import org.koin.dsl.module
-import ru.foolstack.network.client
 import ru.foolstack.profile.api.domain.usecase.GetProfileUseCase
 import ru.foolstack.profile.impl.data.repository.ProfileRepository
 import ru.foolstack.profile.impl.data.repository.local.LocalDataSource

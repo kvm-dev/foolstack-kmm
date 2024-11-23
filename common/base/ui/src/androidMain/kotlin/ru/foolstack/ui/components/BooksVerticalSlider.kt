@@ -130,7 +130,7 @@ fun BooksVerticalSlider(
                             onClickBook()
                         }
                         .padding(horizontal = 20.dp, vertical = 18.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Column(
                         modifier = Modifier
@@ -215,12 +215,14 @@ fun BooksVerticalSlider(
                     }
                 }
             }
-            header{
-                BookPrBlock(text = subscribeText, modifier = Modifier
-                    .padding(vertical = 10.dp, horizontal = 20.dp)
-                    .clickable {
-                    subscribeClick()
-                })
+            if(keywordFilteredBooks.size>6){
+                header{
+                    BookPrBlock(text = subscribeText, modifier = Modifier
+                        .padding(vertical = 10.dp, horizontal = 20.dp)
+                        .clickable {
+                            subscribeClick()
+                        })
+                }
             }
         }
         Box(
@@ -232,7 +234,7 @@ fun BooksVerticalSlider(
         ) {
             Column(modifier = Modifier
                 .padding(top = 20.dp)) {
-                TopBar(screenTitle = if(lang == Lang.RU){"Литература"}else{"Books"}, onBackPressed = onBackPressed)
+                TopBar(screenTitle = if(lang == Lang.RU){"Литература"}else{"Books"}, action = onBackPressed)
                 ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
                 SearchPanel(modifier = Modifier
                     .fillMaxWidth(),

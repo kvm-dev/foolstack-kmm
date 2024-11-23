@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import ru.foolstack.events.impl.domain.interactor.EventsInteractor
 import ru.foolstack.events.impl.presentation.ui.EventsViewState
 import ru.foolstack.model.ProgressState
@@ -19,9 +20,9 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
 
     val uiState: StateFlow<EventsViewState> = _uiState.asStateFlow()
 
-    fun initViewModel() = with(viewModelScope) {
+    fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
-            viewModelScope.launch {
+            launch {
                 interactor.eventsState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)
@@ -30,10 +31,10 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
         }
     }
 
-    fun refresh() = with(viewModelScope){
+    fun refresh() = with(viewModelScope + coroutineExceptionHandler){
         val lang = interactor.getCurrentLang()
         _uiState.update { EventsViewState.LoadingState(lang = lang) }
-        viewModelScope.launch {
+        launch {
             interactor.getEventsFromServer()
             updateState(ProgressState.LOADING)
             initViewModel()

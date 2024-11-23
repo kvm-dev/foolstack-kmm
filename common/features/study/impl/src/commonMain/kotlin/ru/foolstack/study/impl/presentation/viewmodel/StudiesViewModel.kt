@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import ru.foolstack.model.ProgressState
 import ru.foolstack.study.impl.domain.interactor.StudiesInteractor
 import ru.foolstack.study.impl.presentation.ui.StudiesViewState
@@ -18,9 +19,9 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
 
     val uiState: StateFlow<StudiesViewState> = _uiState.asStateFlow()
 
-    fun initViewModel() = with(viewModelScope) {
+    fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
-            viewModelScope.launch {
+            launch {
                 interactor.studiesState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)
@@ -29,10 +30,10 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
         }
     }
 
-    fun refresh() = with(viewModelScope){
+    fun refresh() = with(viewModelScope + coroutineExceptionHandler){
         val lang = interactor.getCurrentLang()
         _uiState.update { StudiesViewState.LoadingState(lang = lang) }
-        viewModelScope.launch {
+        launch {
             interactor.getStudiesFromServer()
             updateState(ProgressState.LOADING)
             initViewModel()

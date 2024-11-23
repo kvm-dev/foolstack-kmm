@@ -8,7 +8,9 @@ enum class NavigationScreens(val title: String) {
     BooksListScreenNavigation("BooksListScreen"),
     BookScreenNavigation("BookScreen"),
     StudiesListScreenNavigation("StudiesListScreen"),
-    InterviewScreen("Interview"),
+    InterviewsListScreenNavigation("InterviewsListScreen"),
+    InterviewScreenNavigation("InterviewScreen"),
+    ProfessionsListScreenNavigation("ProfessionsListScreen"),
     TestsScreen("Tests"),
     NewsListScreenNavigation("NewsListScreen"),
     NewsScreenNavigation("NewsScreen")

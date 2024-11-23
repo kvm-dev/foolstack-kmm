@@ -68,7 +68,7 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                                 "Событие"
                             } else {
                                 "Event"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = R.drawable.bug_icon)
                             Image(
@@ -127,7 +127,7 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                                     )
                                     TopBar(
                                         screenTitle = successState.event.eventName ?: "",
-                                        onBackPressed = { backDispatcher.onBackPressed() },
+                                        action = { backDispatcher.onBackPressed() },
                                         isDark = false,
                                         isTitleVisible = false,
                                     )

@@ -5,24 +5,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import ru.foolstack.ui.theme.CardText
 import ru.foolstack.ui.theme.InputText
 import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
-fun BookTitle(text: String, modifier: Modifier){
-    Text(
-        modifier = modifier,
-        textAlign = TextAlign.Center,
-        text =text, fontFamily = montserratFamily, fontWeight = FontWeight.Black, style = TextStyle(
-            fontSize = 13.sp,
+fun ExtraBoldTitle(text: String, modifier: Modifier){
+    Text(modifier = modifier,
+        text = text, fontFamily = montserratFamily, fontWeight = FontWeight.ExtraBold, style = TextStyle(
+            fontSize = 18.sp,
             color = MaterialTheme.colorScheme.InputText,
-            textAlign = TextAlign.Start,
-            fontStyle = FontStyle.Italic
-        )
+            textAlign = TextAlign.Center
+        ),
+        overflow = TextOverflow.Ellipsis
     )
 }

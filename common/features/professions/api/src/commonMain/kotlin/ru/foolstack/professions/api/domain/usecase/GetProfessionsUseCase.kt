@@ -8,4 +8,8 @@ interface GetProfessionsUseCase {
 
     val professionsState: StateFlow<ResultState<ProfessionsDomain>>
     suspend fun getProfessions(fromLocal: Boolean = false): ProfessionsDomain
+
+    suspend fun getProfessionId():Int
+
+    suspend fun saveProfessionId(professionId: Int)
 }

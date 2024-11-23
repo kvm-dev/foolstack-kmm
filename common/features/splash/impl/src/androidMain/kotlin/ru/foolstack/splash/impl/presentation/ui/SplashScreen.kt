@@ -1,6 +1,5 @@
 package ru.foolstack.splash.impl.presentation.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

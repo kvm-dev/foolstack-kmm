@@ -4,19 +4,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import ru.foolstack.splash.impl.domain.interactor.SplashInteractor
 import ru.foolstack.splash.impl.presentation.ui.SplashBottomText
 import ru.foolstack.splash.impl.presentation.ui.SplashViewState
 import ru.foolstack.model.ProgressState
-import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.utils.TextFieldValidation
-import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel() {
@@ -28,6 +31,9 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
         )
     )
     val uiState: StateFlow<SplashViewState> = _uiState.asStateFlow()
+
+    private var viewModelJob = SupervisorJob()
+    private val uiScope = CoroutineScope(Dispatchers.IO + viewModelJob + coroutineExceptionHandler)
 
     var emailValue by mutableStateOf("")
         private set
@@ -43,9 +49,9 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
     var otpLoading by mutableStateOf(false)
         private set
 
-    fun initViewModel() = with(viewModelScope) {
+    fun initViewModel()  {
         if (progressState.value == ProgressState.LOADING) {
-            launch {
+            uiScope.launch {
                 val local = interactor.getCurrentLang()
                 val isTokenExist = interactor.isTokenExist()
                 val isInternetConnected = interactor.isConnectionAvailable()
@@ -185,7 +191,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
         _uiState.update { state }
     }
 
-    fun authorizationOrRegistrationByEmail() = with(viewModelScope) {
+    fun authorizationOrRegistrationByEmail() = with(viewModelScope + coroutineExceptionHandler) {
         emailLoading = true
         val local = interactor.getCurrentLang()
         launch {
@@ -246,7 +252,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
         }
     }
 
-    fun confirmAuthOrRegistrationByEmail(isUserExist: Boolean) = with(viewModelScope) {
+    fun confirmAuthOrRegistrationByEmail(isUserExist: Boolean) = with(viewModelScope + coroutineExceptionHandler) {
         otpLoading = true
         val isInternetConnected = interactor.isConnectionAvailable()
         val local = interactor.getCurrentLang()
@@ -424,7 +430,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
         }
     }
 
-    fun resendOtpCode() = with(viewModelScope) {
+    fun resendOtpCode() = with(viewModelScope + coroutineExceptionHandler) {
         otpValue = ""
         otpError = ""
         launch {
@@ -456,4 +462,5 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
     fun backToEmailScreen(){
         _uiState.update { interactor.getAuthorizationOrRegistrationState() }
     }
+
 }

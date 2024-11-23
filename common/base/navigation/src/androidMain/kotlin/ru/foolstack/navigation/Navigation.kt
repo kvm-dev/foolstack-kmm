@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -19,18 +18,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.inject
 import ru.foolstack.books.impl.presentation.ui.BookCardScreen
 import ru.foolstack.books.impl.presentation.ui.BooksScreen
 import ru.foolstack.events.impl.presentation.ui.EventsScreen
 import ru.foolstack.events.impl.presentation.ui.EventCardScreen
+import ru.foolstack.interview.impl.presentation.ui.InterviewCardScreen
+import ru.foolstack.interview.impl.presentation.ui.InterviewsScreen
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.splash.impl.presentation.ui.SplashScreen
 import ru.foolstack.main.impl.presentation.ui.MainScreen
 import ru.foolstack.news.impl.presentation.ui.NewsCardScreen
 import ru.foolstack.news.impl.presentation.ui.NewsScreen
+import ru.foolstack.professions.impl.presentation.ui.ProfessionsScreen
 import ru.foolstack.study.impl.presentation.ui.StudiesScreen
 import ru.foolstack.ui.components.BottomAppBar
 import ru.foolstack.ui.components.BottomIcons
@@ -46,7 +47,6 @@ fun StartApplication(
     FoolStackTheme {
         val getCurrentLanguageUseCase: GetCurrentLanguageUseCase by inject()
         // Get current back stack entry
-        val backStackEntry by navController.currentBackStackEntryAsState()
         // Get the name of the current screen
         val isShowBottomBar = remember { mutableStateOf(false) }
         val bottomBarSelectedState = remember { mutableStateOf(BottomIcons.MAIN) }
@@ -65,6 +65,12 @@ fun StartApplication(
                     onClickNews = {
                         isShowBottomBar.value = true
                         navController.navigate(NavigationScreens.NewsListScreenNavigation.name) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onClickInterviews = {
+                        isShowBottomBar.value = true
+                        navController.navigate(NavigationScreens.InterviewsListScreenNavigation.name) {
                             launchSingleTop = true
                         }
                     }
@@ -180,11 +186,40 @@ fun StartApplication(
 
                     composable(route = "${NavigationScreens.NewsScreenNavigation.name}/{newsId}") {
                             navBackStackEntry ->
-                        val eventId = navBackStackEntry.arguments?.getString("newsId")
-                        eventId?.let { id->
+                        val newsId = navBackStackEntry.arguments?.getString("newsId")
+                        newsId?.let { id->
                             isShowBottomBar.value = false
                             NewsCardScreen(newsId = id.toInt())
                         }
+                    }
+
+                    composable(route = NavigationScreens.InterviewsListScreenNavigation.name) {
+                        isShowBottomBar.value = true
+                        bottomBarSelectedState.value = BottomIcons.INTERVIEW
+                        InterviewsScreen(navController = navController,
+                            interviewDestination = NavigationScreens.InterviewScreenNavigation.name,
+                            selectProfession = {
+                                isShowBottomBar.value = false
+                                navController.navigate(NavigationScreens.ProfessionsListScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.ProfessionsListScreenNavigation.name) {
+                                        inclusive = false
+                                    }
+                                }
+                            })
+                    }
+
+                    composable(route = "${NavigationScreens.InterviewScreenNavigation.name}/{materialId}") {
+                            navBackStackEntry ->
+                        val materialId = navBackStackEntry.arguments?.getString("materialId")
+                        materialId?.let { id->
+                            isShowBottomBar.value = false
+                            InterviewCardScreen(materialId = id.toInt())
+                        }
+                    }
+
+                    composable(route = NavigationScreens.ProfessionsListScreenNavigation.name) {
+                        isShowBottomBar.value = false
+                        ProfessionsScreen(navController = navController, navigateToMain = { cancelOrderAndNavigateToStart(navController) })
                     }
                 }
             }
@@ -201,5 +236,5 @@ fun Context.findActivity(): ComponentActivity? = when (this) {
 fun cancelOrderAndNavigateToStart(
     navController: NavHostController
 ) {
-    navController.popBackStack(NavigationScreens.SplashScreenNavigation.name, inclusive = false)
+    navController.popBackStack(NavigationScreens.MainScreenNavigation.name, inclusive = false)
 }

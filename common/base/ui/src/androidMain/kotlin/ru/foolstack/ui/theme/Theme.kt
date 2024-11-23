@@ -64,7 +64,8 @@ var SalePriceSchemeColor by mutableStateOf(SalePriceLightColor)
 var InputTextSchemeColor by mutableStateOf(InputTextLightColor)
 var HintTextSchemeColor by mutableStateOf(HintTextLightColor)
 var BannerBackgroundSchemeColor by mutableStateOf(BannerBackgroundLightColor)
-
+var ProfessionsBanner1SchemeColor by mutableStateOf(ProfessionsSaleBannerColor1)
+var ProfessionsBanner2SchemeColor by mutableStateOf(ProfessionsSaleBannerColor2)
 
 
 
@@ -280,6 +281,19 @@ var ColorScheme.BannerBackground: Color
     set(value) {
         BannerBackgroundSchemeColor = value
     }
+
+var ColorScheme.ProfessionsBannerColor1: Color
+    get() = ProfessionsBanner1SchemeColor
+    set(value) {
+        ProfessionsBanner1SchemeColor = value
+    }
+
+var ColorScheme.ProfessionsBannerColor2: Color
+    get() = ProfessionsBanner2SchemeColor
+    set(value) {
+        ProfessionsBanner2SchemeColor = value
+    }
+
 
 
 
@@ -533,6 +547,18 @@ fun FoolStackTheme(
         BannerBackgroundDarkColor
     } else {
         BannerBackgroundLightColor
+    }
+
+    colorScheme.ProfessionsBannerColor1 = if (darkTheme) {
+        ProfessionsSaleBannerColor1
+    } else {
+        ProfessionsSaleBannerColor1
+    }
+
+    colorScheme.ProfessionsBannerColor2 = if (darkTheme) {
+        ProfessionsSaleBannerColor2
+    } else {
+        ProfessionsSaleBannerColor2
     }
 
 

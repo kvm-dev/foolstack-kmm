@@ -7,10 +7,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.foolstack.events.api.model.EventsDomain
+import kotlinx.coroutines.plus
 import ru.foolstack.main.impl.domain.interactor.MainInteractor
 import ru.foolstack.main.impl.presentation.ui.MainViewState
 import ru.foolstack.model.ProgressState
@@ -29,9 +28,9 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
     val profileState: StateFlow<ResultState<ProfileDomain>> = _profileState.asStateFlow()
 
-    fun initViewModel() = with(viewModelScope) {
+    fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
-        viewModelScope.launch {
+        launch {
             interactor.profileState.combine(interactor.eventsState) { profile, events  ->
                 if(profile is ResultState.Success && events is ResultState.Success){
                     _profileState.value = profile
