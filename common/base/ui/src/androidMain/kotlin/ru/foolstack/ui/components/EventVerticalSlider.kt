@@ -90,7 +90,7 @@ fun EventVerticalSlider(
                             ) {
                                 PullToRefreshDefaults.Indicator(state = state, isRefreshing = isRefreshing, color = MaterialTheme.colorScheme.MainYellow, containerColor = MaterialTheme.colorScheme.LoadingIndicatorBackground)
                             }
-                            TopBar(screenTitle = if(lang == Lang.RU){"События"}else{"Events"}, onBackPressed = onBackPressed)
+                            TopBar(screenTitle = if(lang == Lang.RU){"События"}else{"Events"}, action = onBackPressed)
                             ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
                         }
                     }

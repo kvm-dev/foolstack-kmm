@@ -25,8 +25,12 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
             launch {
                 val professionId = interactor.getProfessionId()
                 interactor.materialsState.collect{ resultState->
-                    _uiState.update { interactor.checkState(state = resultState, professionId = professionId) }
-                    updateState(ProgressState.COMPLETED)
+                    interactor.profileState.collect{ profileState->
+                        interactor.professionsState.collect{ professionsState->
+                            _uiState.update { interactor.checkState(state = resultState, professionId = professionId, professionsState = professionsState, profileState = profileState) }
+                            updateState(ProgressState.COMPLETED)
+                        }
+                    }
                 }
             }
         }
@@ -60,12 +64,20 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
         }
     }
 
-    fun navigateToMaterial(navController: NavController, eventId: Int, materialDestination: String){
-        val route = "$materialDestination/{materialId}"
+    fun sendComment(materialId: Int, comment: String) = with(viewModelScope + coroutineExceptionHandler){
+        launch { interactor.sendComment(materialId = materialId, comment = comment) }
+    }
+
+    fun goToTelegram(){
+        interactor.goToTelegram()
+    }
+
+    fun navigateToMaterial(navController: NavController, materialId: Int,interviewDestination: String){
+        val route = "$interviewDestination/{materialId}"
         navController.navigate(
             route.replace(
                 oldValue = "{materialId}",
-                newValue = eventId.toString()
+                newValue = materialId.toString()
             )
         )
     }

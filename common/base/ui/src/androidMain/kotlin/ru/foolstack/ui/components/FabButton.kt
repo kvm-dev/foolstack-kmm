@@ -41,7 +41,7 @@ fun FabButton(selectedState: MutableState<BottomIcons>) {
             selectedState.value = BottomIcons.TESTS
         },
     ) {
-        val icon = painterResource(id = R.drawable.interview)
+        val icon = painterResource(id = R.drawable.interview_icon)
         Icon(painter = icon, contentDescription = null,
             tint = if (selectedState.value == BottomIcons.INTERVIEW) MaterialTheme.colorScheme.MainOrange else MaterialTheme.colorScheme.DisabledColor)
     }

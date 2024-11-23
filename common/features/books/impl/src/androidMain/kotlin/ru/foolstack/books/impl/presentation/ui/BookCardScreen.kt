@@ -28,7 +28,7 @@ import ru.foolstack.model.ProgressState
 import ru.foolstack.ui.R
 import ru.foolstack.ui.components.BookPrBlock
 import ru.foolstack.ui.components.BookSaleText
-import ru.foolstack.ui.components.BookTitle
+import ru.foolstack.ui.components.CardBoldItalicTitle
 import ru.foolstack.ui.components.CardText
 import ru.foolstack.ui.components.GreenButton
 import ru.foolstack.ui.components.Title
@@ -59,7 +59,7 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                                 "Книга"
                             } else {
                                 "Book"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = R.drawable.bug_icon)
                             Image(
@@ -106,7 +106,7 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                         Column(modifier = Modifier.align(Alignment.TopCenter)) {
                                     TopBar(
                                         screenTitle = "",
-                                        onBackPressed = { backDispatcher.onBackPressed() },
+                                        action = { backDispatcher.onBackPressed() },
                                         isDark = true,
                                         isTitleVisible = false,
                                     )
@@ -114,7 +114,7 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                                         .align(Alignment.CenterHorizontally)
                                         .fillMaxWidth()
                                         .padding(top = 2.dp, start = 20.dp, end = 20.dp)) {
-                                        BookTitle(text = successState.book?.bookName?:"",
+                                        CardBoldItalicTitle(text = successState.book?.bookName?:"",
                                             modifier = Modifier
                                                 .padding(start = 60.dp, end = 60.dp, bottom = 10.dp)
                                                 .align(Alignment.CenterHorizontally))

@@ -9,12 +9,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import ru.foolstack.ui.theme.CardText
 import ru.foolstack.ui.theme.InputText
 import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
-fun BookTitle(text: String, modifier: Modifier){
+fun CardBoldItalicTitle(text: String, modifier: Modifier){
     Text(
         modifier = modifier,
         textAlign = TextAlign.Center,

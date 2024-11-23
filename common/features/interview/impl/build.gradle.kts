@@ -65,6 +65,8 @@ kotlin {
             implementation(projects.common.features.authorization.api)
             //events
             implementation(projects.common.features.events.api)
+            //comments
+            implementation(projects.common.features.comments.api)
         }
         androidMain.dependencies {
             //utils

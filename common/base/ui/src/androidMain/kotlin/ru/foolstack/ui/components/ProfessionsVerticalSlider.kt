@@ -89,7 +89,7 @@ fun ProfessionsVerticalSlider(
                         "Выбери направление"
                     } else {
                         "Career direction"
-                    }, onBackPressed = onBackPressed
+                    }, action = onBackPressed
                 )
             }
         }

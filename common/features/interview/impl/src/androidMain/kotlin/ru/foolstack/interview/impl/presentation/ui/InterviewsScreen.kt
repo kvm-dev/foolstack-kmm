@@ -36,8 +36,6 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import ru.foolstack.interview.api.model.MaterialDomain
-import ru.foolstack.interview.api.model.SubProfessionDomain
 import ru.foolstack.interview.impl.presentation.viewmodel.InterviewsViewModel
 import ru.foolstack.language.api.model.LangResultDomain
 import ru.foolstack.model.ProgressState
@@ -48,13 +46,15 @@ import ru.foolstack.ui.components.Title
 import ru.foolstack.ui.components.TopBar
 import ru.foolstack.ui.components.YellowButton
 import ru.foolstack.interview.impl.mapper.Mapper
+import ru.foolstack.ui.components.CommentBottomSheet
+import ru.foolstack.ui.model.Lang
 
 @Composable
 fun InterviewsScreen(
     interviewsViewModel: InterviewsViewModel = koinViewModel(),
     navController: NavController,
-    interviewsDestination: String,
-    notFoundProfession: () -> Unit) {
+    interviewDestination: String,
+    selectProfession: () -> Unit) {
     val materialId  = remember { mutableIntStateOf(0) }
     val selectedFilter  = remember { mutableStateOf("") }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -69,6 +69,13 @@ fun InterviewsScreen(
             interviewsViewModel.refresh()
             isRefreshing = false
         }
+    }
+
+    val isShowBottomSheet = remember {
+        mutableStateOf(false)
+    }
+    val commentText = remember {
+        mutableStateOf("")
     }
 
     LifecycleResumeEffect(Unit) {
@@ -91,12 +98,7 @@ fun InterviewsScreen(
                             .fillMaxSize()
                             .padding(top = 40.dp)
                     ) {
-                        TopBar(
-                            screenTitle = if ((interviewsState as InterviewsViewState.LoadingState).lang is LangResultDomain.Ru) {
-                                "Вопросы на интервью"
-                            } else {
-                                "Interview questions"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                        TopBar(screenTitle = if((interviewsState as InterviewsViewState.LoadingState).lang is LangResultDomain.Ru){"Вопросы на интервью"}else{"Interview questions"}, action = selectProfession, isBackArrow = false)
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -114,54 +116,16 @@ fun InterviewsScreen(
                                 )
                             }
                         }
-                        repeat(10) {
+                        repeat(20) {
                             Column {
                                 ShimmerEffect(
                                     modifier = Modifier
-                                        .height(220.dp)
+                                        .height(100.dp)
                                         .fillMaxWidth()
                                         .padding(start = 20.dp, end = 20.dp, top = 12.dp)
                                         .background(Color.LightGray, RoundedCornerShape(10)),
                                     durationMillis = 1000
                                 )
-                                Row {
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(36.dp)
-                                            .width(120.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 12.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(10)),
-                                        durationMillis = 1000
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(34.dp)
-                                            .width(100.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(30)),
-                                        durationMillis = 1000
-                                    )
-                                }
-                                Row {
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(34.dp)
-                                            .width(200.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(10)),
-                                        durationMillis = 1000
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(32.dp)
-                                            .width(100.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(30)),
-                                        durationMillis = 1000
-                                    )
-                                }
                             }
                         }
                     }
@@ -175,12 +139,7 @@ fun InterviewsScreen(
                             .fillMaxSize()
                             .padding(top = 40.dp)
                     ) {
-                        TopBar(
-                            screenTitle = if ((interviewsState as InterviewsViewState.ErrorState).lang is LangResultDomain.Ru) {
-                                "Вопросы на интервью"
-                            } else {
-                                "Interview questions"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                        TopBar(screenTitle = if((interviewsState as InterviewsViewState.ErrorState).lang is LangResultDomain.Ru){"Вопросы на интервью"}else{"Interview questions"}, action = selectProfession, isBackArrow = false)
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = R.drawable. bug_icon)
                             Image(
@@ -219,18 +178,87 @@ fun InterviewsScreen(
                     Log.d("interviews in state is", "Success")
                     val successState = (interviewsState as InterviewsViewState.SuccessState)
                     if(successState.currentProfessionId == 0){
-                        YellowButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "Задать профессию",
-                            onClick = { notFoundProfession() },
-                            isEnabled = true,
-                            isLoading = false
-                        )
+                        Box(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.background)
+                                .fillMaxSize()
+                                .padding(top = 40.dp)
+                        ) {
+                            TopBar(screenTitle = if((interviewsState as InterviewsViewState.ErrorState).lang is LangResultDomain.Ru){"Вопросы на интервью"}else{"Interview questions"}, action = selectProfession, isBackArrow = false)
+                            Column(modifier = Modifier.align(Alignment.Center)) {
+                                val bugBitmap = ImageBitmap.imageResource(id = R.drawable.fs_logo)
+                                Image(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(100.dp, 10.dp),
+                                    bitmap = bugBitmap,
+                                    contentDescription = "FoolStack"
+                                )
+                                Title(
+                                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                                    text = if ((interviewsState as InterviewsViewState.ErrorState).lang is LangResultDomain.Ru) {
+                                        "Прежде чем увидеть вопросы, необходимо определиться с профессией"
+                                    } else {
+                                        "Before you see the questions, you need to decide on a profession"
+                                    }
+                                )
+                                YellowButton(
+                                    onClick = selectProfession,
+                                    text = if ((interviewsState as InterviewsViewState.ErrorState).lang is LangResultDomain.Ru) {
+                                        "Выбрать профессию"
+                                    } else {
+                                        "Select profession"
+                                    },
+                                    isEnabled = true,
+                                    isLoading = false,
+                                    modifier = Modifier
+                                        .padding(top = 30.dp, start = 16.dp, end = 16.dp)
+                                        .fillMaxWidth()
+                                )
+                            }
+                        }
                     }
                     else{
                     MaterialsExpandableList(
-                        sections = Mapper().mapToMaterialsExpandedItems(successState.materials))
+                        sections = Mapper().mapToMaterialsExpandedItems(successState.materials),
+                        lang = if (successState.lang is LangResultDomain.Ru) {
+                            Lang.RU
+                        } else {
+                            Lang.ENG
+                        },
+                        chips = Mapper().mapToChips(
+                            successState.materials
+                        ),
+                        selectedChips = successState.selectedFilters,
+                        onChangeProfession = selectProfession,
+                        onRefresh = {
+                            onRefresh()
+                        },
+                        isRefreshing = isRefreshing,
+                        selectId = materialId,
+                        onClickMaterial = {
+                            interviewsViewModel.navigateToMaterial(
+                                navController = navController,
+                                materialId = materialId.intValue,
+                                interviewDestination = interviewDestination
+                            )
+                        },
+                        selectedChip = selectedFilter,
+                        onclickChip = {interviewsViewModel.updateFilters(selectedFilter.value)},
+                        onSendComment = {isShowBottomSheet.value = true},
+                        isShowBanner = successState.isShowBanner,
+                        onClickBanner = {interviewsViewModel.goToTelegram()}
+                        )
                     }
+                    CommentBottomSheet(
+                        isShowBottomSheet = isShowBottomSheet,
+                        text = commentText,
+                        lang = if(successState.lang is LangResultDomain.Ru){ Lang.RU } else { Lang.ENG },
+                        sendComment = { interviewsViewModel.sendComment(materialId = materialId.intValue, comment = commentText.value)
+                                        isShowBottomSheet.value = false
+                                        commentText.value = ""},
+                        onValueChange = { commentText.value = it }
+                    )
                 }
 
                 is InterviewsViewState.WithoutProfessionState -> {

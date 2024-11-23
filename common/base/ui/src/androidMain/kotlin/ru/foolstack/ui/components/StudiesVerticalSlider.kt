@@ -93,7 +93,7 @@ fun StudiesVerticalSlider(
                 ) {
                     PullToRefreshDefaults.Indicator(state = state, isRefreshing = isRefreshing, color = MaterialTheme.colorScheme.MainYellow, containerColor = MaterialTheme.colorScheme.LoadingIndicatorBackground)
                 }
-                TopBar(screenTitle = if(lang == Lang.RU){"Обучение"}else{"Education"}, onBackPressed = onBackPressed)
+                TopBar(screenTitle = if(lang == Lang.RU){"Обучение"}else{"Education"}, action = onBackPressed)
                 ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
             }
         }

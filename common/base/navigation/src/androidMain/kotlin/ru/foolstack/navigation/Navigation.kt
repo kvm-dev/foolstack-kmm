@@ -24,6 +24,7 @@ import ru.foolstack.books.impl.presentation.ui.BookCardScreen
 import ru.foolstack.books.impl.presentation.ui.BooksScreen
 import ru.foolstack.events.impl.presentation.ui.EventsScreen
 import ru.foolstack.events.impl.presentation.ui.EventCardScreen
+import ru.foolstack.interview.impl.presentation.ui.InterviewCardScreen
 import ru.foolstack.interview.impl.presentation.ui.InterviewsScreen
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.splash.impl.presentation.ui.SplashScreen
@@ -185,8 +186,8 @@ fun StartApplication(
 
                     composable(route = "${NavigationScreens.NewsScreenNavigation.name}/{newsId}") {
                             navBackStackEntry ->
-                        val eventId = navBackStackEntry.arguments?.getString("newsId")
-                        eventId?.let { id->
+                        val newsId = navBackStackEntry.arguments?.getString("newsId")
+                        newsId?.let { id->
                             isShowBottomBar.value = false
                             NewsCardScreen(newsId = id.toInt())
                         }
@@ -196,8 +197,8 @@ fun StartApplication(
                         isShowBottomBar.value = true
                         bottomBarSelectedState.value = BottomIcons.INTERVIEW
                         InterviewsScreen(navController = navController,
-                            interviewsDestination = NavigationScreens.InterviewsListScreenNavigation.name,
-                            notFoundProfession = {
+                            interviewDestination = NavigationScreens.InterviewScreenNavigation.name,
+                            selectProfession = {
                                 isShowBottomBar.value = false
                                 navController.navigate(NavigationScreens.ProfessionsListScreenNavigation.name) {
                                     popUpTo(NavigationScreens.ProfessionsListScreenNavigation.name) {
@@ -206,6 +207,16 @@ fun StartApplication(
                                 }
                             })
                     }
+
+                    composable(route = "${NavigationScreens.InterviewScreenNavigation.name}/{materialId}") {
+                            navBackStackEntry ->
+                        val materialId = navBackStackEntry.arguments?.getString("materialId")
+                        materialId?.let { id->
+                            isShowBottomBar.value = false
+                            InterviewCardScreen(materialId = id.toInt())
+                        }
+                    }
+
                     composable(route = NavigationScreens.ProfessionsListScreenNavigation.name) {
                         isShowBottomBar.value = false
                         ProfessionsScreen(navController = navController, navigateToMain = { cancelOrderAndNavigateToStart(navController) })

@@ -43,7 +43,7 @@ fun SubProfessionsVerticalSlider(
                         "Выбери профессию"
                     } else {
                         "Choose a profession"
-                    }, onBackPressed = onBackPressed
+                    }, action = onBackPressed
                 )
             }
         }

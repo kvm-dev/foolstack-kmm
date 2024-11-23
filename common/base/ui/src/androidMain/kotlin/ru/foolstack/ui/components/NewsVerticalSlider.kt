@@ -82,12 +82,12 @@ fun NewsVerticalSlider(
                     )
                 }
                 TopBar(
-                    isArrowVisible = false,
+                    isIconVisible = false,
                     screenTitle = if (lang == Lang.RU) {
                         "Новости"
                     } else {
                         "News"
-                    }, onBackPressed = onBackPressed
+                    }, action = onBackPressed
                 )
             }
         }

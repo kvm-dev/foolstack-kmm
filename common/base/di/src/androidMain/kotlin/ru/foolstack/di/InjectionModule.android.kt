@@ -4,6 +4,7 @@ import ru.foolstack.books.impl.di.booksModule
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import ru.foolstack.authorization.impl.di.authorizationModule
+import ru.foolstack.comments.impl.di.commentsModule
 import ru.foolstack.events.impl.di.eventsModule
 import ru.foolstack.splash.impl.di.splashModule
 import ru.foolstack.interview.impl.di.interviewModule
@@ -39,6 +40,7 @@ actual val injectionModule: Module
             newsModule,
             studyModule,
             testsModule,
-            mainModule
+            mainModule,
+            commentsModule
         )
     }

@@ -55,3 +55,5 @@ include(":common:features:main:impl")
 
 include(":common:features:professions:api")
 include(":common:features:professions:impl")
+include(":common:features:comments:api")
+include(":common:features:comments:impl")

@@ -49,7 +49,10 @@ import ru.foolstack.ui.model.Lang
 import ru.foolstack.ui.R.drawable
 
 @Composable
-fun EventsScreen(eventsViewModel: EventsViewModel = koinViewModel(), navController: NavController, eventDestination: String) {
+fun EventsScreen(
+    eventsViewModel: EventsViewModel = koinViewModel(),
+    navController: NavController,
+    eventDestination: String) {
     val eventId  = remember { mutableIntStateOf(0) }
     val selectedFilter  = remember { mutableStateOf("") }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -84,7 +87,7 @@ fun EventsScreen(eventsViewModel: EventsViewModel = koinViewModel(), navControll
                                 "События"
                             } else {
                                 "Events"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -168,7 +171,7 @@ fun EventsScreen(eventsViewModel: EventsViewModel = koinViewModel(), navControll
                                 "События"
                             } else {
                                 "Events"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = drawable. bug_icon)
                             Image(
@@ -248,7 +251,7 @@ fun EventsScreen(eventsViewModel: EventsViewModel = koinViewModel(), navControll
                                     "События"
                                 } else {
                                     "Events"
-                                }, onBackPressed = { backDispatcher.onBackPressed() })
+                                }, action = { backDispatcher.onBackPressed() })
                             val emptyText = if (successState.lang is LangResultDomain.Ru) {
                                 "В ближайшее время мероприятий\nне планируется"
                             } else {

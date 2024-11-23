@@ -17,6 +17,7 @@ sealed class InterviewsViewState {
         val lang: LangResultDomain,
         val currentProfessionId: Int,
         val materials: List<MaterialDomain>,
-        val selectedFilters: List<String>
+        val selectedFilters: List<String>,
+        val isShowBanner: Boolean
     ): InterviewsViewState()
 }

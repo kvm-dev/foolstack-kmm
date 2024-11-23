@@ -4,16 +4,12 @@ import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +36,6 @@ import ru.foolstack.model.ProgressState
 import ru.foolstack.news.impl.mapper.Mapper
 import ru.foolstack.news.impl.presentation.viewmodel.NewsViewModel
 import ru.foolstack.ui.R
-import ru.foolstack.ui.components.EventVerticalSlider
 import ru.foolstack.ui.components.NewsVerticalSlider
 import ru.foolstack.ui.components.NotificationTitle
 import ru.foolstack.ui.components.ShimmerEffect
@@ -84,7 +79,7 @@ fun NewsScreen(newsViewModel: NewsViewModel = koinViewModel(), navController: Na
                                 "Новости"
                             } else {
                                 "News"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
 
                         repeat(10) {
                             Column(modifier = Modifier
@@ -142,7 +137,7 @@ fun NewsScreen(newsViewModel: NewsViewModel = koinViewModel(), navController: Na
                                 "Новости"
                             } else {
                                 "News"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = R.drawable. bug_icon)
                             Image(
@@ -206,7 +201,7 @@ fun NewsScreen(newsViewModel: NewsViewModel = koinViewModel(), navController: Na
                                     "Новости"
                                 } else {
                                     "News"
-                                }, onBackPressed = { backDispatcher.onBackPressed() })
+                                }, action = { backDispatcher.onBackPressed() })
                             val emptyText = if (successState.lang is LangResultDomain.Ru) {
                                 "К сожалению актуальных новостей\nсейчас нет"
                             } else {

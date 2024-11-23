@@ -66,7 +66,7 @@ fun NewsCardScreen(newsCardViewModel: NewsCardViewModel = koinViewModel(), newsI
                                 "Новость"
                             } else {
                                 "News"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = R.drawable.bug_icon)
                             Image(
@@ -126,7 +126,7 @@ fun NewsCardScreen(newsCardViewModel: NewsCardViewModel = koinViewModel(), newsI
                                     )
                                     TopBar(
                                         screenTitle = successState.singleNewsDomain.newsName ?: "",
-                                        onBackPressed = { backDispatcher.onBackPressed() },
+                                        action = { backDispatcher.onBackPressed() },
                                         isDark = false,
                                         isTitleVisible = false,
                                     )

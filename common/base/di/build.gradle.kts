@@ -47,6 +47,7 @@ kotlin {
             implementation(projects.common.features.study.impl)
             implementation(projects.common.features.tests.impl)
             implementation(projects.common.features.main.impl)
+            implementation(projects.common.features.comments.impl)
         }
         androidMain.dependencies {
             //di

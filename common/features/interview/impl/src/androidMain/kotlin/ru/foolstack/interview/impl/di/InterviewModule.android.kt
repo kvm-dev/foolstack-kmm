@@ -8,10 +8,13 @@ import ru.foolstack.interview.impl.data.repository.MaterialsRepository
 import ru.foolstack.interview.impl.data.repository.local.LocalDataSource
 import ru.foolstack.interview.impl.data.repository.network.MaterialsApi
 import ru.foolstack.interview.impl.data.repository.network.NetworkDataSource
+import ru.foolstack.interview.impl.domain.interactor.InterviewCardInteractor
 import ru.foolstack.interview.impl.domain.interactor.InterviewsInteractor
 import ru.foolstack.interview.impl.domain.usecase.GetMaterialsUseCaseImpl
 import ru.foolstack.interview.impl.mapper.Mapper
 import ru.foolstack.interview.impl.presentation.viewmodel.InterviewsViewModel
+import ru.foolstack.interview.impl.presentation.viewmodel.InterviewCardViewModel
+
 
 actual val interviewModule: Module
     get() = module {
@@ -27,8 +30,19 @@ actual val interviewModule: Module
             getCurrentLanguageUseCase = get(),
             getNetworkStateUseCase = get(),
             getMaterialsUseCase = get(),
-            getProfessionsUseCase = get()
+            getProfessionsUseCase = get(),
+            sendMaterialCommentUseCase = get(),
+            browserUtils = get(),
+            getProfileUseCase = get()
+        )
+        }
+        single<InterviewCardInteractor> { InterviewCardInteractor(
+            getCurrentLanguageUseCase = get(),
+            getNetworkStateUseCase = get(),
+            getMaterialsUseCase = get(),
+            sendMaterialCommentUseCase = get()
         )
         }
         viewModelOf(::InterviewsViewModel)
+        viewModelOf(::InterviewCardViewModel)
     }

@@ -28,6 +28,8 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import ru.foolstack.ui.model.MaterialSectionItem
+import ru.foolstack.ui.components.MaterialSection
+import ru.foolstack.ui.model.Lang
 
 fun Modifier.clickableWithoutRipple(
 ) = composed(
@@ -128,18 +130,24 @@ fun Modifier.scrollEnabled(
     }
 )
 
-fun LazyListScope.MaterialSection(
+fun LazyListScope.materialSection(
     sectionData: MaterialSectionItem,
+    lang: Lang,
     isExpanded: Boolean,
-    onHeaderClick: () -> Unit
+    onHeaderClick: () -> Unit,
+    onDetailsClick: () -> Unit,
+    sendCommentClick: () -> Unit
 ) {
 
     item {
-        ru.foolstack.ui.components.MaterialSection(
+        MaterialSection(
             materialHeader = sectionData.headerText,
             materialText = sectionData.materialText,
+            lang = lang,
             isExpanded = isExpanded,
-            onHeaderClicked = onHeaderClick
+            onHeaderClicked = onHeaderClick,
+            onDetailsClick = onDetailsClick,
+            sendCommentClick = sendCommentClick
         )
     }
 }

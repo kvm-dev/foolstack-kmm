@@ -57,7 +57,7 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                               onClickMain()
                             }
                         ) {
-                                val icon = painterResource(id = R.drawable.home)
+                                val icon = painterResource(id = R.drawable.home_icon)
                                 Column(horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Bottom) {
                                     Icon(
@@ -78,7 +78,7 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                 onClickInterviews()
                             }
                         ) {
-                                val icon = painterResource(id = R.drawable.interview)
+                                val icon = painterResource(id = R.drawable.interview_icon)
                                 Column(horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Bottom) {
                                 Icon(
@@ -98,7 +98,7 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                 selectedState.value = BottomIcons.TESTS
                             }
                         ) {
-                                val icon = painterResource(id = R.drawable.tests)
+                                val icon = painterResource(id = R.drawable.tests_icon)
                                 Column(horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Bottom) {
                                 Icon(
@@ -119,7 +119,7 @@ fun BottomAppBar(selectedState: MutableState<BottomIcons>, isShow: MutableState<
                                 onClickNews()
                             }
                         ) {
-                                val icon = painterResource(id = R.drawable.news)
+                                val icon = painterResource(id = R.drawable.news_icon)
                                 Column(horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Bottom) {
                                 Icon(

@@ -151,7 +151,7 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
                         ) {
                             Column(modifier = Modifier
                                 .padding(top = 20.dp)) {
-                                TopBar(screenTitle = if((booksState as BooksViewState.LoadingState).lang is LangResultDomain.Ru){"Литература"}else{"Books"}, onBackPressed = { backDispatcher.onBackPressed() })
+                                TopBar(screenTitle = if((booksState as BooksViewState.LoadingState).lang is LangResultDomain.Ru){"Литература"}else{"Books"}, action = { backDispatcher.onBackPressed() })
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -195,7 +195,7 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
                                 "Литература"
                             } else {
                                 "Books"
-                            }, onBackPressed = { backDispatcher.onBackPressed() })
+                            }, action = { backDispatcher.onBackPressed() })
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = R.drawable.bug_icon)
                             Image(
@@ -278,7 +278,7 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
                                     "Литература"
                                 } else {
                                     "Books"
-                                }, onBackPressed = { backDispatcher.onBackPressed() })
+                                }, action = { backDispatcher.onBackPressed() })
                             val emptyText = if (successState.lang is LangResultDomain.Ru) {
                                 "В данный момент нет\nподходящей литературы"
                             } else {

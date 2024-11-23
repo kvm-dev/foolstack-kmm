@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import ru.foolstack.ui.model.Lang
-import ru.foolstack.ui.model.ProfessionItem
 import ru.foolstack.ui.model.SubProfessionItem
 import ru.foolstack.ui.theme.DisabledColor
 
