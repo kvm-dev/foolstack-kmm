@@ -24,11 +24,7 @@ import ru.foolstack.viewmodel.BaseViewModel
 
 class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel() {
     private val _uiState = MutableStateFlow<SplashViewState>(
-        SplashViewState.UnAuthorized(
-            "ENG",
-            false,
-            splashBottomText = SplashBottomText()
-        )
+        SplashViewState.Idle
     )
     val uiState: StateFlow<SplashViewState> = _uiState.asStateFlow()
 
@@ -59,7 +55,10 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                     if (isInternetConnected) {
                         //authByToken
                         val profile = interactor.getProfileFromServer()
-                        val materials = interactor.getMaterialsFromServer()
+                        var  materials = interactor.getMaterialsFromLocal()
+                        if(materials.materials.isEmpty() || materials.errorMsg.isNotEmpty()){
+                            materials = interactor.getMaterialsFromServer()
+                        }
                         val tests = interactor.getTestsFromServer()
                         val books = interactor.getBooksFromServer()
                         val news = interactor.getNewsFromServer()
@@ -67,15 +66,15 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                         val studies = interactor.getStudiesFromServer()
                         val professions = interactor.getProfessionsFromServer()
                         if(interactor.validateAuthorizedData(
-                            profile = profile,
-                            materials = materials,
-                            tests = tests,
-                            books = books,
-                            news = news,
-                            events = events,
-                            studies = studies,
-                            professions = professions
-                        )){
+                                profile = profile,
+                                materials = materials,
+                                tests = tests,
+                                books = books,
+                                news = news,
+                                events = events,
+                                studies = studies,
+                                professions = professions
+                            )){
                             val state = interactor.getAuthorizedState(
                                 local = local,
                                 isInternetConnected = isInternetConnected,
@@ -88,7 +87,6 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                                 studies = studies,
                                 professions = professions)
                             _uiState.update { state }
-                            updateState(ProgressState.COMPLETED)
                         }
                         else{
                             val state = interactor.authorizedErrorsResponseHandler(
@@ -101,7 +99,6 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                                 studies = studies
                             )
                             _uiState.update { state }
-                            updateState(ProgressState.COMPLETED)
                         }
                     } else {
                         //goToMain without AuthCheck
@@ -114,24 +111,22 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                         val studies = interactor.getStudiesFromLocal()
                         val professions = interactor.getProfessionsFromLocal()
                         if (profile.userId != 0 && materials.materials.isNotEmpty() && tests.tests.isNotEmpty()) {
-                           val state = interactor.getAuthorizedState(
-                               local = local,
-                               isInternetConnected = isInternetConnected,
-                               profile = profile,
-                               materials = materials,
-                               tests = tests,
-                               news = news,
-                               books = books,
-                               events = events,
-                               studies = studies,
-                               professions = professions
-                               )
+                            val state = interactor.getAuthorizedState(
+                                local = local,
+                                isInternetConnected = isInternetConnected,
+                                profile = profile,
+                                materials = materials,
+                                tests = tests,
+                                news = news,
+                                books = books,
+                                events = events,
+                                studies = studies,
+                                professions = professions
+                            )
                             _uiState.update { state }
-                            updateState(ProgressState.COMPLETED)
                         } else {
                             //showConnectionErrorBottomSheet
                             _uiState.update { interactor.getNoConnectionState() }
-                            updateState(ProgressState.COMPLETED)
                             checkConnectionCycle()
                         }
                     }
@@ -140,17 +135,16 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                         //showAuthorizationBottomSheet
                         val state = interactor.getUnauthorizedState()
                         _uiState.update { state }
-                        updateState(ProgressState.COMPLETED)
                     }
                     else{
                         //showConnectionErrorBottomSheet
                         _uiState.update { interactor.getNoConnectionState() }
-                        updateState(ProgressState.COMPLETED)
                         checkConnectionCycle()
                     }
                 }
             }
         }
+        updateState(ProgressState.COMPLETED)
     }
 
     private fun validateEmail(): Boolean {
@@ -232,7 +226,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                         }
                         else if (registrationResult.errorMsg.lowercase() ==
                             interactor.getErrorEmailEmptyOrIncorrect().lowercase()
-                            ){
+                        ){
                             emailError = interactor.getErrorEmailEmptyOrIncorrect(local.lang)
                         }
                         else if (registrationResult.errorMsg.lowercase() ==
@@ -258,7 +252,10 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
         val local = interactor.getCurrentLang()
         launch {
             val profile = interactor.getProfileFromServer()
-            val materials = interactor.getMaterialsFromServer()
+            var materials = interactor.getMaterialsFromLocal()
+            if(materials.materials.isEmpty() || materials.errorMsg.isNotEmpty()){
+                materials = interactor.getMaterialsFromServer()
+            }
             val tests = interactor.getTestsFromServer()
             val books = interactor.getBooksFromServer()
             val news = interactor.getNewsFromServer()
@@ -269,15 +266,15 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                 val result = interactor.authByEmail(email = emailValue, code  = otpValue)
                 if(result.errorMsg.isEmpty()){
                     if(interactor.validateAuthorizedData(
-                        profile = profile,
-                        materials = materials,
-                        tests = tests,
-                        books = books,
-                        news = news,
-                        events = events,
-                        studies = studies,
-                        professions = professions
-                    )){
+                            profile = profile,
+                            materials = materials,
+                            tests = tests,
+                            books = books,
+                            news = news,
+                            events = events,
+                            studies = studies,
+                            professions = professions
+                        )){
                         val state = interactor.getAuthorizedState(
                             local = local,
                             isInternetConnected = isInternetConnected,
@@ -398,7 +395,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                             studies = studies,
                             books = books,
                             professions = professions
-                            )
+                        )
                         _uiState.update { state }
                     }
                     else{
@@ -424,8 +421,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                     } else{
                         resultConfirm.errorMsg
                     }
-                    }
                 }
+            }
             otpLoading = false
         }
     }
@@ -462,5 +459,4 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
     fun backToEmailScreen(){
         _uiState.update { interactor.getAuthorizationOrRegistrationState() }
     }
-
 }

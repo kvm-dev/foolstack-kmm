@@ -10,6 +10,8 @@ import ru.foolstack.study.api.model.StudiesDomain
 import ru.foolstack.tests.api.model.TestsDomain
 
 sealed class SplashViewState{
+
+    object Idle: SplashViewState()
     data class UnAuthorized(
         val lang: String,
         val isInternetConnected: Boolean,

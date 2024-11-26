@@ -1,40 +1,43 @@
 package ru.foolstack.foolstack.android
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import ru.foolstack.navigation.StartApplication
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //edge2Edge mode, fullscreen
         enableEdgeToEdge()
-        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-        insetsController.apply {
-            hide(WindowInsetsCompat.Type.statusBars())
-            hide(WindowInsetsCompat.Type.navigationBars())
-            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
+//        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+//        insetsController.apply {
+//            hide(WindowInsetsCompat.Type.statusBars())
+//            hide(WindowInsetsCompat.Type.navigationBars())
+//            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+//        }
         setContent {
-            MyApplicationTheme {
+            FoolStackTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .safeDrawingPadding(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     StartApplication()
@@ -72,7 +75,7 @@ fun GreetingView(text: String) {
 @Preview
 @Composable
 fun DefaultPreview() {
-    MyApplicationTheme {
+    FoolStackTheme {
         GreetingView("Hello, Android!")
     }
 }

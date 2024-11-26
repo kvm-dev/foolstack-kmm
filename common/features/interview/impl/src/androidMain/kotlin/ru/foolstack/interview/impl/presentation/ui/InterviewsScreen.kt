@@ -184,7 +184,7 @@ fun InterviewsScreen(
                                 .fillMaxSize()
                                 .padding(top = 40.dp)
                         ) {
-                            TopBar(screenTitle = if((interviewsState as InterviewsViewState.ErrorState).lang is LangResultDomain.Ru){"Вопросы на интервью"}else{"Interview questions"}, action = selectProfession, isBackArrow = false)
+                            TopBar(screenTitle = if((interviewsState as InterviewsViewState.SuccessState).lang is LangResultDomain.Ru){"Вопросы на интервью"}else{"Interview questions"}, action = selectProfession, isBackArrow = false)
                             Column(modifier = Modifier.align(Alignment.Center)) {
                                 val bugBitmap = ImageBitmap.imageResource(id = R.drawable.fs_logo)
                                 Image(
@@ -196,7 +196,7 @@ fun InterviewsScreen(
                                 )
                                 Title(
                                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                                    text = if ((interviewsState as InterviewsViewState.ErrorState).lang is LangResultDomain.Ru) {
+                                    text = if ((interviewsState as InterviewsViewState.SuccessState).lang is LangResultDomain.Ru) {
                                         "Прежде чем увидеть вопросы, необходимо определиться с профессией"
                                     } else {
                                         "Before you see the questions, you need to decide on a profession"
@@ -204,7 +204,7 @@ fun InterviewsScreen(
                                 )
                                 YellowButton(
                                     onClick = selectProfession,
-                                    text = if ((interviewsState as InterviewsViewState.ErrorState).lang is LangResultDomain.Ru) {
+                                    text = if ((interviewsState as InterviewsViewState.SuccessState).lang is LangResultDomain.Ru) {
                                         "Выбрать профессию"
                                     } else {
                                         "Select profession"
