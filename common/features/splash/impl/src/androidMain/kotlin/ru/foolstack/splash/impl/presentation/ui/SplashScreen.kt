@@ -1,5 +1,6 @@
 package ru.foolstack.splash.impl.presentation.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,8 +21,7 @@ import ru.foolstack.ui.components.BottomSplashScreenState
 import ru.foolstack.ui.components.SplashBackground
 
 @Composable
-fun SplashScreen(navigateToMainScreen: () -> Unit, splashViewModel: SplashViewModel = koinViewModel())
- {
+fun SplashScreen(navigateToMainScreen: () -> Unit, splashViewModel: SplashViewModel = koinViewModel()) {
     SplashBackground()
     Column(
         modifier = Modifier
@@ -30,151 +30,119 @@ fun SplashScreen(navigateToMainScreen: () -> Unit, splashViewModel: SplashViewMo
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        splashViewModel.initViewModel()
         val viewModelState by splashViewModel.progressState.collectAsState()
-        when(viewModelState){
-            ProgressState.LOADING ->{
+        when (viewModelState) {
+            ProgressState.LOADING -> {
                 //nothing because loading
+                Log.d("мы здесь", "лоадинг")
+                splashViewModel.initViewModel()
             }
-            ProgressState.COMPLETED ->{
+
+            ProgressState.COMPLETED -> {
+                Log.d("мы здесь", "комплит")
                 val uiState by splashViewModel.uiState.collectAsState()
-                UiStateHandler(
-                    state = uiState,
-                    authScreen = navigateToMainScreen,
-                    onClickAuthorizationScreen = { splashViewModel.authorizationOrRegistrationSplashScreen() },
-                    onClickConfirm = splashViewModel::confirmAuthOrRegistrationByEmail,
-                    onClickResend = { splashViewModel.resendOtpCode() },
-                    onChangeEmail =  splashViewModel::setEmail,
-                    onChangeOtp =  splashViewModel::setOtp,
-                    onClickAuthorizationOrRegistration = { splashViewModel.authorizationOrRegistrationByEmail() },
-                    onClickTryAgain = {splashViewModel.onClickTryAgain()},
-                    onClickBackToEmailScreen = { splashViewModel.backToEmailScreen() },
-                    onClickBackToAuthorizationScreen = { splashViewModel.backToAuthorizationScreen() },
-                    navigateToAuthorizedScreen = navigateToMainScreen,
-                    emailText = splashViewModel.emailValue,
-                    isEmailError = splashViewModel.emailError.isNotEmpty(),
-                    emailErrorText = splashViewModel.emailError,
-                    isEmailLoading = splashViewModel.emailLoading,
-                    otpText = splashViewModel.otpValue,
-                    otpErrorText = splashViewModel.otpError,
-                    isOtpError = splashViewModel.otpError.isNotEmpty(),
-                    isOtpLoading = splashViewModel.otpLoading)
-                        }
+                val splashBitmap = ImageBitmap.imageResource(ru.foolstack.ui.R.drawable.splash_img)
+                val logoBitmap = ImageBitmap.imageResource(ru.foolstack.ui.R.drawable.logo)
+                val bugBitmap = ImageBitmap.imageResource(id = ru.foolstack.ui.R.drawable.bug_icon)
+                BigAppTitle("foolStack")
+                when (uiState) {
+                    is SplashViewState.Idle->{
+                        //nothing init state
+                    }
+                    is SplashViewState.UnAuthorized -> {
+                        val state = uiState as SplashViewState.UnAuthorized
+                        BottomSplashScreen(
+                            bottomSplashScreenState = BottomSplashScreenState.UNAUTHORIZED,
+                            splashBitmap = splashBitmap,
+                            logoBitmap = logoBitmap,
+                            onClickGuestScreen = navigateToMainScreen,
+                            onClickAuthorizationScreen = { splashViewModel.authorizationOrRegistrationSplashScreen() },
+                            titleText = state.splashBottomText.splashTitleText,
+                            descriptionText = state.splashBottomText.splashDescriptionText,
+                            mainButtonText = state.splashBottomText.splashMainButtonText,
+                            secondButtonText = state.splashBottomText.splashSecondButtonText,
+                            resendButtonText = state.splashBottomText.splashResendButtonText,
+                        )
+                    }
+
+                    is SplashViewState.NoConnectionError -> {
+                        val state = uiState as SplashViewState.NoConnectionError
+                        BottomSplashScreen(
+                            bottomSplashScreenState = BottomSplashScreenState.NO_CONNECTION,
+                            splashBitmap = splashBitmap,
+                            logoBitmap = logoBitmap,
+                            onChangeEmail = splashViewModel::setEmail,
+                            onChangeOtp = splashViewModel::setOtp,
+                            onClickTryAgain = { splashViewModel.onClickTryAgain() },
+                            titleText = state.splashTitleText,
+                            descriptionText = state.splashDescriptionText,
+                        )
+                    }
+
+                    is SplashViewState.AuthorizationOrRegistration -> {
+                        val state = uiState as SplashViewState.AuthorizationOrRegistration
+                        BottomSplashScreen(
+                            bottomSplashScreenState = BottomSplashScreenState.AUTHORIZATION,
+                            splashBitmap = splashBitmap,
+                            logoBitmap = logoBitmap,
+                            onClickAuthorizationScreen = { splashViewModel.authorizationOrRegistrationSplashScreen() },
+                            onClickGuestScreen = navigateToMainScreen,
+                            onChangeEmail = splashViewModel::setEmail,
+                            onClickAuthorizationOrRegistrationByEmail = { splashViewModel.authorizationOrRegistrationByEmail() },
+                            onClickBackToAuthorizationScreen = { splashViewModel.backToAuthorizationScreen() },
+                            titleText = state.splashBottomText.splashTitleText,
+                            descriptionText = state.splashBottomText.splashDescriptionText,
+                            mainButtonText = state.splashBottomText.splashMainButtonText,
+                            secondButtonText = state.splashBottomText.splashSecondButtonText,
+                            emailText = splashViewModel.emailValue,
+                            errorText = splashViewModel.emailError,
+                            isEmailError = splashViewModel.emailError.isNotEmpty(),
+                            isEmailLoading = splashViewModel.emailLoading,
+                        )
+                    }
+
+                    is SplashViewState.Confirmation -> {
+                        val state = uiState as SplashViewState.Confirmation
+                        BottomSplashScreen(
+                            bottomSplashScreenState = BottomSplashScreenState.CONFIRM,
+                            splashBitmap = splashBitmap,
+                            logoBitmap = logoBitmap,
+                            onClickConfirm = splashViewModel::confirmAuthOrRegistrationByEmail,
+                            onClickResend = { splashViewModel.resendOtpCode() },
+                            onChangeEmail = splashViewModel::setEmail,
+                            onChangeOtp = splashViewModel::setOtp,
+                            onClickBackToEmailScreen = { splashViewModel.backToEmailScreen() },
+                            titleText = state.splashBottomText.splashTitleText,
+                            descriptionText = state.splashBottomText.splashDescriptionText,
+                            mainButtonText = state.splashBottomText.splashMainButtonText,
+                            secondButtonText = state.splashBottomText.splashSecondButtonText,
+                            resendButtonText = state.splashBottomText.splashResendButtonText,
+                            errorText = splashViewModel.otpError,
+                            otpValue = splashViewModel.otpValue,
+                            isOtpError = splashViewModel.otpError.isNotEmpty(),
+                            isOtpLoading = splashViewModel.otpLoading,
+                            isUserExist = state.isUserExist
+                        )
+                    }
+
+                    is SplashViewState.Authorized -> {
+                        navigateToMainScreen()
+                    }
+
+                    is SplashViewState.AnyError -> {
+                        val state = uiState as SplashViewState.AnyError
+                        BottomSplashScreen(
+                            bottomSplashScreenState = BottomSplashScreenState.ANY_ERROR,
+                            splashBitmap = splashBitmap,
+                            logoBitmap = bugBitmap,
+                            onClickTryAgain = { splashViewModel.onClickTryAgain() },
+                            titleText = state.splashTitleText,
+                            descriptionText = state.splashDescriptionText,
+                            mainButtonText = state.tryAgainButtonText,
+                        )
                     }
                 }
             }
-@Composable private fun UiStateHandler(state: SplashViewState,
-                                       authScreen: () -> Unit,
-                                       onClickAuthorizationScreen: () -> Unit,
-                                       onChangeEmail: (String) -> Unit,
-                                       onChangeOtp: (String) -> Unit,
-                                       onClickAuthorizationOrRegistration: () -> Unit,
-                                       onClickConfirm: (Boolean) -> Unit,
-                                       onClickResend: () -> Unit,
-                                       onClickTryAgain: () -> Unit,
-                                       onClickBackToEmailScreen: () -> Unit,
-                                       onClickBackToAuthorizationScreen: () -> Unit,
-                                       navigateToAuthorizedScreen: () -> Unit,
-                                       emailText: String,
-                                       isEmailError: Boolean,
-                                       emailErrorText: String,
-                                       isEmailLoading: Boolean,
-                                       otpText: String,
-                                       isOtpError: Boolean,
-                                       otpErrorText: String,
-                                       isOtpLoading: Boolean
-                                       ){
-    val splashBitmap = ImageBitmap.imageResource(ru.foolstack.ui.R.drawable.splash_img)
-    val logoBitmap = ImageBitmap.imageResource(ru.foolstack.ui.R.drawable.logo)
-    val bugBitmap = ImageBitmap.imageResource(id = ru.foolstack.ui.R.drawable.bug_icon)
-    BigAppTitle("foolStack")
-    when(state){
-        is SplashViewState.UnAuthorized -> {
-                BottomSplashScreen(
-                    bottomSplashScreenState = BottomSplashScreenState.UNAUTHORIZED,
-                    splashBitmap = splashBitmap,
-                    logoBitmap = logoBitmap,
-                    onClickGuestScreen = authScreen,
-                    onClickAuthorizationScreen = onClickAuthorizationScreen,
-                    titleText = state.splashBottomText.splashTitleText,
-                    descriptionText  = state.splashBottomText.splashDescriptionText,
-                    mainButtonText = state.splashBottomText.splashMainButtonText,
-                    secondButtonText = state.splashBottomText.splashSecondButtonText,
-                    resendButtonText = state.splashBottomText.splashResendButtonText,
-                )
-
-        }
-        is SplashViewState.NoConnectionError -> {
-            BottomSplashScreen(
-                bottomSplashScreenState = BottomSplashScreenState.NO_CONNECTION,
-                splashBitmap = splashBitmap,
-                logoBitmap = logoBitmap,
-                onChangeEmail = onChangeEmail,
-                onChangeOtp = onChangeOtp,
-                onClickTryAgain = onClickTryAgain,
-                titleText = state.splashTitleText,
-                descriptionText = state.splashDescriptionText,
-            )
-        }
-
-        is SplashViewState.AuthorizationOrRegistration-> {
-            BottomSplashScreen(
-                bottomSplashScreenState = BottomSplashScreenState.AUTHORIZATION,
-                splashBitmap = splashBitmap,
-                logoBitmap = logoBitmap,
-                onClickAuthorizationScreen = onClickAuthorizationScreen,
-                onClickGuestScreen = authScreen,
-                onChangeEmail = onChangeEmail,
-                onClickAuthorizationOrRegistrationByEmail = onClickAuthorizationOrRegistration,
-                onClickBackToAuthorizationScreen = onClickBackToAuthorizationScreen,
-                titleText = state.splashBottomText.splashTitleText,
-                descriptionText  = state.splashBottomText.splashDescriptionText,
-                mainButtonText = state.splashBottomText.splashMainButtonText,
-                secondButtonText = state.splashBottomText.splashSecondButtonText,
-                emailText = emailText,
-                errorText = emailErrorText,
-                isEmailError = isEmailError,
-                isEmailLoading = isEmailLoading,
-            )
-        }
-
-        is SplashViewState.Confirmation-> {
-            BottomSplashScreen(
-                bottomSplashScreenState = BottomSplashScreenState.CONFIRM,
-                splashBitmap = splashBitmap,
-                logoBitmap = logoBitmap,
-                onClickConfirm = onClickConfirm,
-                onClickResend = onClickResend,
-                onChangeEmail = onChangeEmail,
-                onChangeOtp = onChangeOtp,
-                onClickBackToEmailScreen = onClickBackToEmailScreen,
-                titleText = state.splashBottomText.splashTitleText,
-                descriptionText  = state.splashBottomText.splashDescriptionText,
-                mainButtonText = state.splashBottomText.splashMainButtonText,
-                secondButtonText = state.splashBottomText.splashSecondButtonText,
-                resendButtonText = state.splashBottomText.splashResendButtonText,
-                errorText = otpErrorText,
-                otpValue = otpText,
-                isOtpError = isOtpError,
-                isOtpLoading = isOtpLoading,
-                isUserExist = state.isUserExist
-            )
-        }
-
-        is SplashViewState.Authorized-> {
-            navigateToAuthorizedScreen()
-        }
-
-        is SplashViewState.AnyError-> {
-            BottomSplashScreen(
-                bottomSplashScreenState = BottomSplashScreenState.ANY_ERROR,
-                splashBitmap = splashBitmap,
-                logoBitmap = bugBitmap,
-                onClickTryAgain = onClickTryAgain,
-                titleText = state.splashTitleText,
-                descriptionText  = state.splashDescriptionText,
-                mainButtonText = state.tryAgainButtonText,
-            )
         }
     }
 }

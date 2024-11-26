@@ -26,10 +26,6 @@ fun InterviewWebView(materialContent: String){
     val materialContentWithTheme = "<body style=\"background-color:$background\">$materialContent</body>"
     AndroidView(factory = {
         WebView(it).apply {
-            this.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
             this.webChromeClient = CustomWebChromeClient()
             this.settings.setSupportZoom(true)
             this.settings.builtInZoomControls = true
