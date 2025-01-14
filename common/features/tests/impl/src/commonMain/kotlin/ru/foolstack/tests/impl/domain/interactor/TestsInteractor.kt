@@ -1,51 +1,45 @@
-package ru.foolstack.interview.impl.domain.interactor
+package ru.foolstack.tests.impl.domain.interactor
 
-import ru.foolstack.comments.api.domain.usecase.SendMaterialCommentUseCase
-import ru.foolstack.comments.api.model.MaterialCommentRequestDomain
-import ru.foolstack.interview.api.domain.usecase.GetMaterialsUseCase
-import ru.foolstack.interview.api.model.MaterialDomain
-import ru.foolstack.interview.api.model.MaterialsDomain
-import ru.foolstack.interview.impl.presentation.ui.InterviewsViewState
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
 import ru.foolstack.professions.api.domain.usecase.GetProfessionsUseCase
 import ru.foolstack.professions.api.model.ProfessionsDomain
 import ru.foolstack.profile.api.domain.usecase.GetProfileUseCase
 import ru.foolstack.profile.api.model.ProfileDomain
-import ru.foolstack.utils.BrowserUtils
+import ru.foolstack.tests.api.domain.usecase.GetPassedTestsUseCase
+import ru.foolstack.tests.api.domain.usecase.GetTestsUseCase
+import ru.foolstack.tests.api.domain.usecase.SendTestResultUseCase
+import ru.foolstack.tests.api.model.PassedTestDomain
+import ru.foolstack.tests.api.model.PassedTestsDomain
+import ru.foolstack.tests.api.model.SendRequestDomain
+import ru.foolstack.tests.api.model.TestsDomain
+import ru.foolstack.tests.impl.presentation.ui.TestsViewState
 import ru.foolstack.utils.model.ResultState
 
-class InterviewsInteractor(
+class TestsInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,
     private val getNetworkStateUseCase: GetNetworkStateUseCase,
-    private val getMaterialsUseCase: GetMaterialsUseCase,
+    private val getTestsUseCase: GetTestsUseCase,
+    private val getPassedTestsUseCase: GetPassedTestsUseCase,
+    private val sendTestResultUseCase: SendTestResultUseCase,
     private val getProfessionsUseCase: GetProfessionsUseCase,
-    private val sendMaterialCommentUseCase: SendMaterialCommentUseCase,
-    private val getProfileUseCase: GetProfileUseCase,
-    private val browserUtils: BrowserUtils
+    getProfileUseCase: GetProfileUseCase
 ){
-    val materialsState = getMaterialsUseCase.materialsState
+    val testsState = getTestsUseCase.testsState
     val profileState = getProfileUseCase.profileState
     val professionsState = getProfessionsUseCase.professionsState
-
+    val passedTestsState = getPassedTestsUseCase.passedTestsState
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
-    fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
+    private fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
-    suspend fun getMaterialsFromServer():MaterialsDomain{
-        return getMaterialsUseCase.getMaterialsByProfession(professionId = getProfessionId())
-    }
+    suspend fun getTestsFromServer() = getTestsUseCase.getTests()
 
-    suspend fun getMaterialsFromLocal() = getMaterialsUseCase.getMaterials(true)
-
-    suspend fun getProfessionsFromServer() = getProfessionsUseCase.getProfessions()
-
-    suspend fun getProfessionsFromLocal() = getProfessionsUseCase.getProfessions(fromLocal = true)
-
-    suspend fun checkState(state: ResultState<MaterialsDomain>,
-                           profileState: ResultState<ProfileDomain>,
-                           professionsState:ResultState<ProfessionsDomain>,
-                           professionId: Int):InterviewsViewState{
+    suspend fun checkState(testsState: ResultState<TestsDomain>,
+                   passedTestsState: ResultState<PassedTestsDomain>,
+                   profileState: ResultState<ProfileDomain>,
+                   professionsState: ResultState<ProfessionsDomain>,
+                   professionId: Int):TestsViewState{
         val lang = getCurrentLang()
         var isShowBanner = true
         val fullPurchasedList = HashSet<Int>()
@@ -134,48 +128,52 @@ class InterviewsInteractor(
         else{
             isShowBanner = true
         }
-        when(state){
+
+        when(testsState){
             is ResultState.Loading->{
-                return InterviewsViewState.LoadingState(lang = lang)
+                return TestsViewState.LoadingState(lang = lang)
             }
             is ResultState.Idle->{
-                return InterviewsViewState.LoadingState(lang = lang)
+                return TestsViewState.LoadingState(lang = lang)
             }
             is ResultState.Success->{
-                return if(state.data?.errorMsg?.isNotEmpty() == true){
-                    InterviewsViewState.ErrorState(lang = lang)
+                return if(testsState.data?.errorMsg?.isNotEmpty() == true){
+                    TestsViewState.ErrorState(lang = lang)
                 } else{
-                    val filteredMaterials = HashSet<MaterialDomain>()
-                    state.data?.materials?.forEach { material->
-                        material.subProfessions.forEach { subProfessin->
-                            if(subProfessin.professionId==professionId){
-                                filteredMaterials.add(material)
-                            }
+                    val passedTests = ArrayList<PassedTestDomain>()
+                    if(passedTestsState is ResultState.Success){
+                        passedTestsState.data?.passedTests?.forEach { passedTest->
+                            passedTests.add(passedTest)
                         }
                     }
-                    val filtersList = HashSet<String>()
-                    filteredMaterials.forEach { material->
-                        material.knowledgeAreas.forEach { sub->
-                            filtersList.add(sub.areaName)
-                        }
-                    }
-                    InterviewsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), materials = filteredMaterials.toList(),
-                     selectedFilters = filtersList.toList(), currentProfessionId = professionId, lang = lang, isShowBanner = isShowBanner)
+
+                    TestsViewState.SuccessState(
+                        isHaveConnection = isConnectionAvailable(),
+                        tests = testsState.data?.tests?: listOf(),
+                        lang = lang,
+                        currentProfessionId = professionId,
+                        passedTests = passedTests)
                 }
             }
         }
     }
 
-    suspend fun sendComment(materialId: Int, comment: String){
-        sendMaterialCommentUseCase.sendComment(MaterialCommentRequestDomain(materialId = materialId, comment = comment))
+    suspend fun sendResult(testId: Int, testResult: Int){
+        sendTestResultUseCase.sendTestResult(SendRequestDomain(
+            testId = testId, testResult = testResult
+        ))
+    }
+
+    suspend fun getPassedTestsFromServer(){
+        getPassedTestsUseCase.getPassedTests()
+    }
+
+    suspend fun getPassedTestsFromLocal(){
+        getPassedTestsUseCase.getPassedTests(fromLocal = true)
     }
 
     suspend fun getProfessionId(): Int{
         return getProfessionsUseCase.getProfessionId()
     }
 
-
-    fun goToTelegram(){
-        browserUtils.openInBrowser("https://t.me/+-fxZnU-zAJJkYzIy")
-    }
 }

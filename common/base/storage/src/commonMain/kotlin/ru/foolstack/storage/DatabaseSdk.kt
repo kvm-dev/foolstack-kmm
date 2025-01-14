@@ -5,6 +5,8 @@ import ru.foolstack.storage.model.Books
 import ru.foolstack.storage.model.Events
 import ru.foolstack.storage.model.Materials
 import ru.foolstack.storage.model.News
+import ru.foolstack.storage.model.PassedTest
+import ru.foolstack.storage.model.PassedTests
 import ru.foolstack.storage.model.Professions
 import ru.foolstack.storage.model.Profile
 import ru.foolstack.storage.model.Studies
@@ -23,6 +25,10 @@ class DatabaseSdk(databaseDriverFactory: DatabaseDriverFactory, mapper: Mapper) 
     suspend fun getTests():Tests = database.getTests()
 
     suspend fun saveTests(tests:Tests) = database.clearAndSaveTests(tests)
+
+    suspend fun getPassedTests():PassedTests = database.getPassedTests()
+
+    suspend fun savePassedTests(passedTests:PassedTests) = database.clearAndSavePassedTests(passedTests)
 
     suspend fun getEvents() =  database.getEvents()
 

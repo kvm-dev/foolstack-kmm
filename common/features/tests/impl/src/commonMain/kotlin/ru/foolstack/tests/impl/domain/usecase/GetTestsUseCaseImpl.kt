@@ -25,4 +25,18 @@ class GetTestsUseCaseImpl(private val repository: TestsRepository):GetTestsUseCa
             responseTests
         }
     }
+
+    override suspend fun getTestsByProfession(professionId: Int, fromLocal: Boolean): TestsDomain {
+        _tests.tryEmit(ResultState.Loading)
+        return if(fromLocal){
+            val cachedTests = repository.getTestsFromLocal()
+            _tests.tryEmit(ResultState.Success(cachedTests))
+            cachedTests
+        }
+        else{
+            val responseTests = repository.getTestsByProfessionFromServer(professionId)
+            _tests.tryEmit(ResultState.Success(responseTests))
+            responseTests
+        }
+    }
 }

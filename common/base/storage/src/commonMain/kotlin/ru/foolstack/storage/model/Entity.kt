@@ -82,6 +82,18 @@ data class Variant(
 )
 
 @Serializable
+data class PassedTests(
+    @SerialName("passedTests") val passedTests: List<PassedTest>
+)
+
+@Serializable
+data class PassedTest(
+    @SerialName("testId") val testId: Int,
+    @SerialName("testResult") val testResult: Int,
+    @SerialName("finishTestTime") val finishTestTime: Long
+)
+
+@Serializable
 data class Events(
     @SerialName("events") val events: List<Event>,
     @SerialName("errorMsg") val errorMsg: String

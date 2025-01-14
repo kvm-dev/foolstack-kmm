@@ -8,4 +8,6 @@ interface GetMaterialsUseCase {
 
     val materialsState: StateFlow<ResultState<MaterialsDomain>>
     suspend fun getMaterials(fromLocal: Boolean = false): MaterialsDomain
+
+    suspend fun getMaterialsByProfession(professionId: Int, fromLocal: Boolean = false): MaterialsDomain
 }

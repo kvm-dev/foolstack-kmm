@@ -25,4 +25,18 @@ class GetMaterialsUseCaseImpl(private val repository: MaterialsRepository):GetMa
             responseMaterials
         }
     }
+
+    override suspend fun getMaterialsByProfession(professionId: Int, fromLocal: Boolean): MaterialsDomain {
+        _materials.tryEmit(ResultState.Loading)
+        return if(fromLocal){
+            val cachedMaterials = repository.getMaterialsFromLocal()
+            _materials.tryEmit(ResultState.Success(cachedMaterials))
+            cachedMaterials
+        }
+        else{
+            val responseMaterials = repository.getMaterialsByProfessionFromServer(professionId = professionId)
+            _materials.tryEmit(ResultState.Success(responseMaterials))
+            responseMaterials
+        }
+    }
 }

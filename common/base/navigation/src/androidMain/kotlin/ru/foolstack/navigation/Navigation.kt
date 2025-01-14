@@ -175,7 +175,7 @@ fun StartApplication(
 
                     composable(route = NavigationScreens.StudiesListScreenNavigation.name) {
                         isShowBottomBar.value = false
-                        StudiesScreen(navController = navController)
+                        StudiesScreen()
                     }
 
                     composable(route = NavigationScreens.NewsListScreenNavigation.name) {

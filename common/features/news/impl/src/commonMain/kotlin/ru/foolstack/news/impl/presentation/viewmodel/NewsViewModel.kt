@@ -11,6 +11,7 @@ import kotlinx.coroutines.plus
 import ru.foolstack.model.ProgressState
 import ru.foolstack.news.impl.domain.interactor.NewsInteractor
 import ru.foolstack.news.impl.presentation.ui.NewsViewState
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
@@ -23,6 +24,14 @@ class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
+                if(interactor.newsState.value !is ResultState.Success){
+                    if(interactor.isConnectionAvailable()){
+                        interactor.getNewsFromServer()
+                    }
+                    else{
+                        interactor.getNewsFromLocal()
+                    }
+                }
                 interactor.newsState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)
@@ -35,7 +44,12 @@ class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
         val lang = interactor.getCurrentLang()
         _uiState.update { NewsViewState.LoadingState(lang = lang) }
         launch {
-            interactor.getNewsFromServer()
+            if(interactor.isConnectionAvailable()){
+                interactor.getNewsFromServer()
+            }
+            else{
+                interactor.getNewsFromLocal()
+            }
             updateState(ProgressState.LOADING)
             initViewModel()
         }
@@ -50,4 +64,6 @@ class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
             )
         )
     }
+
+    fun getCurrentLang() = interactor.getCurrentLang()
 }

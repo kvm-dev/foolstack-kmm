@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,7 +55,7 @@ import ru.foolstack.ui.model.Lang
 
 @Composable
 fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController: NavController, bookDestination: String) {
-    val bookId  = remember { mutableStateOf(0) }
+    val bookId  = remember { mutableIntStateOf(0) }
     val searchKeyWord  = remember { mutableStateOf("") }
     val selectedFilter  = remember { mutableStateOf("") }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -79,107 +80,7 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
             when (booksState) {
                 is BooksViewState.LoadingState -> {
                     Log.d("books in state is", "Loading")
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 20.dp)){
-                        // Scrollable Row of Cards
-                        LazyVerticalGrid(
-                            modifier = Modifier
-                                .padding(top = 200.dp)
-                                .scrollEnabled(false),
-                            columns = GridCells.Fixed(2),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            items(10) {
-                                Column(modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(20.dp)) {
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(180.dp)
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 2.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(16)),
-                                        durationMillis = 1000
-                                    )
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(40.dp)
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 2.dp, vertical = 10.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(16)),
-                                        durationMillis = 1000
-                                    )
-                                    Row(modifier = Modifier.fillMaxWidth()) {
-                                        ShimmerEffect(
-                                            modifier = Modifier
-                                                .height(22.dp)
-                                                .width(70.dp)
-                                                .padding(horizontal = 2.dp)
-                                                .background(Color.LightGray, RoundedCornerShape(16)),
-                                            durationMillis = 1000
-                                        )
-                                        Spacer(modifier = Modifier
-                                            .weight(1f)
-                                            .height(22.dp))
-                                        ShimmerEffect(
-                                            modifier = Modifier
-                                                .height(22.dp)
-                                                .width(70.dp)
-                                                .padding(horizontal = 2.dp)
-                                                .background(Color.LightGray, RoundedCornerShape(16)),
-                                            durationMillis = 1000
-                                        )
-                                    }
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(50.dp)
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 2.dp, vertical = 12.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(24)),
-                                        durationMillis = 1000
-                                    )
-                                }
-                            }
-                        }
-                        Box(
-                            Modifier
-                                .align(Alignment.TopCenter)
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .verticalScroll(rememberScrollState())
-                        ) {
-                            Column(modifier = Modifier
-                                .padding(top = 20.dp)) {
-                                TopBar(screenTitle = if((booksState as BooksViewState.LoadingState).lang is LangResultDomain.Ru){"Литература"}else{"Books"}, action = { backDispatcher.onBackPressed() })
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(60.dp)
-                                        .padding(start = 20.dp, bottom = 8.dp, top = 8.dp),
-                                    horizontalArrangement = Arrangement.Absolute.SpaceBetween
-                                ) {
-                                    repeat(6) {
-                                        ShimmerEffect(
-                                            modifier = Modifier
-                                                .size(width = 120.dp, height = 38.dp)
-                                                .padding(start = 2.dp, end = 2.dp)
-                                                .background(Color.LightGray, RoundedCornerShape(34)),
-                                            durationMillis = 1000
-                                        )
-                                    }
-                                }
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .height(46.dp)
-                                        .fillMaxWidth()
-                                        .padding(start = 8.dp, end = 8.dp, top = 8.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(34)),
-                                    durationMillis = 1000
-                                )
-                            }
-                        }
-                    }
+                    LoadingScreen(lang = booksViewModel.getCurrentLang(), onBackClick = {backDispatcher.onBackPressed()})
                 }
 
                 is BooksViewState.ErrorState -> {
@@ -241,7 +142,7 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
                         BooksVerticalSlider(
                             lang = if (successState.lang is LangResultDomain.Ru) { Lang.RU } else { Lang.ENG },
                             books = Mapper().mapToBookItems(successState.books),
-                            chips = Mapper().mapToChips(successState.books.books ?: listOf()),
+                            chips = Mapper().mapToChips(successState.books.books),
                             selectedChips = successState.selectedFilters,
                             searchKeyWord = searchKeyWord,
                             onBackPressed = { backDispatcher.onBackPressed() },
@@ -250,7 +151,7 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
                             onClickBook = {
                                 booksViewModel.navigateToBook(
                                     navController = navController,
-                                    bookId = bookId.value,
+                                    bookId = bookId.intValue,
                                     bookDestination = bookDestination,
                                     prText = successState.books.prText,
                                     maxSalePercent = successState.books.maxSalePercent,
@@ -262,7 +163,7 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
                             selectId = bookId,
                             selectedChip = selectedFilter,
                             onclickChip = { booksViewModel.updateFilters(selectedFilter.value) },
-                            onclickBuy = { booksViewModel.onClickLink(successState.books.books.find { it.bookId == bookId.value }?.bookRefLink?: "")},
+                            onclickBuy = { booksViewModel.onClickLink(successState.books.books.find { it.bookId == bookId.intValue }?.bookRefLink?: "")},
                             subscribeText = booksSubscribeFullText,
                             subscribeClick = { booksViewModel.onClickLink(successState.books.subscribeLink) })
                     } else {
@@ -309,9 +210,120 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
             }
         }
 
+        ProgressState.LOADING -> {
+            Log.d("books realy loading", "yes")
+            LoadingScreen(lang = booksViewModel.getCurrentLang(), onBackClick = {backDispatcher.onBackPressed()})
+            booksViewModel.initViewModel()
+        }
+
         else -> {
             Log.d("books realy complete", "no")
             booksViewModel.initViewModel()
+        }
+    }
+}
+
+@Composable
+fun LoadingScreen(lang: LangResultDomain, onBackClick: () -> Unit){
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(bottom = 20.dp)){
+        // Scrollable Row of Cards
+        LazyVerticalGrid(
+            modifier = Modifier
+                .padding(top = 200.dp)
+                .scrollEnabled(false),
+            columns = GridCells.Fixed(2),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            items(10) {
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)) {
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(180.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 2.dp)
+                            .background(Color.LightGray, RoundedCornerShape(16)),
+                        durationMillis = 1000
+                    )
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(40.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 2.dp, vertical = 10.dp)
+                            .background(Color.LightGray, RoundedCornerShape(16)),
+                        durationMillis = 1000
+                    )
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        ShimmerEffect(
+                            modifier = Modifier
+                                .height(22.dp)
+                                .width(70.dp)
+                                .padding(horizontal = 2.dp)
+                                .background(Color.LightGray, RoundedCornerShape(16)),
+                            durationMillis = 1000
+                        )
+                        Spacer(modifier = Modifier
+                            .weight(1f)
+                            .height(22.dp))
+                        ShimmerEffect(
+                            modifier = Modifier
+                                .height(22.dp)
+                                .width(70.dp)
+                                .padding(horizontal = 2.dp)
+                                .background(Color.LightGray, RoundedCornerShape(16)),
+                            durationMillis = 1000
+                        )
+                    }
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(50.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 2.dp, vertical = 12.dp)
+                            .background(Color.LightGray, RoundedCornerShape(24)),
+                        durationMillis = 1000
+                    )
+                }
+            }
+        }
+        Box(
+            Modifier
+                .align(Alignment.TopCenter)
+                .fillMaxWidth()
+                .height(200.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Column(modifier = Modifier
+                .padding(top = 20.dp)) {
+                TopBar(screenTitle = if(lang is LangResultDomain.Ru){"Литература"}else{"Books"}, action = { onBackClick() })
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(start = 20.dp, bottom = 8.dp, top = 8.dp),
+                    horizontalArrangement = Arrangement.Absolute.SpaceBetween
+                ) {
+                    repeat(6) {
+                        ShimmerEffect(
+                            modifier = Modifier
+                                .size(width = 120.dp, height = 38.dp)
+                                .padding(start = 2.dp, end = 2.dp)
+                                .background(Color.LightGray, RoundedCornerShape(34)),
+                            durationMillis = 1000
+                        )
+                    }
+                }
+                ShimmerEffect(
+                    modifier = Modifier
+                        .height(46.dp)
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, end = 8.dp, top = 8.dp)
+                        .background(Color.LightGray, RoundedCornerShape(34)),
+                    durationMillis = 1000
+                )
+            }
         }
     }
 }

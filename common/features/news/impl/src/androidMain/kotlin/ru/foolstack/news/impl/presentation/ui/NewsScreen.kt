@@ -69,59 +69,7 @@ fun NewsScreen(newsViewModel: NewsViewModel = koinViewModel(), navController: Na
             when (newsState) {
                 is NewsViewState.LoadingState -> {
                     Log.d("news in state is", "Loading")
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 40.dp)
-                    ) {
-                        TopBar(
-                            screenTitle = if ((newsState as NewsViewState.LoadingState).lang is LangResultDomain.Ru) {
-                                "Новости"
-                            } else {
-                                "News"
-                            }, action = { backDispatcher.onBackPressed() })
-
-                        repeat(10) {
-                            Column(modifier = Modifier
-                                .padding(vertical = 20.dp)) {
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .height(220.dp)
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 12.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(10)),
-                                    durationMillis = 1000
-                                )
-
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .height(44.dp)
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 80.dp, top = 4.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(20)),
-                                    durationMillis = 1000
-                                )
-
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .height(36.dp)
-                                        .width(120.dp)
-                                        .padding(start = 20.dp, end = 20.dp, top = 16.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(10)),
-                                    durationMillis = 1000
-                                )
-
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .height(80.dp)
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 20.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(10)),
-                                    durationMillis = 1000
-                                )
-                            }
-                        }
-                    }
+                    LoadingScreen(lang = newsViewModel.getCurrentLang(), onclickNews = { newsViewModel.navigateToSingleNews(navController = navController, newsId = newsId.intValue, newsDestination = newsDestination) })
                 }
 
                 is NewsViewState.ErrorState -> {
@@ -231,9 +179,73 @@ fun NewsScreen(newsViewModel: NewsViewModel = koinViewModel(), navController: Na
             }
         }
 
+        ProgressState.LOADING -> {
+            Log.d("news realy loading", "true")
+            LoadingScreen(lang = newsViewModel.getCurrentLang(), onclickNews = { newsViewModel.navigateToSingleNews(navController = navController, newsId = newsId.intValue, newsDestination = newsDestination) })
+            newsViewModel.initViewModel()
+        }
+
         else -> {
             Log.d("news realy complete", "no")
             newsViewModel.initViewModel()
+        }
+    }
+}
+
+@Composable
+fun LoadingScreen(lang: LangResultDomain, onclickNews: () -> Unit){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 40.dp)
+    ) {
+        TopBar(
+            screenTitle = if (lang is LangResultDomain.Ru) {
+                "Новости"
+            } else {
+                "News"
+            }, action = { onclickNews() },
+            isIconVisible = false)
+
+        repeat(10) {
+            Column(modifier = Modifier
+                .padding(vertical = 20.dp)) {
+                ShimmerEffect(
+                    modifier = Modifier
+                        .height(220.dp)
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp, top = 12.dp)
+                        .background(Color.LightGray, RoundedCornerShape(10)),
+                    durationMillis = 1000
+                )
+
+                ShimmerEffect(
+                    modifier = Modifier
+                        .height(44.dp)
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 80.dp, top = 4.dp)
+                        .background(Color.LightGray, RoundedCornerShape(20)),
+                    durationMillis = 1000
+                )
+
+                ShimmerEffect(
+                    modifier = Modifier
+                        .height(36.dp)
+                        .width(120.dp)
+                        .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                        .background(Color.LightGray, RoundedCornerShape(10)),
+                    durationMillis = 1000
+                )
+
+                ShimmerEffect(
+                    modifier = Modifier
+                        .height(80.dp)
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+                        .background(Color.LightGray, RoundedCornerShape(10)),
+                    durationMillis = 1000
+                )
+            }
         }
     }
 }

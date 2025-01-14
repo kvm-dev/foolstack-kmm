@@ -18,9 +18,11 @@ class StudiesInteractor(
 
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
-    private fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
+    fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
     suspend fun getStudiesFromServer() = getStudiesUseCase.getStudies()
+
+    suspend fun getStudiesFromLocal() = getStudiesUseCase.getStudies(fromLocal = true)
 
     fun checkState(state: ResultState<StudiesDomain>):StudiesViewState{
         val lang = getCurrentLang()

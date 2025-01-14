@@ -66,6 +66,12 @@ CREATE TABLE TestProfessions(
    professionName TEXT NOT NULL
 );
 
+CREATE TABLE PassedTests(
+   testId INTEGER NOT NULL,
+   testResult INTEGER NOT NULL,
+   finishTestTime INTEGER NOT NULL
+);
+
 CREATE TABLE Events(
    eventId INTEGER NOT NULL,
    eventName TEXT NOT NULL,
@@ -277,6 +283,17 @@ FROM Tests;
 
 clearAllTests:
 DELETE FROM Tests;
+
+insertPassedTest:
+INSERT INTO PassedTests(testId, testResult, finishTestTime)
+VALUES(?, ?, ?);
+
+selectPassedTests:
+SELECT PassedTests.*
+FROM PassedTests;
+
+clearAllPassedTests:
+DELETE FROM PassedTests;
 
 
 insertTestQuestion:

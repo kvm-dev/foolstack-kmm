@@ -26,5 +26,4 @@ class CommentsApi(private val client: HttpClient) {
             MaterialCommentResponse(errorMsg = exceptionHandler(result.status))
         }
     }
-
 }

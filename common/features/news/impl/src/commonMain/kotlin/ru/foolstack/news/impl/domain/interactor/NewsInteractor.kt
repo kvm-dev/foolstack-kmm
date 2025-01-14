@@ -16,9 +16,11 @@ class NewsInteractor(
 
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
-    private fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
+    fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
     suspend fun getNewsFromServer() = getNewsUseCase.getNews()
+
+    suspend fun getNewsFromLocal() = getNewsUseCase.getNews(fromLocal = true)
 
     fun checkState(state: ResultState<NewsDomain>):NewsViewState{
         val lang = getCurrentLang()

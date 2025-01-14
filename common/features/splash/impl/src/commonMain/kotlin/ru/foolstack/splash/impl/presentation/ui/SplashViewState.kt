@@ -7,6 +7,7 @@ import ru.foolstack.news.api.model.NewsDomain
 import ru.foolstack.professions.api.model.ProfessionsDomain
 import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.study.api.model.StudiesDomain
+import ru.foolstack.tests.api.model.PassedTestsDomain
 import ru.foolstack.tests.api.model.TestsDomain
 
 sealed class SplashViewState{
@@ -33,13 +34,7 @@ sealed class SplashViewState{
         val isHaveToken: Boolean?,
         val profileData: ProfileDomain?,
         val isInternetConnected: Boolean,
-        val books: BooksDomain?,
-        val events: EventsDomain?,
-        val materials: MaterialsDomain?,
-        val news: NewsDomain?,
-        val studies: StudiesDomain?,
-        val tests: TestsDomain?,
-        val professions: ProfessionsDomain?
+        val events: EventsDomain?
     ): SplashViewState()
 
     data class NoConnectionError(

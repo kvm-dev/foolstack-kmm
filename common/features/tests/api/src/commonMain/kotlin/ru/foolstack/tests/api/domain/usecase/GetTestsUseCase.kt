@@ -10,4 +10,6 @@ interface GetTestsUseCase {
 
     suspend fun getTests(fromLocal: Boolean = false):TestsDomain
 
+    suspend fun getTestsByProfession(professionId: Int, fromLocal: Boolean = false): TestsDomain
+
 }

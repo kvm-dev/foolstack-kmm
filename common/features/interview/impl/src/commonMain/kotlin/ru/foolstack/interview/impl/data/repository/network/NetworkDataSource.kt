@@ -8,4 +8,8 @@ class NetworkDataSource(private val api: MaterialsApi, private val mapper: Mappe
     suspend fun getMaterials(): MaterialsDomain {
         return mapper.mapFromResponseMaterialsToDomain(api.getMaterials())
     }
+
+    suspend fun getMaterialsByProfession(professionId: Int): MaterialsDomain {
+        return mapper.mapFromResponseMaterialsToDomain(api.getMaterialsByProfession(professionId = professionId))
+    }
 }

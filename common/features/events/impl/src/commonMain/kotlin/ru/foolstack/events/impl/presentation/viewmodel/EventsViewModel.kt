@@ -11,6 +11,7 @@ import kotlinx.coroutines.plus
 import ru.foolstack.events.impl.domain.interactor.EventsInteractor
 import ru.foolstack.events.impl.presentation.ui.EventsViewState
 import ru.foolstack.model.ProgressState
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel() {
@@ -23,6 +24,14 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
+                if(interactor.eventsState.value !is ResultState.Success ){
+                    if(interactor.isConnectionAvailable()){
+                        interactor.getEventsFromServer()
+                    }
+                    else{
+                        interactor.getEventsFromLocal()
+                    }
+                }
                 interactor.eventsState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)
@@ -35,7 +44,12 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
         val lang = interactor.getCurrentLang()
         _uiState.update { EventsViewState.LoadingState(lang = lang) }
         launch {
-            interactor.getEventsFromServer()
+            if(interactor.isConnectionAvailable()){
+                interactor.getEventsFromServer()
+            }
+            else{
+                interactor.getEventsFromLocal()
+            }
             updateState(ProgressState.LOADING)
             initViewModel()
         }
@@ -68,4 +82,6 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
             )
         )
     }
+
+    fun getCurrentLang() = interactor.getCurrentLang()
 }
