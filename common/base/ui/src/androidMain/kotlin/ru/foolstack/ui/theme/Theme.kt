@@ -24,6 +24,8 @@ private val LightColorScheme = lightColorScheme(
 )
 //extraColor
 var MainGreenColorSchemeColor by mutableStateOf(MainGreenLight)
+var MainWhiteColorSchemeColor by mutableStateOf(White)
+var MainBlackColorSchemeColor by mutableStateOf(Black)
 var MainOrangeColorSchemeColor by mutableStateOf(MainOrangeLight)
 var DisabledColorSchemeColor by mutableStateOf(DisabledColorLight)
 var SplashGradient0ColorSchemeColor by mutableStateOf(GreenColor1)
@@ -70,6 +72,17 @@ var ColorScheme.MainGreen: Color
     get() = MainGreenColorSchemeColor
     set(value) {
         MainGreenColorSchemeColor = value
+    }
+var ColorScheme.MainWhite: Color
+    get() = MainWhiteColorSchemeColor
+    set(value) {
+        MainWhiteColorSchemeColor = value
+    }
+
+var ColorScheme.MainBlack: Color
+    get() = MainBlackColorSchemeColor
+    set(value) {
+        MainBlackColorSchemeColor = value
     }
 var ColorScheme.MainOrange: Color
     get() = MainOrangeColorSchemeColor
@@ -327,6 +340,18 @@ fun FoolStackTheme(
         MainGreenLight
     }
 
+    colorScheme.MainWhite = if (darkTheme) {
+        White
+    } else {
+        White
+    }
+
+    colorScheme.MainBlack = if (darkTheme) {
+        Black
+    } else {
+        Black
+    }
+
     colorScheme.MainOrange = if (darkTheme) {
         MainOrangeDark
     } else {
@@ -393,9 +418,9 @@ fun FoolStackTheme(
         ContentButtonDisabledLight
     }
     colorScheme.MainGreen = if (darkTheme) {
-        FieldsDefaultBorderColorDark
+        MainGreenDark
     } else {
-        FieldsDefaultBorderColorLight
+        MainGreenLight
     }
 
     colorScheme.ErrorColor = if (darkTheme) {

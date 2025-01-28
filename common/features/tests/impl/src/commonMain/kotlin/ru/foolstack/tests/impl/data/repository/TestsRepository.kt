@@ -1,10 +1,13 @@
 package ru.foolstack.tests.impl.data.repository
 
+import kotlinx.datetime.Clock
+import ru.foolstack.tests.api.model.PassedTestDomain
 import ru.foolstack.tests.api.model.PassedTestsDomain
 import ru.foolstack.tests.api.model.SendRequestDomain
 import ru.foolstack.tests.api.model.SendResultDomain
 import ru.foolstack.tests.api.model.TestsDomain
 import ru.foolstack.tests.impl.data.repository.local.LocalDataSource
+import ru.foolstack.tests.impl.data.repository.network.DelayedTestResultSender
 import ru.foolstack.tests.impl.data.repository.network.NetworkDataSource
 import ru.foolstack.tests.impl.mapper.Mapper
 import ru.foolstack.authorization.impl.data.repository.local.LocalDataSource as AuthorizationLocalDataSource
@@ -14,7 +17,8 @@ class TestsRepository(private val localDataSource: LocalDataSource,
                       private val networkDataSource: NetworkDataSource,
                       private val authorizationLocalDataSource: AuthorizationLocalDataSource,
                       private val authorizationNetworkDataSource: AuthorizationNetworkDataSource,
-                      private val mapper: Mapper
+                      private val mapper: Mapper,
+                      private val delayedTestResultSender: DelayedTestResultSender
 ) {
     suspend fun getTestsFromServer(): TestsDomain {
         val result = networkDataSource.getTests()
@@ -66,10 +70,11 @@ class TestsRepository(private val localDataSource: LocalDataSource,
         return localDataSource.getPassedTests()
     }
 
-    suspend fun sendTestResult(requestDomain: SendRequestDomain): SendResultDomain {
+    suspend fun sendTestResultToServer(requestDomain: SendRequestDomain): SendResultDomain {
         var userToken = authorizationLocalDataSource.getTokenFromLocal()
         val refreshToken = authorizationLocalDataSource.getRefreshTokenFromLocal()
-        val result = networkDataSource.sendTestResult(request = mapper.mapSendResultRequestFromRequestDomain(requestDomain), userToken = userToken)
+        val currentTime = (Clock.System.now().toEpochMilliseconds() + 864000000)/1000//10 days
+        val result = networkDataSource.sendTestResult(request = mapper.mapSendResultRequestFromRequestDomain(requestDomain, finishDateTime = currentTime), userToken = userToken)
         return if(result.errorMsg.isEmpty()){
             result
         } else{
@@ -79,12 +84,28 @@ class TestsRepository(private val localDataSource: LocalDataSource,
                 authorizationLocalDataSource.saveRefreshTokenToLocal(resultAfterRefreshToken.userRefreshToken)
                 userToken = authorizationLocalDataSource.getTokenFromLocal()
                 return networkDataSource.sendTestResult(
-                    request = mapper.mapSendResultRequestFromRequestDomain(requestDomain),
+                    request = mapper.mapSendResultRequestFromRequestDomain(requestDomain, finishDateTime = currentTime),
                     userToken = userToken
                 )
             } else{
                 result
             }
         }
+    }
+
+    suspend fun sendTestResultToLocal(requestDomain: SendRequestDomain): SendResultDomain {
+        val currentTime = (Clock.System.now().toEpochMilliseconds() + 864000000)/1000//10 days
+        val passedTest = PassedTestDomain(
+            testId = requestDomain.testId,
+            testResult = requestDomain.testResult,
+            finishTestTime = currentTime
+        )
+            localDataSource.savePassedTest(passedTest)
+            delayedTestResultSender.sendTestResult()
+        return SendResultDomain(
+            success = true,
+            errorMsg = ""
+        )
+
     }
 }

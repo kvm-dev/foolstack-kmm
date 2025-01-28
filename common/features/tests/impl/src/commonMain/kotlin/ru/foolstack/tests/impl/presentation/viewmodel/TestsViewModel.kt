@@ -11,6 +11,7 @@ import kotlinx.coroutines.plus
 import ru.foolstack.model.ProgressState
 import ru.foolstack.tests.impl.domain.interactor.TestsInteractor
 import ru.foolstack.tests.impl.presentation.ui.TestsViewState
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class TestsViewModel(private val interactor: TestsInteractor) : BaseViewModel() {
@@ -23,11 +24,30 @@ class TestsViewModel(private val interactor: TestsInteractor) : BaseViewModel() 
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
+                if(interactor.testsState.value !is ResultState.Success){
+                    if(interactor.isConnectionAvailable()){
+                        interactor.getTestsFromServer()
+                        interactor.getPassedTestsFromServer()
+                    }
+                    else{
+                        interactor.getTestsFromLocal()
+                        interactor.getPassedTestsFromLocal()
+                    }
+                }
                 val professionId = interactor.getProfessionId()
                 interactor.testsState.collect{ resultState->
                     interactor.passedTestsState.collect { passedTestsState ->
                         interactor.profileState.collect { profileState ->
                             interactor.professionsState.collect { professionsState ->
+                                if(resultState == ResultState.Idle){
+                                    if(interactor.isConnectionAvailable()){
+                                        interactor.getTestsFromServer()
+                                        interactor.getPassedTestsFromServer()
+                                    }
+                                    else{
+                                        interactor.getTestsFromLocal()
+                                        interactor.getPassedTestsFromLocal()}
+                                }
                                 _uiState.update {
                                     interactor.checkState(
                                         testsState = resultState,
@@ -50,15 +70,17 @@ class TestsViewModel(private val interactor: TestsInteractor) : BaseViewModel() 
         val lang = interactor.getCurrentLang()
         _uiState.update { TestsViewState.LoadingState(lang = lang) }
         launch {
-            interactor.getTestsFromServer()
-            interactor.getPassedTestsFromServer()
+            if(interactor.isConnectionAvailable()){
+                interactor.getTestsFromServer()
+                interactor.getPassedTestsFromServer()
+            }
+            else{
+                interactor.getTestsFromLocal()
+                interactor.getPassedTestsFromLocal()
+            }
             updateState(ProgressState.LOADING)
             initViewModel()
         }
-    }
-
-    fun sendComment(testId: Int, testResult: Int) = with(viewModelScope + coroutineExceptionHandler){
-        launch { interactor.sendResult(testId = testId, testResult = testResult) }
     }
 
     fun navigateToTest(navController: NavController, testId: Int, testDestination: String){
@@ -70,4 +92,6 @@ class TestsViewModel(private val interactor: TestsInteractor) : BaseViewModel() 
             )
         )
     }
+
+    fun getCurrentLang() = interactor.getCurrentLang()
 }

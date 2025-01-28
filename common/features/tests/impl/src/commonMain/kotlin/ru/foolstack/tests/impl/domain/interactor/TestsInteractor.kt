@@ -31,9 +31,11 @@ class TestsInteractor(
     val passedTestsState = getPassedTestsUseCase.passedTestsState
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
-    private fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
+    fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
-    suspend fun getTestsFromServer() = getTestsUseCase.getTests()
+    suspend fun getTestsFromServer() = getTestsUseCase.getTestsByProfession(professionId = getProfessionId())
+
+    suspend fun getTestsFromLocal() = getTestsUseCase.getTests(fromLocal = true)
 
     suspend fun checkState(testsState: ResultState<TestsDomain>,
                    passedTestsState: ResultState<PassedTestsDomain>,

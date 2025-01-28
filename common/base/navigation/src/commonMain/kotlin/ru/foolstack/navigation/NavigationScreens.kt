@@ -11,7 +11,8 @@ enum class NavigationScreens(val title: String) {
     InterviewsListScreenNavigation("InterviewsListScreen"),
     InterviewScreenNavigation("InterviewScreen"),
     ProfessionsListScreenNavigation("ProfessionsListScreen"),
-    TestsScreen("Tests"),
+    TestsListScreenNavigation("TestsListScreen"),
+    TestScreenNavigation("TestScreen"),
     NewsListScreenNavigation("NewsListScreen"),
     NewsScreenNavigation("NewsScreen")
 }

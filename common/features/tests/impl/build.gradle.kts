@@ -14,6 +14,13 @@ kotlin {
             }
         }
     }
+    targets.configureEach {
+        compilations.configureEach {
+            compilerOptions.configure {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
+        }
+    }
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -35,6 +42,8 @@ kotlin {
             implementation(projects.common.features.tests.api)
             //utils
             implementation(projects.common.base.utils)
+            //date time
+            implementation(libs.kotlinx.datetime)
             //ui
             implementation(projects.common.base.ui)
             //language
@@ -69,6 +78,8 @@ kotlin {
             implementation(projects.common.features.comments.api)
         }
         androidMain.dependencies {
+            //work manager
+            implementation(libs.work.manager)
             //utils
             implementation(projects.common.base.utils)
             //viewmodel

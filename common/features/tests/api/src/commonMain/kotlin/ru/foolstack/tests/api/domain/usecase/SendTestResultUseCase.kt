@@ -5,5 +5,5 @@ import ru.foolstack.tests.api.model.SendResultDomain
 
 interface SendTestResultUseCase {
 
-    suspend fun sendTestResult(request: SendRequestDomain): SendResultDomain
+    suspend fun sendTestResult(request: SendRequestDomain, toLocal: Boolean = false): SendResultDomain
 }

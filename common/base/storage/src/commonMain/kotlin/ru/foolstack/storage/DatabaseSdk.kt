@@ -30,6 +30,8 @@ class DatabaseSdk(databaseDriverFactory: DatabaseDriverFactory, mapper: Mapper) 
 
     suspend fun savePassedTests(passedTests:PassedTests) = database.clearAndSavePassedTests(passedTests)
 
+    suspend fun savePassedTest(passedTest:PassedTest) = database.addPassedTest(passedTest)
+
     suspend fun getEvents() =  database.getEvents()
 
     suspend fun saveEvents(events: Events) = database.clearAndSaveEvents(events)

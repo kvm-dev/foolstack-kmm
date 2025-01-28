@@ -10,8 +10,6 @@ sealed class TestsViewState {
 
     data class ErrorState(val lang: LangResultDomain): TestsViewState()
 
-    data class WithoutProfessionState(val lang: LangResultDomain): TestsViewState()
-
     data class SuccessState(
         val isHaveConnection: Boolean,
         val lang: LangResultDomain,

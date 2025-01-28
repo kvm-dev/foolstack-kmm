@@ -26,7 +26,10 @@ actual val professionsModule: Module
             ProfessionsInteractor(
             getCurrentLanguageUseCase = get(),
             getNetworkStateUseCase = get(),
-            getProfessionsUseCase = get()
+            getProfessionsUseCase = get(),
+            getMaterialsUseCase = get(),
+            getTestsUseCase = get(),
+            getPassedTestsUseCase = get()
         )
         }
         viewModelOf(::ProfessionsViewModel)

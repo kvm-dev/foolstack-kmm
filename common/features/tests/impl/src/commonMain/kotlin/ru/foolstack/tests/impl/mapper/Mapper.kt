@@ -23,6 +23,7 @@ import ru.foolstack.tests.api.model.SendResultDomain
 import ru.foolstack.tests.impl.model.PassedTestsResponse
 import ru.foolstack.tests.impl.model.TestResultRequest
 import ru.foolstack.tests.impl.model.TestResultResponse
+import ru.foolstack.ui.model.TestItem
 
 class Mapper {
     fun mapTestsDomainFromResponse(response: TestsResponse): TestsDomain {
@@ -235,8 +236,8 @@ class Mapper {
         )
     }
 
-    fun mapSendResultRequestFromRequestDomain(request: SendRequestDomain):TestResultRequest{
-        return TestResultRequest(testId = request.testId, testResult = request.testResult)
+    fun mapSendResultRequestFromRequestDomain(request: SendRequestDomain, finishDateTime: Long):TestResultRequest{
+        return TestResultRequest(testId = request.testId, testResult = request.testResult, finishTestTime = finishDateTime)
     }
 
     fun mapTestResultDomainFromTestResultResponse(response: TestResultResponse): SendResultDomain{
@@ -278,6 +279,40 @@ class Mapper {
         return PassedTests(
             passedTests = passedTests
         )
+    }
+
+    fun mapPassedTestDomainToPassedTest(response: PassedTestDomain): PassedTest {
+        return PassedTest(
+            testId = response.testId,
+            testResult = response.testResult,
+            finishTestTime = response.finishTestTime
+        )
+    }
+
+    fun mapTestsDomainToTestsItems(tests: List<TestDomain>, passedTests: List<PassedTestDomain>):List<TestItem>{
+        val testItems = ArrayList<TestItem>()
+        tests.forEach { test->
+            val lastResult = passedTests.find { it.testId == test.testId }?.testResult?: 0
+            val nextTry = passedTests.find { it.testId == test.testId }?.finishTestTime
+            testItems.add(TestItem(
+                testId = test.testId,
+                testName = test.testName,
+                lastResult = lastResult,
+                questionsSize = test.questions.size,
+                timeLimit = test.testTimeLimit,
+                difficulty = test.testLevel,
+                nextTry = nextTry
+            ))
+        }
+        return testItems
+    }
+
+    fun mapVariantsToStringList(variants: List<VariantDomain>?):List<String>{
+        val list = ArrayList<String>()
+        variants?.forEach {
+            list.add(it.variantText)
+        }
+        return list
     }
 
 }

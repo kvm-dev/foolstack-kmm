@@ -58,6 +58,10 @@ kotlin {
             implementation(libs.navigation)
             //profile
             implementation(projects.common.features.profile.api)
+            //interviews
+            implementation(projects.common.features.interview.api)
+            //tests
+            implementation(projects.common.features.tests.api)
             //authorization
             implementation(projects.common.features.authorization.api)
             //events
