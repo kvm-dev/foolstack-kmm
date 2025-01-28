@@ -288,7 +288,7 @@ private fun ScrollableContent(
                     resendButtonText.split(" (")[0]
                 }
                 if(!isOtpLoading && isUserExist){
-                    SecondButton(text = resendText, onClick = { timeLeft = 300; onClickResend() }, isEnabled = timeLeft==0)
+                    SecondOrangeButton(text = resendText, onClick = { timeLeft = 300; onClickResend() }, isEnabled = timeLeft==0)
                 }
             }
             BottomSplashScreenState.NO_CONNECTION->{
@@ -307,7 +307,7 @@ private fun ScrollableContent(
         }
         if(bottomSplashScreenState!= BottomSplashScreenState.NO_CONNECTION){
             val onclickEvent = if(bottomSplashScreenState == BottomSplashScreenState.AUTHORIZATION){ onClickBackToAuthorizationScreen} else { onClickBackToEmailScreen }
-            SecondButton(text = secondButtonText, onClick = { onclickEvent() }, isEnabled = true)
+            SecondOrangeButton(text = secondButtonText, onClick = { onclickEvent() }, isEnabled = true)
         }
     }
 }

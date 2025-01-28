@@ -8,6 +8,8 @@ import ru.foolstack.storage.model.Events
 import ru.foolstack.storage.model.Material
 import ru.foolstack.storage.model.Materials
 import ru.foolstack.storage.model.News
+import ru.foolstack.storage.model.PassedTest
+import ru.foolstack.storage.model.PassedTests
 import ru.foolstack.storage.model.Profession
 import ru.foolstack.storage.model.Professions
 import ru.foolstack.storage.model.Profile
@@ -197,6 +199,30 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
             }
         }
     }
+
+    internal fun getPassedTests(): PassedTests {
+        return mapper.mapPassedTests(dbQuery.selectPassedTests().executeAsList())
+    }
+
+    internal fun clearAndSavePassedTests(passedTests: PassedTests){
+        dbQuery.clearAllPassedTests()
+        passedTests.passedTests.forEach { passedTest->
+            dbQuery.insertPassedTest(
+                testId = passedTest.testId.toLong(),
+                testResult = passedTest.testResult.toLong(),
+                finishTestTime = passedTest.finishTestTime
+            )
+        }
+    }
+
+    internal fun addPassedTest(passedTest: PassedTest){
+            dbQuery.insertPassedTest(
+                testId = passedTest.testId.toLong(),
+                testResult = passedTest.testResult.toLong(),
+                finishTestTime = passedTest.finishTestTime
+            )
+    }
+
 
     internal fun getProfessions(): Professions {
         return mapper.mapProfessions(dbQuery.selectProfessions().executeAsList())

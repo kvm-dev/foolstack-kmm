@@ -39,6 +39,7 @@ kotlin {
             implementation(projects.common.features.study.impl)
             implementation(projects.common.features.news.impl)
             implementation(projects.common.features.interview.impl)
+            implementation(projects.common.features.tests.impl)
             implementation(projects.common.features.professions.impl)
             implementation(projects.common.features.language.api)
             //di

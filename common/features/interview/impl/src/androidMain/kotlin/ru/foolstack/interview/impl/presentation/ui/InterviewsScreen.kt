@@ -92,43 +92,8 @@ fun InterviewsScreen(
             val interviewsState by interviewsViewModel.uiState.collectAsState()
             when (interviewsState) {
                 is InterviewsViewState.LoadingState -> {
-                    Log.d("interviews in state is", "Loading")
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 40.dp)
-                    ) {
-                        TopBar(screenTitle = if((interviewsState as InterviewsViewState.LoadingState).lang is LangResultDomain.Ru){"Вопросы на интервью"}else{"Interview questions"}, action = selectProfession, isBackArrow = false)
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .padding(start = 20.dp),
-                            horizontalArrangement = Arrangement.Absolute.SpaceBetween
-                        ) {
-                            repeat(6) {
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .size(width = 120.dp, height = 38.dp)
-                                        .padding(horizontal = 2.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(34)),
-                                    durationMillis = 1000
-                                )
-                            }
-                        }
-                        repeat(20) {
-                            Column {
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .height(100.dp)
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 12.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(10)),
-                                    durationMillis = 1000
-                                )
-                            }
-                        }
-                    }
+                    Log.d("state is", "Loading")
+                    LoadingScreen(lang = interviewsViewModel.getCurrentLang(), selectProfession = selectProfession)
                 }
 
                 is InterviewsViewState.ErrorState -> {
@@ -267,9 +232,55 @@ fun InterviewsScreen(
             }
         }
 
+        ProgressState.LOADING -> {
+            LoadingScreen(lang = interviewsViewModel.getCurrentLang(), selectProfession = selectProfession)
+            Log.d("interviews realy loading", "yes")
+            interviewsViewModel.initViewModel()
+        }
+
         else -> {
             Log.d("interviews realy complete", "no")
             interviewsViewModel.initViewModel()
+        }
+    }
+}
+
+@Composable
+fun LoadingScreen(lang: LangResultDomain,  selectProfession: () -> Unit){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 40.dp)
+    ) {
+        TopBar(screenTitle = if(lang is LangResultDomain.Ru){"Вопросы на интервью"}else{"Interview questions"}, action = selectProfession, isBackArrow = false)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .padding(start = 20.dp),
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween
+        ) {
+            repeat(6) {
+                ShimmerEffect(
+                    modifier = Modifier
+                        .size(width = 120.dp, height = 38.dp)
+                        .padding(horizontal = 2.dp)
+                        .background(Color.LightGray, RoundedCornerShape(34)),
+                    durationMillis = 1000
+                )
+            }
+        }
+        repeat(20) {
+            Column {
+                ShimmerEffect(
+                    modifier = Modifier
+                        .height(100.dp)
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp, top = 12.dp)
+                        .background(Color.LightGray, RoundedCornerShape(10)),
+                    durationMillis = 1000
+                )
+            }
         }
     }
 }

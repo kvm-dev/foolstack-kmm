@@ -26,24 +26,21 @@ import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.registration.api.domain.usecase.RegistrationByEmailUseCase
 import ru.foolstack.study.api.domain.usecase.GetStudiesUseCase
 import ru.foolstack.study.api.model.StudiesDomain
+import ru.foolstack.tests.api.domain.usecase.GetPassedTestsUseCase
 import ru.foolstack.tests.api.domain.usecase.GetTestsUseCase
+import ru.foolstack.tests.api.model.PassedTestsDomain
 import ru.foolstack.tests.api.model.TestsDomain
 
 class SplashInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,
     private val getNetworkStateUseCase: GetNetworkStateUseCase,
     private val getProfileUseCase: GetProfileUseCase,
-    private val getProfessionsUseCase: GetProfessionsUseCase,
     private val getTokenFromLocalUseCase: GetTokenFromLocalUseCase,
-    private val getBooksUseCase: GetBooksUseCase,
     private val getEventsUseCase: GetEventsUseCase,
-    private val getMaterialsUseCase: GetMaterialsUseCase,
-    private val getNewsUseCase: GetNewsUseCase,
-    private val getStudiesUseCase: GetStudiesUseCase,
-    private val getTestsUseCase: GetTestsUseCase,
     private val isUserExistUseCase: IsUserExistUseCase,
     private val authByEmailUseCase: AuthByEmailUseCase,
     private val authByTokenUseCase: AuthByTokenUseCase,
+    private val getProfessionsUseCase: GetProfessionsUseCase,
     private val registrationByEmailUseCase: RegistrationByEmailUseCase,
     private val confirmAuthAndRegUseCase: ConfirmAuthAndRegUseCase
 ) {
@@ -51,28 +48,14 @@ class SplashInteractor(
 
     fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
-    suspend fun getBooksFromServer() = getBooksUseCase.getBooks()
-    suspend fun getBooksFromLocal() = getBooksUseCase.getBooks(fromLocal = true)
-
     suspend fun getEventsFromServer() = getEventsUseCase.getEvents()
     suspend fun getEventsFromLocal() = getEventsUseCase.getEvents(fromLocal = true)
-
-    suspend fun getMaterialsFromServer() = getMaterialsUseCase.getMaterials()
-    suspend fun getMaterialsFromLocal() = getMaterialsUseCase.getMaterials(fromLocal = true)
-
-    suspend fun getNewsFromServer() = getNewsUseCase.getNews()
-    suspend fun getNewsFromLocal() = getNewsUseCase.getNews(fromLocal = true)
-
-    suspend fun getStudiesFromServer() = getStudiesUseCase.getStudies()
-    suspend fun getStudiesFromLocal() = getStudiesUseCase.getStudies(fromLocal = true)
-
-    suspend fun getTestsFromServer() = getTestsUseCase.getTests()
-    suspend fun getTestsFromLocal() = getTestsUseCase.getTests(fromLocal = true)
 
     suspend fun getProfileFromServer() = getProfileUseCase.getProfile()
     suspend fun getProfileFromLocal() = getProfileUseCase.getProfile(fromLocal = true)
 
     suspend fun getProfessionsFromServer() = getProfessionsUseCase.getProfessions()
+
     suspend fun getProfessionsFromLocal() = getProfessionsUseCase.getProfessions(fromLocal = true)
 
     suspend fun isTokenExist() = getTokenFromLocalUseCase.getToken().isNotEmpty()
@@ -214,47 +197,18 @@ class SplashInteractor(
 
      fun authorizedErrorsResponseHandler(
         profile: ProfileDomain,
-        materials: MaterialsDomain,
-        tests: TestsDomain,
-        books: BooksDomain,
-        news: NewsDomain,
-        events: EventsDomain,
-        studies: StudiesDomain): SplashViewState {
-        if(profile.errorMsg.isNotEmpty()){
-            return responseErrorHandler(profile.errorMsg)
-        }
-        else if(materials.errorMsg.isNotEmpty()){
-            return responseErrorHandler(materials.errorMsg)
-
-        }
-        else if(tests.errorMsg.isNotEmpty()){
-            return responseErrorHandler(tests.errorMsg)
-        }
-        else if(news.errorMsg.isNotEmpty()){
-            return responseErrorHandler(news.errorMsg)
-        }
-        else if(events.errorMsg.isNotEmpty()){
-            return responseErrorHandler(events.errorMsg)
-        }
-        else if(studies.errorMsg.isNotEmpty()){
-            return responseErrorHandler(studies.errorMsg)
-        }
-        else if(books.errorMsg.isNotEmpty()){
-            return responseErrorHandler(books.errorMsg)
-        }
-        else{
-            return responseErrorHandler("")
-        }
+        events: EventsDomain): SplashViewState {
+         return if(profile.errorMsg.isNotEmpty()){
+             responseErrorHandler(profile.errorMsg)
+         } else if(events.errorMsg.isNotEmpty()){
+             responseErrorHandler(events.errorMsg)
+         } else{
+             responseErrorHandler("")
+         }
     }
 
     suspend fun validateAuthorizedData(profile: ProfileDomain,
-                                       professions: ProfessionsDomain,
-                                       books: BooksDomain,
-                                       materials: MaterialsDomain,
-                                       news: NewsDomain,
-                                       events: EventsDomain,
-                                       studies: StudiesDomain,
-                                       tests: TestsDomain
+                                       events: EventsDomain
     ):Boolean{
         var newProfile = profile
         if(newProfile.errorMsg.isNotEmpty()){
@@ -262,13 +216,7 @@ class SplashInteractor(
             newProfile = getProfileFromServer()
         }
         return (newProfile.errorMsg.isEmpty()
-                && books.errorMsg.isEmpty()
-                && materials.errorMsg.isEmpty()
-                && news.errorMsg.isEmpty()
-                && events.errorMsg.isEmpty()
-                && studies.errorMsg.isEmpty()
-                && tests.errorMsg.isEmpty()
-                && professions.errorMsg.isEmpty())
+                && events.errorMsg.isEmpty())
     }
 
     fun getUnauthorizedState(): SplashViewState.UnAuthorized{
@@ -339,25 +287,13 @@ class SplashInteractor(
         local: LangResultDomain,
         isInternetConnected: Boolean,
         profile: ProfileDomain,
-        books: BooksDomain,
-        materials: MaterialsDomain,
-        news: NewsDomain?,
-        events: EventsDomain,
-        studies: StudiesDomain,
-        tests: TestsDomain,
-        professions: ProfessionsDomain): SplashViewState.Authorized{
+        events: EventsDomain): SplashViewState.Authorized{
         return SplashViewState.Authorized(
             lang = local.lang,
             isHaveToken = true,
             profileData = profile,
             isInternetConnected = isInternetConnected,
-            books = books,
-            events = events,
-            materials = materials,
-            news = news,
-            studies = studies,
-            tests = tests,
-            professions = professions
+            events = events
         )
     }
 

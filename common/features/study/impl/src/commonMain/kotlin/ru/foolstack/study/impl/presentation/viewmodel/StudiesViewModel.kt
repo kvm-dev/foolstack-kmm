@@ -10,6 +10,7 @@ import kotlinx.coroutines.plus
 import ru.foolstack.model.ProgressState
 import ru.foolstack.study.impl.domain.interactor.StudiesInteractor
 import ru.foolstack.study.impl.presentation.ui.StudiesViewState
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewModel() {
@@ -22,6 +23,14 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
+                if(interactor.studiesState.value !is ResultState.Success){
+                    if(interactor.isConnectionAvailable()){
+                        interactor.getStudiesFromServer()
+                    }
+                    else{
+                        interactor.getStudiesFromLocal()
+                    }
+                }
                 interactor.studiesState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)
@@ -34,7 +43,12 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
         val lang = interactor.getCurrentLang()
         _uiState.update { StudiesViewState.LoadingState(lang = lang) }
         launch {
-            interactor.getStudiesFromServer()
+            if(interactor.isConnectionAvailable()){
+                interactor.getStudiesFromServer()
+            }
+            else{
+                interactor.getStudiesFromLocal()
+            }
             updateState(ProgressState.LOADING)
             initViewModel()
         }
@@ -61,4 +75,6 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
     fun onStudyClick(url: String){
         interactor.openInBrowser(url)
     }
+
+    fun getCurrentLang() = interactor.getCurrentLang()
 }

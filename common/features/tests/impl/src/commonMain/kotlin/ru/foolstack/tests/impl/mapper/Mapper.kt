@@ -1,5 +1,7 @@
 package ru.foolstack.tests.impl.mapper
 
+import ru.foolstack.storage.model.PassedTest
+import ru.foolstack.storage.model.PassedTests
 import ru.foolstack.storage.model.Question
 import ru.foolstack.storage.model.Test
 import ru.foolstack.storage.model.Tests
@@ -14,6 +16,14 @@ import ru.foolstack.tests.impl.model.TestResponse
 import ru.foolstack.tests.impl.model.TestsResponse
 import ru.foolstack.tests.impl.model.VariantResponse
 import ru.foolstack.storage.model.ProfessionListItem
+import ru.foolstack.tests.api.model.PassedTestDomain
+import ru.foolstack.tests.api.model.PassedTestsDomain
+import ru.foolstack.tests.api.model.SendRequestDomain
+import ru.foolstack.tests.api.model.SendResultDomain
+import ru.foolstack.tests.impl.model.PassedTestsResponse
+import ru.foolstack.tests.impl.model.TestResultRequest
+import ru.foolstack.tests.impl.model.TestResultResponse
+import ru.foolstack.ui.model.TestItem
 
 class Mapper {
     fun mapTestsDomainFromResponse(response: TestsResponse): TestsDomain {
@@ -188,6 +198,121 @@ class Mapper {
             )
         }
         return variantsData
+    }
+
+    fun mapPassedTestsDomainFromResponse(response: PassedTestsResponse): PassedTestsDomain {
+        val passedTests = ArrayList<PassedTestDomain>()
+        response.passedTests.forEach { passedTest->
+            passedTests.add(
+                PassedTestDomain(
+                testId = passedTest.testId,
+                testResult = passedTest.testResult,
+                finishTestTime = passedTest.finishTestTime
+            )
+            )
+        }
+        return PassedTestsDomain(
+            success = response.success,
+            passedTests = passedTests,
+            errorMsg = response.errorMsg
+        )
+    }
+
+    fun mapPassedTestsDomainFromLocal(response: PassedTests): PassedTestsDomain {
+        val passedTests = ArrayList<PassedTestDomain>()
+        response.passedTests.forEach { passedTest->
+            passedTests.add(
+                PassedTestDomain(
+                    testId = passedTest.testId,
+                    testResult = passedTest.testResult,
+                    finishTestTime = passedTest.finishTestTime
+                )
+            )
+        }
+        return PassedTestsDomain(
+            passedTests = passedTests,
+            success = true,
+            errorMsg = ""
+        )
+    }
+
+    fun mapSendResultRequestFromRequestDomain(request: SendRequestDomain, finishDateTime: Long):TestResultRequest{
+        return TestResultRequest(testId = request.testId, testResult = request.testResult, finishTestTime = finishDateTime)
+    }
+
+    fun mapTestResultDomainFromTestResultResponse(response: TestResultResponse): SendResultDomain{
+        return SendResultDomain(
+            success = response.success,
+            errorMsg = response.errorMsg
+        )
+    }
+
+    fun mapPassedTestsDomain(response: PassedTests): PassedTestsDomain {
+        val passedTests = ArrayList<PassedTestDomain>()
+        response.passedTests.forEach { passedTest->
+            passedTests.add(
+                PassedTestDomain(
+                testId = passedTest.testId,
+                testResult = passedTest.testResult,
+                finishTestTime = passedTest.finishTestTime
+            )
+            )
+        }
+        return PassedTestsDomain(
+            success = true,
+            errorMsg = "",
+            passedTests = passedTests
+        )
+    }
+
+    fun mapPassedTestsDomainToPassedTests(response: PassedTestsDomain): PassedTests {
+        val passedTests = ArrayList<PassedTest>()
+        response.passedTests.forEach { passedTest->
+            passedTests.add(
+                PassedTest(
+                    testId = passedTest.testId,
+                    testResult = passedTest.testResult,
+                    finishTestTime = passedTest.finishTestTime
+                )
+            )
+        }
+        return PassedTests(
+            passedTests = passedTests
+        )
+    }
+
+    fun mapPassedTestDomainToPassedTest(response: PassedTestDomain): PassedTest {
+        return PassedTest(
+            testId = response.testId,
+            testResult = response.testResult,
+            finishTestTime = response.finishTestTime
+        )
+    }
+
+    fun mapTestsDomainToTestsItems(tests: List<TestDomain>, passedTests: List<PassedTestDomain>):List<TestItem>{
+        val testItems = ArrayList<TestItem>()
+        tests.forEach { test->
+            val lastResult = passedTests.find { it.testId == test.testId }?.testResult?: 0
+            val nextTry = passedTests.find { it.testId == test.testId }?.finishTestTime
+            testItems.add(TestItem(
+                testId = test.testId,
+                testName = test.testName,
+                lastResult = lastResult,
+                questionsSize = test.questions.size,
+                timeLimit = test.testTimeLimit,
+                difficulty = test.testLevel,
+                nextTry = nextTry
+            ))
+        }
+        return testItems
+    }
+
+    fun mapVariantsToStringList(variants: List<VariantDomain>?):List<String>{
+        val list = ArrayList<String>()
+        variants?.forEach {
+            list.add(it.variantText)
+        }
+        return list
     }
 
 }

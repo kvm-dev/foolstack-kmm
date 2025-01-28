@@ -16,31 +16,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.foolstack.ui.theme.DisabledColor
 import ru.foolstack.ui.theme.EnabledButtonSecondContentColor
+import ru.foolstack.ui.theme.GreenButtonContainer
 import ru.foolstack.ui.theme.montserratFamily
 
-
 @Composable
-fun SecondButton(
+fun SecondGreenButton(
     text: String,
     onClick: () -> Unit = { },
     isEnabled: Boolean
 ) {
-
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 20.dp, vertical = 10.dp),
         onClick = { onClick() },
         enabled = isEnabled,
         content = { Text(modifier = Modifier
-            .padding(vertical = 14.dp, horizontal = 8.dp),
+            .padding(vertical = 2.dp, horizontal = 8.dp),
             text = text,
             textAlign = TextAlign.Center,
-            fontFamily = montserratFamily, fontWeight = FontWeight.Medium, style = TextStyle(
-                fontSize = 22.sp)
+            fontFamily = montserratFamily, fontWeight = FontWeight.SemiBold, style = TextStyle(
+                fontSize = 16.sp)
         ) },
         colors = ButtonDefaults.buttonColors(
-            contentColor = MaterialTheme.colorScheme.EnabledButtonSecondContentColor,
+            contentColor = MaterialTheme.colorScheme.GreenButtonContainer,
             disabledContainerColor = Color.Transparent,
             disabledContentColor = MaterialTheme.colorScheme.DisabledColor,
             containerColor = Color.Transparent

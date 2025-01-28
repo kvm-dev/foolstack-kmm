@@ -33,6 +33,8 @@ import ru.foolstack.news.impl.presentation.ui.NewsCardScreen
 import ru.foolstack.news.impl.presentation.ui.NewsScreen
 import ru.foolstack.professions.impl.presentation.ui.ProfessionsScreen
 import ru.foolstack.study.impl.presentation.ui.StudiesScreen
+import ru.foolstack.tests.impl.presentation.ui.TestCardScreen
+import ru.foolstack.tests.impl.presentation.ui.TestsScreen
 import ru.foolstack.ui.components.BottomAppBar
 import ru.foolstack.ui.components.BottomIcons
 import ru.foolstack.ui.theme.FoolStackTheme
@@ -71,6 +73,12 @@ fun StartApplication(
                     onClickInterviews = {
                         isShowBottomBar.value = true
                         navController.navigate(NavigationScreens.InterviewsListScreenNavigation.name) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onClickTests = {
+                        isShowBottomBar.value = true
+                        navController.navigate(NavigationScreens.TestsListScreenNavigation.name) {
                             launchSingleTop = true
                         }
                     }
@@ -175,7 +183,7 @@ fun StartApplication(
 
                     composable(route = NavigationScreens.StudiesListScreenNavigation.name) {
                         isShowBottomBar.value = false
-                        StudiesScreen(navController = navController)
+                        StudiesScreen()
                     }
 
                     composable(route = NavigationScreens.NewsListScreenNavigation.name) {
@@ -207,7 +215,6 @@ fun StartApplication(
                                 }
                             })
                     }
-
                     composable(route = "${NavigationScreens.InterviewScreenNavigation.name}/{materialId}") {
                             navBackStackEntry ->
                         val materialId = navBackStackEntry.arguments?.getString("materialId")
@@ -220,6 +227,38 @@ fun StartApplication(
                     composable(route = NavigationScreens.ProfessionsListScreenNavigation.name) {
                         isShowBottomBar.value = false
                         ProfessionsScreen(navController = navController, navigateToMain = { cancelOrderAndNavigateToStart(navController) })
+                    }
+
+                    composable(route = NavigationScreens.TestsListScreenNavigation.name) {
+                        isShowBottomBar.value = true
+                        bottomBarSelectedState.value = BottomIcons.TESTS
+                        TestsScreen(navController = navController,
+                            testDestination = NavigationScreens.TestScreenNavigation.name,
+                            selectProfession = {
+                                isShowBottomBar.value = false
+                                navController.navigate(NavigationScreens.ProfessionsListScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.ProfessionsListScreenNavigation.name) {
+                                        inclusive = false
+                                    }
+                                }
+                            })
+                    }
+
+                    composable(route = "${NavigationScreens.TestScreenNavigation.name}/{testId}") {
+                            navBackStackEntry ->
+                        val eventId = navBackStackEntry.arguments?.getString("testId")
+                        eventId?.let { id->
+                            isShowBottomBar.value = false
+                            TestCardScreen(testId = id.toInt(), navigateToMain =
+                              {
+                                isShowBottomBar.value = true
+                                navController.navigate(NavigationScreens.MainScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.SplashScreenNavigation.name) {
+                                        inclusive = true
+                                    }
+                                }
+                            })
+                        }
                     }
                 }
             }

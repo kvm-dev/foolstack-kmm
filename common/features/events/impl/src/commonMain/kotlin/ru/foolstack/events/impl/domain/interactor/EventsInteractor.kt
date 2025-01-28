@@ -16,9 +16,11 @@ class EventsInteractor(
 
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
-    private fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
+    fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
     suspend fun getEventsFromServer() = getEventsUseCase.getEvents()
+
+    suspend fun getEventsFromLocal() = getEventsUseCase.getEvents(fromLocal = true)
 
     fun checkState(state: ResultState<EventsDomain>):EventsViewState{
         val lang = getCurrentLang()

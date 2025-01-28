@@ -18,9 +18,12 @@ class BooksInteractor(
 
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
-    private fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
+    fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
     suspend fun getBooksFromServer() = getBooksUseCase.getBooks()
+
+    suspend fun getBooksFromLocal() = getBooksUseCase.getBooks(fromLocal = true)
+
 
     fun checkState(state: ResultState<BooksDomain>):BooksViewState{
         val lang = getCurrentLang()

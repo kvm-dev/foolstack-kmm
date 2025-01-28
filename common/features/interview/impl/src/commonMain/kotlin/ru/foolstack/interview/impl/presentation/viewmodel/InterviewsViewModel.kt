@@ -11,6 +11,7 @@ import kotlinx.coroutines.plus
 import ru.foolstack.interview.impl.domain.interactor.InterviewsInteractor
 import ru.foolstack.interview.impl.presentation.ui.InterviewsViewState
 import ru.foolstack.model.ProgressState
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseViewModel() {
@@ -23,10 +24,25 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
+                if(interactor.materialsState.value !is ResultState.Success){
+                    if(interactor.isConnectionAvailable()){
+                        interactor.getMaterialsFromServer()
+                    }
+                    else{
+                        interactor.getMaterialsFromLocal()
+                    }
+                }
                 val professionId = interactor.getProfessionId()
                 interactor.materialsState.collect{ resultState->
                     interactor.profileState.collect{ profileState->
                         interactor.professionsState.collect{ professionsState->
+                            if(resultState == ResultState.Idle){
+                                if(interactor.isConnectionAvailable()){
+                                    interactor.getMaterialsFromServer()
+                                }
+                                else{
+                                    interactor.getMaterialsFromLocal() }
+                            }
                             _uiState.update { interactor.checkState(state = resultState, professionId = professionId, professionsState = professionsState, profileState = profileState) }
                             updateState(ProgressState.COMPLETED)
                         }
@@ -35,12 +51,16 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
             }
         }
     }
-
     fun refresh() = with(viewModelScope + coroutineExceptionHandler){
         val lang = interactor.getCurrentLang()
         _uiState.update { InterviewsViewState.LoadingState(lang = lang) }
         launch {
-            interactor.getMaterialsFromServer()
+            if(interactor.isConnectionAvailable()){
+                interactor.getMaterialsFromServer()
+            }
+            else{
+                interactor.getMaterialsFromLocal()
+            }
             updateState(ProgressState.LOADING)
             initViewModel()
         }
@@ -81,4 +101,6 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
             )
         )
     }
+
+    fun getCurrentLang() = interactor.getCurrentLang()
 }

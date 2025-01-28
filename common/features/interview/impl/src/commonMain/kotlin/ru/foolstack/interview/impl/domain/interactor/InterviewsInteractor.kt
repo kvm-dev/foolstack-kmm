@@ -5,12 +5,10 @@ import ru.foolstack.comments.api.model.MaterialCommentRequestDomain
 import ru.foolstack.interview.api.domain.usecase.GetMaterialsUseCase
 import ru.foolstack.interview.api.model.MaterialDomain
 import ru.foolstack.interview.api.model.MaterialsDomain
-import ru.foolstack.interview.impl.data.repository.local.LocalDataSource
 import ru.foolstack.interview.impl.presentation.ui.InterviewsViewState
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
 import ru.foolstack.professions.api.domain.usecase.GetProfessionsUseCase
-import ru.foolstack.professions.api.model.ProfessionDomain
 import ru.foolstack.professions.api.model.ProfessionsDomain
 import ru.foolstack.profile.api.domain.usecase.GetProfileUseCase
 import ru.foolstack.profile.api.model.ProfileDomain
@@ -32,14 +30,22 @@ class InterviewsInteractor(
 
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
-    private fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
+    fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
-    suspend fun getMaterialsFromServer() = getMaterialsUseCase.getMaterials()
+    suspend fun getMaterialsFromServer():MaterialsDomain{
+        return getMaterialsUseCase.getMaterialsByProfession(professionId = getProfessionId())
+    }
 
-    fun checkState(state: ResultState<MaterialsDomain>,
-                   profileState: ResultState<ProfileDomain>,
-                   professionsState:ResultState<ProfessionsDomain>,
-                   professionId: Int):InterviewsViewState{
+    suspend fun getMaterialsFromLocal() = getMaterialsUseCase.getMaterials(true)
+
+    suspend fun getProfessionsFromServer() = getProfessionsUseCase.getProfessions()
+
+    suspend fun getProfessionsFromLocal() = getProfessionsUseCase.getProfessions(fromLocal = true)
+
+    suspend fun checkState(state: ResultState<MaterialsDomain>,
+                           profileState: ResultState<ProfileDomain>,
+                           professionsState:ResultState<ProfessionsDomain>,
+                           professionId: Int):InterviewsViewState{
         val lang = getCurrentLang()
         var isShowBanner = true
         val fullPurchasedList = HashSet<Int>()
@@ -167,6 +173,7 @@ class InterviewsInteractor(
     suspend fun getProfessionId(): Int{
         return getProfessionsUseCase.getProfessionId()
     }
+
 
     fun goToTelegram(){
         browserUtils.openInBrowser("https://t.me/+-fxZnU-zAJJkYzIy")

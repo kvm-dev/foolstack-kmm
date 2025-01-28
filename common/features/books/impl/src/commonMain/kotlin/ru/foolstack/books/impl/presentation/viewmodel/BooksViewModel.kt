@@ -11,6 +11,7 @@ import kotlinx.coroutines.plus
 import ru.foolstack.books.impl.domain.interactor.BooksInteractor
 import ru.foolstack.books.impl.presentation.ui.BooksViewState
 import ru.foolstack.model.ProgressState
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() {
@@ -23,6 +24,14 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
+                if(interactor.booksState.value !is ResultState.Success){
+                    if(interactor.isConnectionAvailable()){
+                        interactor.getBooksFromServer()
+                    }
+                    else{
+                        interactor.getBooksFromLocal()
+                    }
+                }
                 interactor.booksState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)
@@ -35,7 +44,12 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
         val lang = interactor.getCurrentLang()
         _uiState.update { BooksViewState.LoadingState(lang = lang) }
         launch {
-            interactor.getBooksFromServer()
+            if(interactor.isConnectionAvailable()){
+                interactor.getBooksFromServer()
+            }
+            else{
+                interactor.getBooksFromLocal()
+            }
             updateState(ProgressState.LOADING)
             initViewModel()
         }
@@ -100,4 +114,6 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
     fun onClickLink(url: String){
         interactor.openInBrowser(url)
     }
+
+    fun getCurrentLang() = interactor.getCurrentLang()
 }

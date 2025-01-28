@@ -29,6 +29,7 @@ android-security = "1.1.0-alpha03"
 androidx-material3Android = "1.3.0"
 coilComposeCore = "3.0.0-alpha06"
 material3Jvmstubs = "1.4.0-alpha02"
+workManagerVersion = "2.9.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -46,6 +47,9 @@ compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = 
 navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation"}
 #material-design
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+#work-manager(android)
+work-manager = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManagerVersion" }
 
 #tests
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

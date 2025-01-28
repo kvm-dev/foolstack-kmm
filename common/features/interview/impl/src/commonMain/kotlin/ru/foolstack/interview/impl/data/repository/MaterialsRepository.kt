@@ -16,6 +16,16 @@ class MaterialsRepository(private val localDataSource: LocalDataSource,
             }
         }
 
+    suspend fun getMaterialsByProfessionFromServer(professionId: Int): MaterialsDomain {
+        val result = networkDataSource.getMaterialsByProfession(professionId = professionId)
+        return if (result.errorMsg.isEmpty()) {
+            localDataSource.saveMaterials(result)
+            localDataSource.getMaterials()
+        } else {
+            result
+        }
+    }
+
     suspend fun getMaterialsFromLocal(): MaterialsDomain {
         return localDataSource.getMaterials()
     }

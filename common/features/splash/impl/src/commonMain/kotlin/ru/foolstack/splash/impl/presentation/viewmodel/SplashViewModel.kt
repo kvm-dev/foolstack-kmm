@@ -51,78 +51,43 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                 val local = interactor.getCurrentLang()
                 val isTokenExist = interactor.isTokenExist()
                 val isInternetConnected = interactor.isConnectionAvailable()
+                if(isInternetConnected){
+                    interactor.getProfessionsFromServer()
+                }
+                else{
+                    interactor.getProfessionsFromLocal()
+                }
                 if (isTokenExist) {
                     if (isInternetConnected) {
                         //authByToken
                         val profile = interactor.getProfileFromServer()
-                        var  materials = interactor.getMaterialsFromLocal()
-                        if(materials.materials.isEmpty() || materials.errorMsg.isNotEmpty()){
-                            materials = interactor.getMaterialsFromServer()
-                        }
-                        val tests = interactor.getTestsFromServer()
-                        val books = interactor.getBooksFromServer()
-                        val news = interactor.getNewsFromServer()
                         val events = interactor.getEventsFromServer()
-                        val studies = interactor.getStudiesFromServer()
-                        val professions = interactor.getProfessionsFromServer()
                         if(interactor.validateAuthorizedData(
                                 profile = profile,
-                                materials = materials,
-                                tests = tests,
-                                books = books,
-                                news = news,
-                                events = events,
-                                studies = studies,
-                                professions = professions
-                            )){
+                                events = events)){
                             val state = interactor.getAuthorizedState(
                                 local = local,
                                 isInternetConnected = isInternetConnected,
                                 profile = profile,
-                                materials = materials,
-                                tests =  tests,
-                                books = books,
-                                news = news,
-                                events = events,
-                                studies = studies,
-                                professions = professions)
+                                events = events)
                             _uiState.update { state }
                         }
                         else{
                             val state = interactor.authorizedErrorsResponseHandler(
                                 profile = profile,
-                                materials = materials,
-                                tests = tests,
-                                books = books,
-                                news = news,
-                                events = events,
-                                studies = studies
-                            )
+                                events = events)
                             _uiState.update { state }
                         }
                     } else {
                         //goToMain without AuthCheck
                         val profile = interactor.getProfileFromLocal()
-                        val materials = interactor.getMaterialsFromLocal()
-                        val tests = interactor.getTestsFromLocal()
-                        val books = interactor.getBooksFromLocal()
-                        val news = interactor.getNewsFromLocal()
                         val events = interactor.getEventsFromLocal()
-                        val studies = interactor.getStudiesFromLocal()
-                        val professions = interactor.getProfessionsFromLocal()
-                        if (profile.userId != 0 && materials.materials.isNotEmpty() && tests.tests.isNotEmpty()) {
+                        if (profile.userId != 0) {
                             val state = interactor.getAuthorizedState(
                                 local = local,
                                 isInternetConnected = isInternetConnected,
                                 profile = profile,
-                                materials = materials,
-                                tests = tests,
-                                news = news,
-                                books = books,
-                                events = events,
-                                studies = studies,
-                                professions = professions
-                            )
+                                events = events)
                             _uiState.update { state }
                         } else {
                             //showConnectionErrorBottomSheet
@@ -252,52 +217,24 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
         val local = interactor.getCurrentLang()
         launch {
             val profile = interactor.getProfileFromServer()
-            var materials = interactor.getMaterialsFromLocal()
-            if(materials.materials.isEmpty() || materials.errorMsg.isNotEmpty()){
-                materials = interactor.getMaterialsFromServer()
-            }
-            val tests = interactor.getTestsFromServer()
-            val books = interactor.getBooksFromServer()
-            val news = interactor.getNewsFromServer()
             val events = interactor.getEventsFromServer()
-            val studies = interactor.getStudiesFromServer()
-            val professions = interactor.getProfessionsFromServer()
             if(isUserExist){
                 val result = interactor.authByEmail(email = emailValue, code  = otpValue)
                 if(result.errorMsg.isEmpty()){
                     if(interactor.validateAuthorizedData(
                             profile = profile,
-                            materials = materials,
-                            tests = tests,
-                            books = books,
-                            news = news,
-                            events = events,
-                            studies = studies,
-                            professions = professions
-                        )){
+                            events = events)){
                         val state = interactor.getAuthorizedState(
                             local = local,
                             isInternetConnected = isInternetConnected,
                             profile = profile,
-                            materials = materials,
-                            tests = tests,
-                            books = books,
-                            news = news,
-                            events = events,
-                            studies = studies,
-                            professions = professions)
+                            events = events)
                         _uiState.update { state }
                     }
                     else{
                         val state = interactor.authorizedErrorsResponseHandler(
                             profile = profile,
-                            materials = materials,
-                            tests = tests,
-                            books = books,
-                            news = news,
-                            events = events,
-                            studies = studies
-                        )
+                            events = events)
                         _uiState.update { state }
                     }
                 }
@@ -307,38 +244,19 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                         if(resultConfirm.success){
                             if(interactor.validateAuthorizedData(
                                     profile = profile,
-                                    materials = materials,
-                                    tests = tests,
-                                    books = books,
-                                    news = news,
-                                    events = events,
-                                    studies = studies,
-                                    professions = professions
-                                )){
+                                    events = events)){
                                 val state = interactor.getAuthorizedState(
                                     local = local,
                                     isInternetConnected = isInternetConnected,
                                     profile = profile,
-                                    materials = materials,
-                                    tests = tests,
-                                    books = books,
-                                    news = news,
-                                    events = events,
-                                    studies = studies,
-                                    professions = professions)
+                                    events = events)
                                 _uiState.update { state }
                             }
                             else
                             {
                                 val state = interactor.authorizedErrorsResponseHandler(
                                     profile = profile,
-                                    materials = materials,
-                                    tests = tests,
-                                    books = books,
-                                    news = news,
-                                    events = events,
-                                    studies = studies
-                                )
+                                    events = events)
                                 _uiState.update { state }
                             }
                         }
@@ -377,37 +295,18 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                 if(resultConfirm.success){
                     if(interactor.validateAuthorizedData(
                             profile = profile,
-                            books = books,
-                            materials = materials,
-                            tests = tests,
-                            news = news,
-                            events = events,
-                            studies = studies,
-                            professions = professions)){
+                            events = events)){
                         val state = interactor.getAuthorizedState(
                             local = local,
                             isInternetConnected = isInternetConnected,
                             profile = profile,
-                            materials = materials,
-                            tests = tests,
-                            news = news,
-                            events = events,
-                            studies = studies,
-                            books = books,
-                            professions = professions
-                        )
+                            events = events)
                         _uiState.update { state }
                     }
                     else{
                         val state = interactor.authorizedErrorsResponseHandler(
                             profile = profile,
-                            books = books,
-                            materials = materials,
-                            tests = tests,
-                            news = news,
-                            events = events,
-                            studies = studies
-                        )
+                            events = events)
                         _uiState.update { state }
                     }
                 }

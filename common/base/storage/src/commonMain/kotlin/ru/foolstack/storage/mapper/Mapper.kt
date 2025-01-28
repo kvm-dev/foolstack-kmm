@@ -7,6 +7,8 @@ import ru.foolstack.storage.model.Events
 import ru.foolstack.storage.model.KnowledgeArea
 import ru.foolstack.storage.model.New
 import ru.foolstack.storage.model.News
+import ru.foolstack.storage.model.PassedTest
+import ru.foolstack.storage.model.PassedTests
 import ru.foolstack.storage.model.Professions
 import ru.foolstack.storage.model.Profession
 import ru.foolstack.storage.model.ProfessionListItem
@@ -26,6 +28,8 @@ import rufoolstackstorageimplcache.News as NewsLocal
 import rufoolstackstorageimplcache.Books as BooksLocal
 import rufoolstackstorageimplcache.Studies as StudyLocal
 import rufoolstackstorageimplcache.EventSubs as EventSubsLocal
+import rufoolstackstorageimplcache.PassedTests as PassedTestsLocal
+
 
 class Mapper {
     fun mapAchievement(response: List<UserAchievments>):List<UserAchievement>{
@@ -95,6 +99,22 @@ class Mapper {
             ))
         }
         return variantsList
+    }
+
+     fun mapPassedTests(passedTests: List<PassedTestsLocal>):PassedTests{
+        val list = ArrayList<PassedTest>()
+         passedTests.forEach { passedTest->
+             list.add(
+                 PassedTest(
+                 testId = passedTest.testId.toInt(),
+                 testResult = passedTest.testResult.toInt(),
+                 finishTestTime = passedTest.finishTestTime
+             )
+             )
+         }
+        return PassedTests(
+            passedTests = list
+        )
     }
 
     private fun mapProfession(profession: ProfessionsLocal):Profession{

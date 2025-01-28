@@ -77,85 +77,7 @@ fun EventsScreen(
             when (eventsState) {
                 is EventsViewState.LoadingState -> {
                     Log.d("event in state is", "Loading")
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 40.dp)
-                    ) {
-                        TopBar(
-                            screenTitle = if ((eventsState as EventsViewState.LoadingState).lang is LangResultDomain.Ru) {
-                                "События"
-                            } else {
-                                "Events"
-                            }, action = { backDispatcher.onBackPressed() })
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .padding(start = 20.dp),
-                            horizontalArrangement = Arrangement.Absolute.SpaceBetween
-                        ) {
-                            repeat(6) {
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .size(width = 120.dp, height = 38.dp)
-                                        .padding(horizontal = 2.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(34)),
-                                    durationMillis = 1000
-                                )
-                            }
-                        }
-                        repeat(10) {
-                            Column {
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .height(220.dp)
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 12.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(10)),
-                                    durationMillis = 1000
-                                )
-                                Row {
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(36.dp)
-                                            .width(120.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 12.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(10)),
-                                        durationMillis = 1000
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(34.dp)
-                                            .width(100.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(30)),
-                                        durationMillis = 1000
-                                    )
-                                }
-                                Row {
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(34.dp)
-                                            .width(200.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(10)),
-                                        durationMillis = 1000
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(32.dp)
-                                            .width(100.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(30)),
-                                        durationMillis = 1000
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    LoadingScreen(lang = eventsViewModel.getCurrentLang(), onBackClick = { backDispatcher.onBackPressed() })
                 }
 
                 is EventsViewState.ErrorState -> {
@@ -282,9 +204,98 @@ fun EventsScreen(
             }
         }
 
+        ProgressState.LOADING -> {
+            LoadingScreen(lang = eventsViewModel.getCurrentLang(), onBackClick = { backDispatcher.onBackPressed() })
+            Log.d("event realy loading", "yes")
+            eventsViewModel.initViewModel()
+        }
+
         else -> {
             Log.d("event realy complete", "no")
             eventsViewModel.initViewModel()
+        }
+    }
+}
+
+@Composable
+fun LoadingScreen(lang: LangResultDomain, onBackClick: () -> Unit){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 40.dp)
+    ) {
+        TopBar(
+            screenTitle = if (lang is LangResultDomain.Ru) {
+                "События"
+            } else {
+                "Events"
+            }, action = { onBackClick() })
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .padding(start = 20.dp),
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween
+        ) {
+            repeat(6) {
+                ShimmerEffect(
+                    modifier = Modifier
+                        .size(width = 120.dp, height = 38.dp)
+                        .padding(horizontal = 2.dp)
+                        .background(Color.LightGray, RoundedCornerShape(34)),
+                    durationMillis = 1000
+                )
+            }
+        }
+        repeat(10) {
+            Column {
+                ShimmerEffect(
+                    modifier = Modifier
+                        .height(220.dp)
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp, top = 12.dp)
+                        .background(Color.LightGray, RoundedCornerShape(10)),
+                    durationMillis = 1000
+                )
+                Row {
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(36.dp)
+                            .width(120.dp)
+                            .padding(start = 20.dp, end = 20.dp, top = 12.dp)
+                            .background(Color.LightGray, RoundedCornerShape(10)),
+                        durationMillis = 1000
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(34.dp)
+                            .width(100.dp)
+                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                            .background(Color.LightGray, RoundedCornerShape(30)),
+                        durationMillis = 1000
+                    )
+                }
+                Row {
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(34.dp)
+                            .width(200.dp)
+                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                            .background(Color.LightGray, RoundedCornerShape(10)),
+                        durationMillis = 1000
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(32.dp)
+                            .width(100.dp)
+                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                            .background(Color.LightGray, RoundedCornerShape(30)),
+                        durationMillis = 1000
+                    )
+                }
+            }
         }
     }
 }

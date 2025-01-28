@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -49,7 +48,7 @@ import ru.foolstack.ui.components.YellowButton
 import ru.foolstack.ui.model.Lang
 
 @Composable
-fun StudiesScreen(studiesViewModel: StudiesViewModel = koinViewModel(), navController: NavController) {
+fun StudiesScreen(studiesViewModel: StudiesViewModel = koinViewModel()) {
     val studyId  = remember { mutableIntStateOf(0) }
     val selectedFilter  = remember { mutableStateOf("") }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -74,85 +73,7 @@ fun StudiesScreen(studiesViewModel: StudiesViewModel = koinViewModel(), navContr
             when (studiesState) {
                 is StudiesViewState.LoadingState -> {
                     Log.d("studies in state is", "Loading")
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 40.dp)
-                    ) {
-                        TopBar(
-                            screenTitle = if ((studiesState as StudiesViewState.LoadingState).lang is LangResultDomain.Ru) {
-                                "Обучение"
-                            } else {
-                                "Education"
-                            }, action = { backDispatcher.onBackPressed() })
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .padding(start = 20.dp),
-                            horizontalArrangement = Arrangement.Absolute.SpaceBetween
-                        ) {
-                            repeat(6) {
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .size(width = 120.dp, height = 38.dp)
-                                        .padding(horizontal = 2.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(34)),
-                                    durationMillis = 1000
-                                )
-                            }
-                        }
-                        repeat(10) {
-                            Column {
-                                ShimmerEffect(
-                                    modifier = Modifier
-                                        .height(220.dp)
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 12.dp)
-                                        .background(Color.LightGray, RoundedCornerShape(10)),
-                                    durationMillis = 1000
-                                )
-                                Row {
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(36.dp)
-                                            .width(120.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 12.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(10)),
-                                        durationMillis = 1000
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(34.dp)
-                                            .width(100.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(30)),
-                                        durationMillis = 1000
-                                    )
-                                }
-                                Row {
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(34.dp)
-                                            .width(200.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(10)),
-                                        durationMillis = 1000
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    ShimmerEffect(
-                                        modifier = Modifier
-                                            .height(32.dp)
-                                            .width(100.dp)
-                                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-                                            .background(Color.LightGray, RoundedCornerShape(30)),
-                                        durationMillis = 1000
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    LoadingScreen(lang = studiesViewModel.getCurrentLang(), onBackClick = { backDispatcher.onBackPressed() })
                 }
 
                 is StudiesViewState.ErrorState -> {
@@ -272,9 +193,98 @@ fun StudiesScreen(studiesViewModel: StudiesViewModel = koinViewModel(), navContr
             }
         }
 
+        ProgressState.LOADING -> {
+            LoadingScreen(lang = studiesViewModel.getCurrentLang(), onBackClick = { backDispatcher.onBackPressed() })
+            Log.d("studies realy loading", "yes")
+            studiesViewModel.initViewModel()
+        }
+
         else -> {
             Log.d("studies realy complete", "no")
             studiesViewModel.initViewModel()
+        }
+    }
+}
+
+@Composable
+fun LoadingScreen(lang: LangResultDomain, onBackClick: () -> Unit){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 40.dp)
+    ) {
+        TopBar(
+            screenTitle = if (lang is LangResultDomain.Ru) {
+                "Обучение"
+            } else {
+                "Education"
+            }, action = { onBackClick() })
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .padding(start = 20.dp),
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween
+        ) {
+            repeat(6) {
+                ShimmerEffect(
+                    modifier = Modifier
+                        .size(width = 120.dp, height = 38.dp)
+                        .padding(horizontal = 2.dp)
+                        .background(Color.LightGray, RoundedCornerShape(34)),
+                    durationMillis = 1000
+                )
+            }
+        }
+        repeat(10) {
+            Column {
+                ShimmerEffect(
+                    modifier = Modifier
+                        .height(220.dp)
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp, top = 12.dp)
+                        .background(Color.LightGray, RoundedCornerShape(10)),
+                    durationMillis = 1000
+                )
+                Row {
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(36.dp)
+                            .width(120.dp)
+                            .padding(start = 20.dp, end = 20.dp, top = 12.dp)
+                            .background(Color.LightGray, RoundedCornerShape(10)),
+                        durationMillis = 1000
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(34.dp)
+                            .width(100.dp)
+                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                            .background(Color.LightGray, RoundedCornerShape(30)),
+                        durationMillis = 1000
+                    )
+                }
+                Row {
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(34.dp)
+                            .width(200.dp)
+                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                            .background(Color.LightGray, RoundedCornerShape(10)),
+                        durationMillis = 1000
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    ShimmerEffect(
+                        modifier = Modifier
+                            .height(32.dp)
+                            .width(100.dp)
+                            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+                            .background(Color.LightGray, RoundedCornerShape(30)),
+                        durationMillis = 1000
+                    )
+                }
+            }
         }
     }
 }

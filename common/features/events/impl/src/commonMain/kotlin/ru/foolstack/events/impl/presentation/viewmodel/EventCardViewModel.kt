@@ -17,7 +17,6 @@ class EventCardViewModel(private val interactor: EventCardInteractor) : BaseView
     private val _uiState = MutableStateFlow<EventCardViewState>(
         EventCardViewState.Idle(lang = interactor.getCurrentLang()))
 
-
     val uiState: StateFlow<EventCardViewState> = _uiState.asStateFlow()
 
     fun initViewModel(eventId: Int) = with(viewModelScope + coroutineExceptionHandler) {
