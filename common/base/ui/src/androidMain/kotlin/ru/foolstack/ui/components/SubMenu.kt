@@ -35,6 +35,7 @@ import ru.foolstack.ui.model.Lang
 
 @Composable
 fun SubMenu(
+    modifier: Modifier,
     lang: Lang,
     onClickEvents: () -> Unit = {},
     onClickBooks: () -> Unit = {},
@@ -44,7 +45,7 @@ fun SubMenu(
     val events =  if(lang== Lang.RU){ "События" } else{ "Events" }
     val books =  if(lang== Lang.RU){ "Литература" } else{ "Books" }
     val studies =  if(lang== Lang.RU){ "Обучение" } else{ "Study" }
-    Column(modifier = Modifier
+    Column(modifier = modifier
         .wrapContentWidth()
         .height(160.dp)) {
         Box(modifier = Modifier
@@ -160,8 +161,6 @@ fun SubMenu(
                         }
                     }
                 }
-
-
         }
     }
 

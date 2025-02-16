@@ -1,6 +1,10 @@
 package ru.foolstack.profile.impl.data.repository
 
+import ru.foolstack.profile.api.model.DeleteProfileResponseDomain
 import ru.foolstack.profile.api.model.ProfileDomain
+import ru.foolstack.profile.api.model.UpdateEmailResponseDomain
+import ru.foolstack.profile.api.model.UpdateNameResponseDomain
+import ru.foolstack.profile.api.model.UpdatePhotoResponseDomain
 import ru.foolstack.profile.impl.data.repository.local.LocalDataSource
 import ru.foolstack.profile.impl.data.repository.network.NetworkDataSource
 import ru.foolstack.authorization.impl.data.repository.local.LocalDataSource as AuthorizationLocalDataSource
@@ -40,4 +44,33 @@ class ProfileRepository(private val localDataSource: LocalDataSource,
         return localDataSource.getProfile()
     }
 
+    suspend fun updateEmail(email: String): UpdateEmailResponseDomain{
+        return networkDataSource.updateEmail(
+            userToken = authorizationLocalDataSource.getTokenFromLocal(),
+            email = email)
+    }
+
+    suspend fun updateName(name: String): UpdateNameResponseDomain{
+        return networkDataSource.updateName(
+            userToken = authorizationLocalDataSource.getTokenFromLocal(),
+            name = name)
+    }
+
+    suspend fun updatePhoto(photo: ByteArray): UpdatePhotoResponseDomain{
+        return networkDataSource.updatePhoto(
+            userToken = authorizationLocalDataSource.getTokenFromLocal(),
+            photo = photo)
+    }
+
+    suspend fun deleteProfile(): DeleteProfileResponseDomain{
+        val result =  networkDataSource.deleteProfile(
+            userToken = authorizationLocalDataSource.getTokenFromLocal())
+        localDataSource.logout()
+        return result
+    }
+
+    suspend fun logout(){
+        localDataSource.logout()
+        localDataSource.getProfile()
+    }
 }

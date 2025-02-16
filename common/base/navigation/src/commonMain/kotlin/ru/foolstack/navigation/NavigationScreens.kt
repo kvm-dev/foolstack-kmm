@@ -3,6 +3,7 @@ package ru.foolstack.navigation
 enum class NavigationScreens(val title: String) {
     SplashScreenNavigation( "SplashScreen"),
     MainScreenNavigation("MainScreen"),
+    MainScreenGuestNavigation("MainScreenGuest"),
     EventsListScreenNavigation("EventsListScreen"),
     EventScreenNavigation("EventScreen"),
     BooksListScreenNavigation("BooksListScreen"),
@@ -14,5 +15,6 @@ enum class NavigationScreens(val title: String) {
     TestsListScreenNavigation("TestsListScreen"),
     TestScreenNavigation("TestScreen"),
     NewsListScreenNavigation("NewsListScreen"),
-    NewsScreenNavigation("NewsScreen")
+    NewsScreenNavigation("NewsScreen"),
+    SettingsScreenNavigation("SettingsScreen")
 }

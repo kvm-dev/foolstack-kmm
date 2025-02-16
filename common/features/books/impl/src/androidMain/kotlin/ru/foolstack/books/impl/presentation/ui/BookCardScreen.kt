@@ -135,19 +135,21 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                                                 bookSubscribeText.replace("***", "$bookSubscribeMinCost ₽")
                                             } else{
                                                 bookSubscribeText.replace("***", "$bookSubscribeMinCost \$")}
-                                            BookPrBlock(text = bookSubscribeFullText, modifier = Modifier
-                                                .padding(top = 12.dp)
-                                                .clickable { bookCardViewModel.onClickLink(bookSubscribeLink) })
-                                            GreenButton(
-                                                modifier = Modifier
-                                                    .padding(top = 16.dp, bottom = 22.dp)
-                                                    .fillMaxWidth(),
-                                                text = if(successState.lang is LangResultDomain.Ru){
-                                                    "Купить за ${successState.book?.bookCostWithSale?: 0} ₽" } else{ "Buy ${successState.book?.bookCostWithSale?: 0} \$" },
-                                                onClick = { bookCardViewModel.onClickLink(successState.book?.bookRefLink?: "") },
-                                                isEnabled = true,
-                                                isLoading = false
-                                            )
+                                            if(!bookCardViewModel.asMode){
+                                                BookPrBlock(text = bookSubscribeFullText, modifier = Modifier
+                                                    .padding(top = 12.dp)
+                                                    .clickable { bookCardViewModel.onClickLink(bookSubscribeLink) })
+                                                GreenButton(
+                                                    modifier = Modifier
+                                                        .padding(top = 16.dp, bottom = 22.dp)
+                                                        .fillMaxWidth(),
+                                                    text = if(successState.lang is LangResultDomain.Ru){
+                                                        "Купить за ${successState.book?.bookCostWithSale?: 0} ₽" } else{ "Buy ${successState.book?.bookCostWithSale?: 0} \$" },
+                                                    onClick = { bookCardViewModel.onClickLink(successState.book?.bookRefLink?: "") },
+                                                    isEnabled = true,
+                                                    isLoading = false
+                                                )
+                                            }
                                         }
                                     }
                                 }

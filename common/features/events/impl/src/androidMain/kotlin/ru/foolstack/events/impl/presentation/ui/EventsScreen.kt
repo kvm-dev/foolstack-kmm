@@ -141,7 +141,8 @@ fun EventsScreen(
                             },
                             events = Mapper().mapToEventItems(successState.events),
                             chips = Mapper().mapToChips(
-                                successState.events.events
+                                if(eventsViewModel.asMode){successState.events.events.filter { it.eventCost == 0 }  } else { successState.events.events }
+
                             ),
                             selectedChips = successState.selectedFilters,
                             onBackPressed = { backDispatcher.onBackPressed() },
@@ -158,7 +159,9 @@ fun EventsScreen(
                                 )
                             },
                             selectedChip = selectedFilter,
-                            onclickChip = {eventsViewModel.updateFilters(selectedFilter.value)}
+                            onclickChip = { eventsViewModel.updateFilters(selectedFilter.value) },
+                            isAsActive = eventsViewModel.asMode,
+                            isConnectionAvailable = eventsViewModel.isConnectionAvailable()
                         )
                     } else {
                         Box(

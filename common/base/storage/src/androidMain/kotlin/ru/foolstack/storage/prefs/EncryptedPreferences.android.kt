@@ -51,4 +51,16 @@ actual class EncryptedPreferences actual constructor(context: PlatformContext) {
     actual fun saveProfessionId(professionId: Int) {
         encryptedPreferences.edit().putInt("professionId", professionId).apply()
     }
+
+    actual fun getCurrentAppTheme(): String {
+        return encryptedPreferences.getString("appTheme", "")?:"system"
+    }
+
+    actual fun setCurrentAppTheme(appTheme: String) {
+        encryptedPreferences.edit().putString("appTheme", appTheme).apply()
+    }
+
+    actual fun clearUserData() {
+        encryptedPreferences.edit().clear().apply()
+    }
 }

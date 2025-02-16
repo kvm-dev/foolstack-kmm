@@ -55,8 +55,6 @@ fun TestsScreen(
     val testId  = remember { mutableIntStateOf(0) }
     var isRefreshing by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val backDispatcher =
-        checkNotNull(LocalOnBackPressedDispatcherOwner.current).onBackPressedDispatcher
     val onRefresh: () -> Unit = {
         isRefreshing = true
         coroutineScope.launch {
@@ -194,7 +192,8 @@ fun TestsScreen(
                                     testDestination = testDestination
                                 )
                             },
-                            isShowDialog = isVisibleDialog
+                            isShowDialog = isVisibleDialog,
+                            isConnectionAvailable = testsViewModel.isConnectionAvailable()
                         )
                         GreenDialog(
                             title = if(successState.lang is LangResultDomain.Ru){"Обрати внимание"} else {"Attention"},

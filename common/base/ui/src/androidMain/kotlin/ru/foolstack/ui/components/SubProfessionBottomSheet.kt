@@ -45,6 +45,7 @@ fun SubProfessionBottomSheet(
                     onDismissRequest = {
                         isShowBottomSheet.value = false
                         selectedSubProfession.value = 0
+                        subProfessionId.value = 0
                     },
                     shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
                     containerColor = MaterialTheme.colorScheme.background,
@@ -72,7 +73,7 @@ fun SubProfessionBottomSheet(
                             ))
                         }
                         //init
-                        if(subsList.size==1){
+                        if(subsList.size==1 && subProfessionId.value==0){
                             subsList.clear()
                             subsList.addAll(subProfessionsList)
                         }
@@ -84,6 +85,7 @@ fun SubProfessionBottomSheet(
                             subProfessions = subsList,
                             onBackPressed = { if(isShowBottomSheet.value){
                                 isShowBottomSheet.value = false
+                                subProfessionId.value = 0
                                 selectedSubProfession.value = 0} },
                             selectId = selectedSubProfession,
                             subProfessionId = subProfessionId,

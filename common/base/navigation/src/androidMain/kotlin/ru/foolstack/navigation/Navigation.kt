@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -32,6 +33,7 @@ import ru.foolstack.main.impl.presentation.ui.MainScreen
 import ru.foolstack.news.impl.presentation.ui.NewsCardScreen
 import ru.foolstack.news.impl.presentation.ui.NewsScreen
 import ru.foolstack.professions.impl.presentation.ui.ProfessionsScreen
+import ru.foolstack.settings.impl.presentation.ui.SettingsScreen
 import ru.foolstack.study.impl.presentation.ui.StudiesScreen
 import ru.foolstack.tests.impl.presentation.ui.TestCardScreen
 import ru.foolstack.tests.impl.presentation.ui.TestsScreen
@@ -43,10 +45,13 @@ import ru.foolstack.ui.theme.MainBackground
 
 @Composable
 fun StartApplication(
-    navController: NavHostController = rememberNavController()) {
+    navController: NavHostController = rememberNavController(),
+    theme: String,
+    recreate: ()->Unit,
+    restart: ()->Unit) {
     val context = LocalContext.current
     val activity = context.findActivity()
-    FoolStackTheme {
+    FoolStackTheme(theme = theme) {
         val getCurrentLanguageUseCase: GetCurrentLanguageUseCase by inject()
         // Get current back stack entry
         // Get the name of the current screen
@@ -98,7 +103,9 @@ fun StartApplication(
                         .background(MaterialTheme.colorScheme.MainBackground)
                 ) {
                     composable(route = NavigationScreens.SplashScreenNavigation.name) {
+                        isShowBottomBar.value = false
                         SplashScreen(
+                            theme = theme,
                             navigateToMainScreen = {
                                 isShowBottomBar.value = true
                                 navController.navigate(NavigationScreens.MainScreenNavigation.name) {
@@ -138,7 +145,23 @@ fun StartApplication(
                                     }
                                 }
                             },
-                            navController = navController, eventDestination = NavigationScreens.EventScreenNavigation.name )
+                            onclickSettings = {
+                                isShowBottomBar.value = false
+                                navController.navigate(NavigationScreens.SettingsScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.SettingsScreenNavigation.name) {
+                                        inclusive = false
+                                    }
+                                }
+                            },
+                            navController = navController, eventDestination = NavigationScreens.EventScreenNavigation.name, theme = theme, onClickLogout =  {
+                                isShowBottomBar.value = false
+                                navController.navigate(NavigationScreens.SplashScreenNavigation.name)
+                                {
+                                    popUpTo(NavigationScreens.SplashScreenNavigation.name) { inclusive = false }
+                                }
+                                navController.graph.clear()
+                                recreate()} )
+
                     }
 
                     composable(route = NavigationScreens.EventsListScreenNavigation.name) {
@@ -260,6 +283,19 @@ fun StartApplication(
                             })
                         }
                     }
+
+                    composable(route = NavigationScreens.SettingsScreenNavigation.name) {
+                        isShowBottomBar.value = false
+                        SettingsScreen(recreateAction = recreate, navController = navController, onDeleteAction  = {
+                            isShowBottomBar.value = false
+                            navController.navigate(NavigationScreens.SplashScreenNavigation.name)
+                            {
+                                popUpTo(NavigationScreens.SplashScreenNavigation.name) { inclusive = false }
+                            }
+                            navController.graph.clear()
+                            recreate()})
+                    }
+
                 }
             }
         }

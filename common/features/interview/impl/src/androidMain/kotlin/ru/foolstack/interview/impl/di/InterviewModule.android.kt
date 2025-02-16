@@ -33,7 +33,8 @@ actual val interviewModule: Module
             getProfessionsUseCase = get(),
             sendMaterialCommentUseCase = get(),
             browserUtils = get(),
-            getProfileUseCase = get()
+            getProfileUseCase = get(),
+            getAsModeUseCase = get()
         )
         }
         single<InterviewCardInteractor> { InterviewCardInteractor(

@@ -104,7 +104,7 @@ fun ProfessionsVerticalSlider(
                         onClickProfession()
                     }
                     .padding(horizontal = 12.dp, vertical = 6.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
             ) {
                 Column{
                     if (professionItem.professionImageBase64.isNotEmpty()) {

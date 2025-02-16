@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import ru.foolstack.ui.theme.ErrorColor
 import ru.foolstack.ui.theme.FieldsDefaultBorderColor
 import ru.foolstack.ui.theme.FieldsPlaceholderColor
+import ru.foolstack.ui.theme.MainBlack
 import ru.foolstack.ui.theme.montserratFamily
 
 
@@ -42,7 +43,7 @@ fun EmailTextField(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = modifier.fillMaxWidth().padding(vertical = 16.dp, horizontal = 16.dp),
+        modifier = modifier.fillMaxWidth(),
     ) {
         OutlinedTextField(
             enabled = isEnabled,
@@ -63,12 +64,12 @@ fun EmailTextField(
                 imeAction = imeAction
             ),
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedTextColor = Color.Black,
+                unfocusedTextColor = MaterialTheme.colorScheme.MainBlack,
                 unfocusedBorderColor = MaterialTheme.colorScheme.FieldsDefaultBorderColor,
-                focusedTextColor = Color.Black,
+                focusedTextColor = MaterialTheme.colorScheme.MainBlack,
                 focusedBorderColor = MaterialTheme.colorScheme.FieldsDefaultBorderColor,
                 errorBorderColor = MaterialTheme.colorScheme.ErrorColor,
-                cursorColor = Color.Black
+                cursorColor = MaterialTheme.colorScheme.MainBlack
             ),
             shape = RoundedCornerShape(8.dp),
             isError = isError

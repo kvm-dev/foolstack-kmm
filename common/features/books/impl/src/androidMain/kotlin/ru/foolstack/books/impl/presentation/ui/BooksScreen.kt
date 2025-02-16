@@ -165,7 +165,9 @@ fun BooksScreen(booksViewModel: BooksViewModel = koinViewModel(), navController:
                             onclickChip = { booksViewModel.updateFilters(selectedFilter.value) },
                             onclickBuy = { booksViewModel.onClickLink(successState.books.books.find { it.bookId == bookId.intValue }?.bookRefLink?: "")},
                             subscribeText = booksSubscribeFullText,
-                            subscribeClick = { booksViewModel.onClickLink(successState.books.subscribeLink) })
+                            subscribeClick = { booksViewModel.onClickLink(successState.books.subscribeLink) },
+                            isAsModeActive = booksViewModel.asMode,
+                            isConnectionAvailable = booksViewModel.isConnectionAvailable())
                     } else {
                         Box(
                             modifier = Modifier

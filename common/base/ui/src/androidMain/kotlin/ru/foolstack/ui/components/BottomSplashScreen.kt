@@ -200,6 +200,8 @@ private fun ScrollableContent(
         Spacer(modifier = Modifier.weight(1f))
         if(bottomSplashScreenState == BottomSplashScreenState.AUTHORIZATION){
             EmailTextField(
+                modifier = Modifier
+                    .padding(16.dp),
                 value = emailText,
                 placeholder = "Email",
                 onChange = onchangeEmail,
@@ -305,9 +307,9 @@ private fun ScrollableContent(
                         .fillMaxWidth())
             }
         }
-        if(bottomSplashScreenState!= BottomSplashScreenState.NO_CONNECTION){
+        if(bottomSplashScreenState != BottomSplashScreenState.NO_CONNECTION){
             val onclickEvent = if(bottomSplashScreenState == BottomSplashScreenState.AUTHORIZATION){ onClickBackToAuthorizationScreen} else { onClickBackToEmailScreen }
-            SecondOrangeButton(text = secondButtonText, onClick = { onclickEvent() }, isEnabled = true)
+            SecondOrangeButton(text = secondButtonText, onClick = { onClickGuestScreen() }, isEnabled = true)
         }
     }
 }

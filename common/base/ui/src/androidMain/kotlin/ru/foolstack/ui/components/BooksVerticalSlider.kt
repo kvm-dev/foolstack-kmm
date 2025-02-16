@@ -24,6 +24,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -50,6 +51,7 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BooksVerticalSlider(
+    isAsModeActive: Boolean,
     lang: Lang,
     books: List<BookItem>,
     chips: List<Chip>,
@@ -65,6 +67,7 @@ fun BooksVerticalSlider(
     subscribeClick: ()-> Unit,
     onclickChip: () -> Unit,
     onclickBuy: () -> Unit,
+    isConnectionAvailable: Boolean
 ) {
     val filteredBooks = HashSet<BookItem>()
     selectedChips.filter { it.isNotEmpty() }.forEach { chip ->
@@ -90,9 +93,14 @@ fun BooksVerticalSlider(
     Box(modifier = Modifier
         .fillMaxSize()
         .pullToRefresh(
-            state = state,
+            state = if(isConnectionAvailable) { state } else {
+                PullToRefreshState()
+            },
             isRefreshing = isRefreshing,
-            onRefresh = onRefresh
+            onRefresh = { if(isConnectionAvailable){
+                onRefresh()
+            }
+            }
         )
         .padding(bottom = 20.dp)){
         Box(
@@ -113,12 +121,14 @@ fun BooksVerticalSlider(
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.Center
         ) {
-            header{
-                BookPrBlock(text = subscribeText, modifier = Modifier
-                    .padding(vertical = 10.dp, horizontal = 20.dp)
-                    .clickable {
-                    subscribeClick()
-                })
+            if(!isAsModeActive){
+                header{
+                    BookPrBlock(text = subscribeText, modifier = Modifier
+                        .padding(vertical = 10.dp, horizontal = 20.dp)
+                        .clickable {
+                            subscribeClick()
+                        })
+                }
             }
             items(keywordFilteredBooks.size) { index ->
                 Card(
@@ -170,18 +180,20 @@ fun BooksVerticalSlider(
                                 .padding(top = 4.dp, start = 10.dp, end = 10.dp)
                                 .align(Alignment.CenterHorizontally)
                         ) {
-                            if (keywordFilteredBooks[index].bookSalePrice != 0) {
-                                OriginalPrice(
-                                    text = keywordFilteredBooks[index].bookPrice.toString(),
-                                    lang = lang,
-                                    isStrike = true
-                                )
-                            } else {
-                                OriginalPrice(
-                                    text = keywordFilteredBooks[index].bookPrice.toString(),
-                                    lang = lang,
-                                    isStrike = false
-                                )
+                            if(!isAsModeActive){
+                                if (keywordFilteredBooks[index].bookSalePrice != 0) {
+                                    OriginalPrice(
+                                        text = keywordFilteredBooks[index].bookPrice.toString(),
+                                        lang = lang,
+                                        isStrike = true
+                                    )
+                                } else {
+                                    OriginalPrice(
+                                        text = keywordFilteredBooks[index].bookPrice.toString(),
+                                        lang = lang,
+                                        isStrike = false
+                                    )
+                                }
                             }
                             Spacer(
                                 Modifier
@@ -190,38 +202,44 @@ fun BooksVerticalSlider(
                                     .background(Color.LightGray)
                             )
                             if (keywordFilteredBooks[index].bookSalePrice != 0) {
-                                SalePrice(
-                                    text = keywordFilteredBooks[index].bookSalePrice.toString(),
-                                    lang = lang
-                                )
+                                if(!isAsModeActive){
+                                    SalePrice(
+                                        text = keywordFilteredBooks[index].bookSalePrice.toString(),
+                                        lang = lang
+                                    )
+                                }
                             }
                         }
-                        GreenButtonLittle(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp),
-                            text = if (lang == Lang.RU) {
-                                "Купить"
-                            } else {
-                                "Buy"
-                            },
-                            onClick = {
-                                selectId.value = keywordFilteredBooks[index].bookId
-                                onclickBuy()
-                                      },
-                            isEnabled = true,
-                            isLoading = false
-                        )
+                        if(!isAsModeActive){
+                            GreenButtonLittle(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 12.dp),
+                                text = if (lang == Lang.RU) {
+                                    "Купить"
+                                } else {
+                                    "Buy"
+                                },
+                                onClick = {
+                                    selectId.value = keywordFilteredBooks[index].bookId
+                                    onclickBuy()
+                                },
+                                isEnabled = true,
+                                isLoading = false
+                            )
+                        }
                     }
                 }
             }
-            if(keywordFilteredBooks.size>6){
-                header{
-                    BookPrBlock(text = subscribeText, modifier = Modifier
-                        .padding(vertical = 10.dp, horizontal = 20.dp)
-                        .clickable {
-                            subscribeClick()
-                        })
+            if(!isAsModeActive){
+                if(keywordFilteredBooks.size>6){
+                    header{
+                        BookPrBlock(text = subscribeText, modifier = Modifier
+                            .padding(vertical = 10.dp, horizontal = 20.dp)
+                            .clickable {
+                                subscribeClick()
+                            })
+                    }
                 }
             }
         }

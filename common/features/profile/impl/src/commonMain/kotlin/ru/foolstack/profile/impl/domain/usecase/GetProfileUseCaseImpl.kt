@@ -25,4 +25,8 @@ class GetProfileUseCaseImpl(private val repository: ProfileRepository):GetProfil
              networkResult
         }
     }
+
+    override suspend fun clearState() {
+        _profile.tryEmit(ResultState.Success(null))
+    }
 }

@@ -21,9 +21,11 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
 
     val uiState: StateFlow<BooksViewState> = _uiState.asStateFlow()
 
+    var asMode = false
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
+                asMode = interactor.isAsModeActive()
                 if(interactor.booksState.value !is ResultState.Success){
                     if(interactor.isConnectionAvailable()){
                         interactor.getBooksFromServer()
@@ -114,6 +116,8 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
     fun onClickLink(url: String){
         interactor.openInBrowser(url)
     }
+
+    fun isConnectionAvailable() = interactor.isConnectionAvailable()
 
     fun getCurrentLang() = interactor.getCurrentLang()
 }

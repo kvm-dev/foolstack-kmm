@@ -61,6 +61,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(projects.common.base.viewmodel)
+    //encryptedPrefs
+    implementation(projects.common.base.storage)
+    //utils
+    implementation(projects.common.base.utils)
     //tests
     debugImplementation(libs.compose.ui.tooling)
 }

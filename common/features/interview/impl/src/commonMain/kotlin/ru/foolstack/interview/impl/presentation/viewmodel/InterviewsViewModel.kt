@@ -21,9 +21,12 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
 
     val uiState: StateFlow<InterviewsViewState> = _uiState.asStateFlow()
 
+    var asMode = false
+
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
+                asMode = interactor.isAsModeActive()
                 if(interactor.materialsState.value !is ResultState.Success){
                     if(interactor.isConnectionAvailable()){
                         interactor.getMaterialsFromServer()
@@ -102,5 +105,6 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
         )
     }
 
+    fun isConnectionAvailable() = interactor.isConnectionAvailable()
     fun getCurrentLang() = interactor.getCurrentLang()
 }

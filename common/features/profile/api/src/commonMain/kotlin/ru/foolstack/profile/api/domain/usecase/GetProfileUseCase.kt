@@ -8,4 +8,6 @@ interface GetProfileUseCase {
 
     val profileState: StateFlow<ResultState<ProfileDomain>>
     suspend fun getProfile(fromLocal: Boolean = false):ProfileDomain
+
+    suspend fun clearState()
 }

@@ -15,10 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ru.foolstack.ui.model.Lang
 import ru.foolstack.ui.model.SubProfessionItem
+import ru.foolstack.ui.theme.MainWhite
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -53,7 +53,7 @@ fun SubProfessionsVerticalSlider(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp))
                     .padding(horizontal = 32.dp, vertical = 6.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.MainWhite)
             ) {
                 SubProfessionRadioButton(
                     isSelected = selectId.value == subProfessionItem.professionId,

@@ -5,31 +5,18 @@ import ru.foolstack.authorization.api.domain.usecase.AuthByTokenUseCase
 import ru.foolstack.authorization.api.domain.usecase.ConfirmAuthAndRegUseCase
 import ru.foolstack.authorization.api.domain.usecase.GetTokenFromLocalUseCase
 import ru.foolstack.authorization.api.domain.usecase.IsUserExistUseCase
-import ru.foolstack.books.api.domain.usecase.GetBooksUseCase
-import ru.foolstack.books.api.model.BooksDomain
 import ru.foolstack.events.api.domain.usecase.GetEventsUseCase
 import ru.foolstack.events.api.model.EventsDomain
-import ru.foolstack.splash.impl.data.StringResources
+import ru.foolstack.splash.impl.data.resources.StringResources
 import ru.foolstack.splash.impl.presentation.ui.SplashBottomText
 import ru.foolstack.splash.impl.presentation.ui.SplashViewState
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.language.api.model.LangResultDomain
-import ru.foolstack.interview.api.domain.usecase.GetMaterialsUseCase
-import ru.foolstack.interview.api.model.MaterialsDomain
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
-import ru.foolstack.news.api.domain.usecase.GetNewsUseCase
-import ru.foolstack.news.api.model.NewsDomain
 import ru.foolstack.professions.api.domain.usecase.GetProfessionsUseCase
-import ru.foolstack.professions.api.model.ProfessionsDomain
 import ru.foolstack.profile.api.domain.usecase.GetProfileUseCase
 import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.registration.api.domain.usecase.RegistrationByEmailUseCase
-import ru.foolstack.study.api.domain.usecase.GetStudiesUseCase
-import ru.foolstack.study.api.model.StudiesDomain
-import ru.foolstack.tests.api.domain.usecase.GetPassedTestsUseCase
-import ru.foolstack.tests.api.domain.usecase.GetTestsUseCase
-import ru.foolstack.tests.api.model.PassedTestsDomain
-import ru.foolstack.tests.api.model.TestsDomain
 
 class SplashInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,

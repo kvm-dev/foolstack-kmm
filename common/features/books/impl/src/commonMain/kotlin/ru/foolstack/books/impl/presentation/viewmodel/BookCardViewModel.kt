@@ -19,9 +19,11 @@ class BookCardViewModel(private val interactor: BookCardInteractor) : BaseViewMo
 
     val uiState: StateFlow<BookCardViewState> = _uiState.asStateFlow()
 
+    var asMode = false
     fun initViewModel(bookId: Int) = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
+                asMode = interactor.isAsModeActive()
                 interactor.booksState.collect{ resultState->
                     if(resultState is ResultState.Success){
                         _uiState.update { BookCardViewState.SuccessState(

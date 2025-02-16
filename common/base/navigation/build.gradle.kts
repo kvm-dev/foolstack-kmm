@@ -41,6 +41,7 @@ kotlin {
             implementation(projects.common.features.interview.impl)
             implementation(projects.common.features.tests.impl)
             implementation(projects.common.features.professions.impl)
+            implementation(projects.common.features.settings.impl)
             implementation(projects.common.features.language.api)
             //di
             implementation(libs.koin.core)

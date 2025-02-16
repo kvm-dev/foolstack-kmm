@@ -10,4 +10,8 @@ expect class EncryptedPreferences(context: PlatformContext) {
     fun getRefreshToken():String
     fun getProfessionId(): Int
     fun saveProfessionId(professionId:Int)
+    fun getCurrentAppTheme():String
+    fun setCurrentAppTheme(appTheme: String)
+
+    fun clearUserData()
 }

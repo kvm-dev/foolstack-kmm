@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -59,8 +57,7 @@ fun InterviewsScreen(
     val selectedFilter  = remember { mutableStateOf("") }
     var isRefreshing by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val backDispatcher =
-        checkNotNull(LocalOnBackPressedDispatcherOwner.current).onBackPressedDispatcher
+    checkNotNull(LocalOnBackPressedDispatcherOwner.current).onBackPressedDispatcher
     val onRefresh: () -> Unit = {
         isRefreshing = true
         coroutineScope.launch {
@@ -185,6 +182,7 @@ fun InterviewsScreen(
                     }
                     else{
                     MaterialsExpandableList(
+                        isAsModeActive = interviewsViewModel.asMode,
                         sections = Mapper().mapToMaterialsExpandedItems(successState.materials),
                         lang = if (successState.lang is LangResultDomain.Ru) {
                             Lang.RU
@@ -200,19 +198,21 @@ fun InterviewsScreen(
                             onRefresh()
                         },
                         isRefreshing = isRefreshing,
-                        selectId = materialId,
                         onClickMaterial = {
-                            interviewsViewModel.navigateToMaterial(
-                                navController = navController,
-                                materialId = materialId.intValue,
-                                interviewDestination = interviewDestination
-                            )
+                                interviewsViewModel.navigateToMaterial(
+                                    navController = navController,
+                                    materialId = it,
+                                    interviewDestination = interviewDestination
+                                )
                         },
                         selectedChip = selectedFilter,
                         onclickChip = {interviewsViewModel.updateFilters(selectedFilter.value)},
-                        onSendComment = {isShowBottomSheet.value = true},
+                        onSendComment = {
+                            materialId.intValue = it
+                            isShowBottomSheet.value = true },
                         isShowBanner = successState.isShowBanner,
-                        onClickBanner = {interviewsViewModel.goToTelegram()}
+                        onClickBanner = {interviewsViewModel.goToTelegram()},
+                        isConnectionAvailable = interviewsViewModel.isConnectionAvailable()
                         )
                     }
                     CommentBottomSheet(

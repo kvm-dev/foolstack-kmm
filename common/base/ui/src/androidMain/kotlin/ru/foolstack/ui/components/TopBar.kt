@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.foolstack.ui.R
+import ru.foolstack.ui.theme.MainBlack
 import ru.foolstack.ui.theme.PrimaryTitleColor
 import ru.foolstack.ui.theme.montserratFamily
 
@@ -49,10 +51,10 @@ fun TopBar(
                         painterResource(R.drawable.filter_icon_white)
                     }
                 }
-                Image(
+                Icon(
                     painter = icon,
                     contentDescription = "",
-                    contentScale = ContentScale.Crop,
+                    tint = MaterialTheme.colorScheme.MainBlack,
                     modifier = Modifier.size(24.dp)
                         .clickable {
                             action()
@@ -61,7 +63,7 @@ fun TopBar(
         }
             if(isTitleVisible){
                 Text(modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).align(Alignment.Center), text = screenTitle,
-                    color = MaterialTheme.colorScheme.PrimaryTitleColor,
+                    color = MaterialTheme.colorScheme.MainBlack,
                     textAlign = TextAlign.Center,
                     fontFamily = montserratFamily, fontWeight = FontWeight.Black, style = TextStyle(
                         fontSize = 14.sp,

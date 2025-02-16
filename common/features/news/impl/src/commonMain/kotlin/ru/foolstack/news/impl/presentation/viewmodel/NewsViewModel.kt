@@ -65,5 +65,6 @@ class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
         )
     }
 
+    fun isConnectionAvailable() = interactor.isConnectionAvailable()
     fun getCurrentLang() = interactor.getCurrentLang()
 }

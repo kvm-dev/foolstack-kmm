@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -42,6 +43,7 @@ import ru.foolstack.ui.utils.decodeBase64ToBitmap
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun StudiesVerticalSlider(
+    isAsModeActive: Boolean,
     lang: Lang,
     studies: List<StudyItem>,
     prText: String,
@@ -54,6 +56,7 @@ fun StudiesVerticalSlider(
     selectId: MutableState<Int>,
     selectedChip: MutableState<String>,
     onclickChip: () -> Unit,
+    isConnectionAvailable: Boolean
 ) {
     val filteredStudies = HashSet<StudyItem>()
     selectedChips.filter { it.isNotEmpty() }.forEach { chip->
@@ -74,9 +77,14 @@ fun StudiesVerticalSlider(
     LazyColumn(
         Modifier
             .pullToRefresh(
-                state = state,
+                state = if(isConnectionAvailable) { state } else {
+                    PullToRefreshState()
+                },
                 isRefreshing = isRefreshing,
-                onRefresh = onRefresh
+                onRefresh = { if(isConnectionAvailable){
+                    onRefresh()
+                }
+                }
             )
             .padding(bottom = 20.dp)
     ) {
@@ -97,14 +105,14 @@ fun StudiesVerticalSlider(
                 ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
             }
         }
-
-        item{
-            ServiceDescription(
-                modifier = Modifier
-                    .padding(horizontal = 32.dp),
-                text = prText)
+        if(!isAsModeActive){
+            item{
+                ServiceDescription(
+                    modifier = Modifier
+                        .padding(horizontal = 32.dp),
+                    text = prText)
+            }
         }
-
         itemsIndexed(filteredStudies.toList()) { _, study ->
             val symbol: String = if (lang == Lang.RU) {
                 "₽"
@@ -156,11 +164,15 @@ fun StudiesVerticalSlider(
                             )
                         }
                         if(study.studySalePercent>0){
-                            StudySale(modifier = Modifier
-                                .align(Alignment.TopStart), text = if(lang == Lang.RU){"Скидка ${study.studySalePercent}%"} else {"Discount ${study.studySalePercent}%"})
+                            if(!isAsModeActive){
+                                StudySale(modifier = Modifier
+                                    .align(Alignment.TopStart), text = if(lang == Lang.RU){"Скидка ${study.studySalePercent}%"} else {"Discount ${study.studySalePercent}%"})
+                            }
                         }
                         if(study.studyAdditionalText.isNotEmpty()){
-                            StudyAdditional(modifier = Modifier.align(Alignment.BottomStart), text = study.studyAdditionalText)
+                            if(!isAsModeActive){
+                                StudyAdditional(modifier = Modifier.align(Alignment.BottomStart), text = study.studyAdditionalText)
+                            }
                         }
                     }
                     Row(
@@ -183,14 +195,18 @@ fun StudiesVerticalSlider(
                                 1-> if(lang == Lang.RU){"нед"} else {"weeks"}
                                 else-> if(lang == Lang.RU){"дней"} else {"days"}
                             }
-                            ServiceTag("$lengthText $lengthType")
+                            if(!isAsModeActive){
+                                ServiceTag("$lengthText $lengthType")
+                            }
                             ServiceTitle(modifier = Modifier.padding(top = 8.dp), text = study.studyName)
                         }
                         Column(modifier = Modifier) {
-                            ServiceSubLabel(
-                                text = if(lang == Lang.RU){"от ${study.studyCost} $symbol/$payPerPeriod"} else {"from ${study.studyCost} $symbol/$payPerPeriod"}, modifier = Modifier
-                                    .align(Alignment.End)
-                            )
+                            if(!isAsModeActive){
+                                ServiceSubLabel(
+                                    text = if(lang == Lang.RU){"от ${study.studyCost} $symbol/$payPerPeriod"} else {"from ${study.studyCost} $symbol/$payPerPeriod"}, modifier = Modifier
+                                        .align(Alignment.End)
+                                )
+                            }
                             ServiceText(modifier = Modifier.align(Alignment.End).padding(end = 6.dp, top = 8.dp), text = study.studyOwner)
                         }
                     }

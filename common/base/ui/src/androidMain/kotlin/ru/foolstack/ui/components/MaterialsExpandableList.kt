@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -32,20 +33,21 @@ import ru.foolstack.ui.theme.MainYellow
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MaterialsExpandableList(
+    isAsModeActive: Boolean,
     sections: List<MaterialSectionItem>,
     chips: List<Chip>,
     selectedChips: List<String>,
     selectedChip: MutableState<String>,
     onclickChip: () -> Unit,
-    selectId: MutableState<Int>,
-    onClickMaterial: () -> Unit,
-    onSendComment: () -> Unit,
+    onClickMaterial: (Int) -> Unit = {},
+    onSendComment: (Int) -> Unit = {},
     onChangeProfession: () -> Unit,
     onRefresh: () -> Unit,
     isRefreshing: Boolean,
     isShowBanner:Boolean,
     onClickBanner: () -> Unit,
-    lang: Lang) {
+    lang: Lang,
+    isConnectionAvailable: Boolean) {
 
     val filteredMaterials = HashSet<MaterialSectionItem>()
     selectedChips.filter { it.isNotEmpty() }.forEach { chip->
@@ -71,9 +73,14 @@ fun MaterialsExpandableList(
     LazyColumn(
         Modifier
             .pullToRefresh(
-                state = state,
+                state = if(isConnectionAvailable) { state } else {
+                    PullToRefreshState()
+                },
                 isRefreshing = isRefreshing,
-                onRefresh = onRefresh
+                onRefresh = { if(isConnectionAvailable){
+                    onRefresh()
+                }
+                }
             )
             .padding(bottom = 20.dp),
         content = {
@@ -104,12 +111,11 @@ fun MaterialsExpandableList(
                                 isExpandedMap[index] = !(isExpandedMap[index] ?: true)
                             },
                             onDetailsClick = {
-                                selectId.value = sectionData.materialId
-                                onClickMaterial()
+
+                                onClickMaterial(sectionData.materialId)
                             },
                             sendCommentClick = {
-                                selectId.value = sectionData.materialId
-                                onSendComment()
+                                onSendComment(sectionData.materialId)
                             },
                             lang = lang
                         )
@@ -124,23 +130,26 @@ fun MaterialsExpandableList(
                         onHeaderClick = {
                             isExpandedMap[index] = !(isExpandedMap[index] ?: true)
                         },
-                        onDetailsClick = onClickMaterial,
+                        onDetailsClick = {
+                            onClickMaterial(sectionData.materialId)
+                        },
                         sendCommentClick = {
-                            selectId.value = sectionData.materialId
-                            onSendComment()
+                            onSendComment(sectionData.materialId)
                         },
                         lang = lang
                     )
                 }
             }
             if(isShowBanner){
-                item {
-                    ProfessionsSaleBanner(
-                        text = if(lang == Lang.RU){ "Для того, чтобы открыть весь список вопросов, тебе следует приобрести соответствующую профессию. Напиши нам в Telegram." } else { "In order to open the full list of questions, it should buy the profession. Write to us in Telegram." },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 24.dp, horizontal = 20.dp),
-                        onClick = onClickBanner)
+                if(!isAsModeActive){
+                    item {
+                        ProfessionsSaleBanner(
+                            text = if(lang == Lang.RU){ "Для того, чтобы открыть весь список вопросов, тебе следует приобрести соответствующую профессию. Напиши нам в Telegram." } else { "In order to open the full list of questions, it should buy the profession. Write to us in Telegram." },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp, horizontal = 20.dp),
+                            onClick = onClickBanner)
+                    }
                 }
             }
         }

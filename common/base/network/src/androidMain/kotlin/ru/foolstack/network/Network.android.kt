@@ -54,7 +54,6 @@ actual val client: HttpClient
             header("Local", "RU")
         }
         install(ContentNegotiation) {
-            // ...
             register(
                 ContentType.Application.Json, KotlinxSerializationConverter(
                     Json {

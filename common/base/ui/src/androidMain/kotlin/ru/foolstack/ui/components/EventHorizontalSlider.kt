@@ -44,14 +44,22 @@ import ru.foolstack.ui.utils.decodeBase64ToBitmap
 
 @Composable
 fun EventHorizontalSlider(lang: Lang,
+                          isAsActive: Boolean,
                           events: List<EventItem>,
                           isLoading: Boolean = false,
                           onClickEvent: () -> Unit,
                           selectId: MutableState<Int>) {
+
+    val filteredEvents: List<EventItem> = if(isAsActive){
+        events.filter { it.eventCost == 0 }
+    }
+    else{
+        events
+    }
     val emptyText = if(lang== Lang.RU){ "В ближайшее время мероприятий\nне планируется" } else{ "There are not events planned\nin the near future" }
     var currentImageIndex by remember { mutableIntStateOf(0) }
     var isAnimating by remember { mutableStateOf(false) }
-    val height = if(isLoading){ 250 } else{ if(events.isNotEmpty()){ 320 } else{ 260 } }
+    val height = if(isLoading){ 250 } else{ if(filteredEvents.isNotEmpty()){ 320 } else{ 260 } }
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(height.dp)) {
@@ -80,12 +88,12 @@ fun EventHorizontalSlider(lang: Lang,
                     }
                 }
             }
-            else if(events.isNotEmpty()){
+            else if(filteredEvents.isNotEmpty()){
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                itemsIndexed(events) { index, event ->
+                itemsIndexed(filteredEvents) { index, event ->
                     var cost = ""
                     var symbol = ""
                     symbol = if (lang == Lang.RU) {
@@ -193,7 +201,7 @@ fun EventHorizontalSlider(lang: Lang,
     }
 
     // Automatic Image Slider
-    if(events.isNotEmpty()){
+    if(filteredEvents.isNotEmpty()){
     LaunchedEffect(currentImageIndex) {
         while (true) {
             delay(5000L)

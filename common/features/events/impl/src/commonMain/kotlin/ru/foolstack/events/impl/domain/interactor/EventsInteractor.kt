@@ -1,5 +1,6 @@
 package ru.foolstack.events.impl.domain.interactor
 
+import ru.foolstack.asmode.api.domain.usecase.GetAsModeUseCase
 import ru.foolstack.events.api.domain.usecase.GetEventsUseCase
 import ru.foolstack.events.api.model.EventsDomain
 import ru.foolstack.events.impl.presentation.ui.EventsViewState
@@ -10,7 +11,8 @@ import ru.foolstack.utils.model.ResultState
 class EventsInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,
     private val getNetworkStateUseCase: GetNetworkStateUseCase,
-    private val getEventsUseCase: GetEventsUseCase
+    private val getEventsUseCase: GetEventsUseCase,
+    private val getAsModeUseCase: GetAsModeUseCase
 ){
     val eventsState = getEventsUseCase.eventsState
 
@@ -44,6 +46,14 @@ class EventsInteractor(
                     EventsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), events = state.data, selectedFilters = filtersList.toList(), lang = lang)
                 }
             }
+        }
+    }
+
+    suspend fun isAsModeActive():Boolean{
+        return if(isConnectionAvailable()){
+            getAsModeUseCase.getAsMode().isAsModeActive
+        } else{
+            false
         }
     }
 }

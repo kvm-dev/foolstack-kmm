@@ -25,8 +25,8 @@ import ru.foolstack.ui.theme.GradientColorSplash0
 import ru.foolstack.ui.theme.GradientColorSplash2
 
 @Composable
-fun SplashBackground(){
-    FoolStackTheme {
+fun SplashBackground(theme: String){
+    FoolStackTheme(theme = theme) {
         val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
         val offset by infiniteTransition.animateFloat(

@@ -59,9 +59,9 @@ fun InterviewCardScreen(interviewCardViewModel: InterviewCardViewModel = koinVie
                     ) {
                         TopBar(
                             screenTitle = if ((interviewState as InterviewCardViewState.Idle).lang is LangResultDomain.Ru) {
-                                "Книга"
+                                "Вопрос на интервью"
                             } else {
-                                "Book"
+                                "Interview question"
                             }, action = { backDispatcher.onBackPressed() })
                         Column(modifier = Modifier.align(Alignment.Center)) {
                             val bugBitmap = ImageBitmap.imageResource(id = R.drawable.bug_icon)
@@ -123,8 +123,7 @@ fun InterviewCardScreen(interviewCardViewModel: InterviewCardViewModel = koinVie
                                     modifier = Modifier
                                         .padding(start = 60.dp, end = 60.dp, bottom = 10.dp)
                                         .align(Alignment.CenterHorizontally))
-                                Column(modifier = Modifier.
-                                verticalScroll(rememberScrollState())) {
+                                Column(modifier = Modifier) {
                                     successState.material?.materialText?.let { InterviewWebView(it) }
                                     CommentButtonWithText(
                                         modifier = Modifier

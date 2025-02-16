@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -43,7 +44,8 @@ fun NewsVerticalSlider(
     onRefresh: () -> Unit,
     isRefreshing: Boolean,
     onClickNews: () -> Unit,
-    selectId: MutableState<Int>
+    selectId: MutableState<Int>,
+    isConnectionAvailable: Boolean
 ) {
 
     val state = rememberPullToRefreshState()
@@ -57,9 +59,14 @@ fun NewsVerticalSlider(
     LazyColumn(
         Modifier
             .pullToRefresh(
-                state = state,
+                state = if(isConnectionAvailable) { state } else {
+                    PullToRefreshState()
+                },
                 isRefreshing = isRefreshing,
-                onRefresh = onRefresh
+                onRefresh = { if(isConnectionAvailable){
+                    onRefresh()
+                }
+                }
             )
             .padding(bottom = 20.dp)
     ) {

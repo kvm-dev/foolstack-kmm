@@ -1,5 +1,6 @@
 package ru.foolstack.study.impl.domain.interactor
 
+import ru.foolstack.asmode.api.domain.usecase.GetAsModeUseCase
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
 import ru.foolstack.study.api.domain.usecase.GetStudiesUseCase
@@ -12,6 +13,7 @@ class StudiesInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,
     private val getNetworkStateUseCase: GetNetworkStateUseCase,
     private val getStudiesUseCase: GetStudiesUseCase,
+    private val getAsModeUseCase: GetAsModeUseCase,
     private val browserUtils: BrowserUtils
 ){
     val studiesState = getStudiesUseCase.studiesState
@@ -51,5 +53,13 @@ class StudiesInteractor(
 
     fun openInBrowser(url: String){
         browserUtils.openInBrowser(url)
+    }
+
+    suspend fun isAsModeActive():Boolean{
+        return if(isConnectionAvailable()){
+            getAsModeUseCase.getAsMode().isAsModeActive
+        } else{
+            false
+        }
     }
 }

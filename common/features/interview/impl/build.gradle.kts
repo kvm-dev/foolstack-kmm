@@ -67,6 +67,8 @@ kotlin {
             implementation(projects.common.features.events.api)
             //comments
             implementation(projects.common.features.comments.api)
+            //as
+            implementation(projects.common.features.asmode.api)
         }
         androidMain.dependencies {
             //utils

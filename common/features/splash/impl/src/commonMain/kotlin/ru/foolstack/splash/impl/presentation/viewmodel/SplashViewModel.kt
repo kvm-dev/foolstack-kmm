@@ -99,6 +99,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                     if(isInternetConnected){
                         //showAuthorizationBottomSheet
                         val state = interactor.getUnauthorizedState()
+                        interactor.getEventsFromServer()
                         _uiState.update { state }
                     }
                     else{
@@ -357,5 +358,18 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
 
     fun backToEmailScreen(){
         _uiState.update { interactor.getAuthorizationOrRegistrationState() }
+    }
+
+    fun refreshProfile() = with(viewModelScope + coroutineExceptionHandler){
+       launch {
+           if(interactor.isConnectionAvailable()){
+               interactor.getProfileFromServer()
+               interactor.getEventsFromServer()
+           }
+           else{
+               interactor.getProfileFromLocal()
+               interactor.getEventsFromLocal()
+           }
+       }
     }
 }

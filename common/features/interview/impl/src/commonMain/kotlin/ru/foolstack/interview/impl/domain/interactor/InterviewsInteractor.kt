@@ -1,5 +1,6 @@
 package ru.foolstack.interview.impl.domain.interactor
 
+import ru.foolstack.asmode.api.domain.usecase.GetAsModeUseCase
 import ru.foolstack.comments.api.domain.usecase.SendMaterialCommentUseCase
 import ru.foolstack.comments.api.model.MaterialCommentRequestDomain
 import ru.foolstack.interview.api.domain.usecase.GetMaterialsUseCase
@@ -21,7 +22,8 @@ class InterviewsInteractor(
     private val getMaterialsUseCase: GetMaterialsUseCase,
     private val getProfessionsUseCase: GetProfessionsUseCase,
     private val sendMaterialCommentUseCase: SendMaterialCommentUseCase,
-    private val getProfileUseCase: GetProfileUseCase,
+    private val getAsModeUseCase: GetAsModeUseCase,
+    getProfileUseCase: GetProfileUseCase,
     private val browserUtils: BrowserUtils
 ){
     val materialsState = getMaterialsUseCase.materialsState
@@ -147,8 +149,8 @@ class InterviewsInteractor(
                 } else{
                     val filteredMaterials = HashSet<MaterialDomain>()
                     state.data?.materials?.forEach { material->
-                        material.subProfessions.forEach { subProfessin->
-                            if(subProfessin.professionId==professionId){
+                        material.subProfessions.forEach { subProfession->
+                            if(subProfession.professionId==professionId){
                                 filteredMaterials.add(material)
                             }
                         }
@@ -158,6 +160,10 @@ class InterviewsInteractor(
                         material.knowledgeAreas.forEach { sub->
                             filtersList.add(sub.areaName)
                         }
+                    }
+                    filteredMaterials.forEach { materialDomain ->
+                        materialDomain.materialName
+
                     }
                     InterviewsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), materials = filteredMaterials.toList(),
                      selectedFilters = filtersList.toList(), currentProfessionId = professionId, lang = lang, isShowBanner = isShowBanner)
@@ -177,5 +183,13 @@ class InterviewsInteractor(
 
     fun goToTelegram(){
         browserUtils.openInBrowser("https://t.me/+-fxZnU-zAJJkYzIy")
+    }
+
+    suspend fun isAsModeActive():Boolean{
+        return if(isConnectionAvailable()){
+            getAsModeUseCase.getAsMode().isAsModeActive
+        } else{
+            false
+        }
     }
 }
