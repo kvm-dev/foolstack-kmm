@@ -45,6 +45,7 @@ import ru.foolstack.ui.components.TopBar
 import ru.foolstack.ui.components.YellowButton
 import ru.foolstack.interview.impl.mapper.Mapper
 import ru.foolstack.ui.components.CommentBottomSheet
+import ru.foolstack.ui.components.NotFoundData
 import ru.foolstack.ui.model.Lang
 
 @Composable
@@ -146,7 +147,7 @@ fun InterviewsScreen(
                                 .fillMaxSize()
                                 .padding(top = 40.dp)
                         ) {
-                            TopBar(screenTitle = if((interviewsState as InterviewsViewState.SuccessState).lang is LangResultDomain.Ru){"Вопросы на интервью"}else{"Interview questions"}, action = selectProfession, isBackArrow = false)
+                            TopBar(screenTitle = if((interviewsState as InterviewsViewState.SuccessState).lang is LangResultDomain.Ru){"Вопросы на интервью"}else{"Interview questions"}, action = selectProfession, isBackArrow = false, isIconVisible = interviewsViewModel.isConnectionAvailable())
                             Column(modifier = Modifier.align(Alignment.Center)) {
                                 val bugBitmap = ImageBitmap.imageResource(id = R.drawable.fs_logo)
                                 Image(
@@ -227,6 +228,11 @@ fun InterviewsScreen(
                 }
 
                 is InterviewsViewState.WithoutProfessionState -> {
+
+                }
+
+                is InterviewsViewState.EmptyState->{
+                        NotFoundData(titleText = interviewsViewModel.getNotFoundDataTitle(), descriptionText = interviewsViewModel.getNotFoundDataDescription())
 
                 }
             }

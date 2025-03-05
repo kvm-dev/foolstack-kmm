@@ -2,12 +2,10 @@ package ru.foolstack.main.impl.domain.interactor
 
 
 import ru.foolstack.asmode.api.domain.usecase.GetAsModeUseCase
-import ru.foolstack.asmode.api.model.AsModeDomain
 import ru.foolstack.authorization.api.domain.usecase.GetTokenFromLocalUseCase
 import ru.foolstack.books.api.domain.usecase.GetBooksUseCase
 import ru.foolstack.events.api.domain.usecase.GetEventsUseCase
 import ru.foolstack.events.api.model.EventsDomain
-import ru.foolstack.interview.api.domain.usecase.GetMaterialsUseCase
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.language.api.model.LangResultDomain
 import ru.foolstack.main.impl.presentation.ui.MainViewState
@@ -17,22 +15,19 @@ import ru.foolstack.profile.api.domain.usecase.GetProfileUseCase
 import ru.foolstack.profile.api.domain.usecase.LogoutUseCase
 import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.study.api.domain.usecase.GetStudiesUseCase
-import ru.foolstack.tests.api.domain.usecase.GetTestsUseCase
 import ru.foolstack.utils.model.ResultState
 
 class MainInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,
     private val getNetworkStateUseCase: GetNetworkStateUseCase,
     private val getProfileUseCase: GetProfileUseCase,
-    private val getBooksUseCase: GetBooksUseCase,
-    private val getStudiesUseCase: GetStudiesUseCase,
-    private val getMaterialsUseCase: GetMaterialsUseCase,
-    private val getTestsUseCase: GetTestsUseCase,
-    private val getNewsUseCase: GetNewsUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val getTokenFromLocalUseCase: GetTokenFromLocalUseCase,
     private val getEventsUseCase: GetEventsUseCase,
-    private val getAsModeUseCase: GetAsModeUseCase){
+    private val getAsModeUseCase: GetAsModeUseCase,
+    private val getBooksUseCase: GetBooksUseCase,
+    private val getStudiesUseCase: GetStudiesUseCase,
+    private val getNewsUseCase: GetNewsUseCase){
     val eventsState = getEventsUseCase.eventsState
 
     val profileState = getProfileUseCase.profileState
@@ -171,13 +166,16 @@ class MainInteractor(
         }
     }
 
-    suspend fun getAllData(){
+    suspend fun getAdditionalData(){
         if(isConnectionAvailable()){
+            getNewsUseCase.getNews()
             getBooksUseCase.getBooks()
             getStudiesUseCase.getStudies()
-            getMaterialsUseCase.getMaterials()
-            getTestsUseCase.getTests()
-            getNewsUseCase.getNews()
+        }
+        else{
+            getNewsUseCase.getNews(fromLocal = true)
+            getBooksUseCase.getBooks(fromLocal = true)
+            getStudiesUseCase.getStudies(fromLocal = true)
         }
     }
 }

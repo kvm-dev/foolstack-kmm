@@ -105,7 +105,6 @@ fun MainScreen(
             when(authStatus){
                 is MainViewState.AuthorizedClient-> {
                     Log.d("user is ", "Client")
-                    mainViewModel.getAllData()
                     isShowGuestNotificationDialog.value = false
                     val clientState = authStatus as MainViewState.AuthorizedClient
                     Column(

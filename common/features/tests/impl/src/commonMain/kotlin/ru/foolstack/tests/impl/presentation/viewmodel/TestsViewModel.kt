@@ -96,4 +96,8 @@ class TestsViewModel(private val interactor: TestsInteractor) : BaseViewModel() 
     fun isConnectionAvailable() = interactor.isConnectionAvailable()
 
     fun getCurrentLang() = interactor.getCurrentLang()
+
+    fun getNotFoundDataTitle() = interactor.getNotFoundDataTitle()
+
+    fun getNotFoundDataDescription() = interactor.getNotFoundDataDescription()
 }

@@ -6,6 +6,7 @@ import ru.foolstack.comments.api.model.MaterialCommentRequestDomain
 import ru.foolstack.interview.api.domain.usecase.GetMaterialsUseCase
 import ru.foolstack.interview.api.model.MaterialDomain
 import ru.foolstack.interview.api.model.MaterialsDomain
+import ru.foolstack.interview.impl.data.resources.StringResources
 import ru.foolstack.interview.impl.presentation.ui.InterviewsViewState
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
@@ -165,8 +166,21 @@ class InterviewsInteractor(
                         materialDomain.materialName
 
                     }
-                    InterviewsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), materials = filteredMaterials.toList(),
-                     selectedFilters = filtersList.toList(), currentProfessionId = professionId, lang = lang, isShowBanner = isShowBanner)
+                    if(filteredMaterials.isNotEmpty()){
+                        InterviewsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), materials = filteredMaterials.toList(),
+                            selectedFilters = filtersList.toList(), currentProfessionId = professionId, lang = lang, isShowBanner = isShowBanner)
+                    }
+                    else{
+                        if(!isConnectionAvailable()){
+                            InterviewsViewState.EmptyState(isHaveConnection = isConnectionAvailable(),
+                                currentProfessionId = professionId, lang = lang)
+                        }
+                        else{
+                            InterviewsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), materials = filteredMaterials.toList(),
+                                selectedFilters = filtersList.toList(), currentProfessionId = professionId, lang = lang, isShowBanner = isShowBanner)
+                        }
+                    }
+
                 }
             }
         }
@@ -192,4 +206,8 @@ class InterviewsInteractor(
             false
         }
     }
+
+    fun getNotFoundDataTitle() = StringResources.getScreenTitleText(getCurrentLang().lang)
+
+    fun getNotFoundDataDescription() = StringResources.getDescriptionText(getCurrentLang().lang)
 }

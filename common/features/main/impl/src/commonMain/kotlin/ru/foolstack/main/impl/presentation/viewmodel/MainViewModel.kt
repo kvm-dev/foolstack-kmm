@@ -47,6 +47,8 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
                                 state
                             }
                         }
+                        //getAdditionalData
+                        interactor.getAdditionalData()
                         updateState(ProgressState.COMPLETED)
                     }
                 }
@@ -117,14 +119,6 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
         updateState(ProgressState.LOADING)
             initViewModel()
     }
-
-        fun getAllData() = with(viewModelScope + coroutineExceptionHandler) {
-            if (interactor.isConnectionAvailable()) {
-                viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
-                    interactor.getAllData()
-                }
-            }
-        }
 
      fun isConnectionAvailable() = interactor.isConnectionAvailable()
  }

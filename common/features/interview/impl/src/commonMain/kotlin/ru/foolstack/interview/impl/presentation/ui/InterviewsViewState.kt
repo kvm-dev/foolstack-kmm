@@ -20,4 +20,10 @@ sealed class InterviewsViewState {
         val selectedFilters: List<String>,
         val isShowBanner: Boolean
     ): InterviewsViewState()
+
+    data class EmptyState(
+        val isHaveConnection: Boolean,
+        val lang: LangResultDomain,
+        val currentProfessionId: Int
+    ): InterviewsViewState()
 }

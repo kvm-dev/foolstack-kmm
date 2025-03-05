@@ -107,4 +107,8 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
 
     fun isConnectionAvailable() = interactor.isConnectionAvailable()
     fun getCurrentLang() = interactor.getCurrentLang()
+
+    fun getNotFoundDataTitle() = interactor.getNotFoundDataTitle()
+
+    fun getNotFoundDataDescription() = interactor.getNotFoundDataDescription()
 }

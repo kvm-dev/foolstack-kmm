@@ -1,7 +1,6 @@
 package ru.foolstack.tests.impl.presentation.ui
 
 import android.util.Log
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -30,7 +29,6 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import org.koin.androidx.compose.koinViewModel
 import ru.foolstack.language.api.model.LangResultDomain
 import ru.foolstack.model.ProgressState
@@ -38,6 +36,7 @@ import ru.foolstack.tests.impl.mapper.Mapper
 import ru.foolstack.tests.impl.presentation.viewmodel.TestsViewModel
 import ru.foolstack.ui.R
 import ru.foolstack.ui.components.GreenDialog
+import ru.foolstack.ui.components.NotFoundData
 import ru.foolstack.ui.components.TestsVerticalSlider
 import ru.foolstack.ui.components.ShimmerEffect
 import ru.foolstack.ui.components.Title
@@ -136,7 +135,7 @@ fun TestsScreen(
                                 .fillMaxSize()
                                 .padding(top = 40.dp)
                         ) {
-                            TopBar(screenTitle = if((testsState as TestsViewState.SuccessState).lang is LangResultDomain.Ru){"Тесты"}else{"Tests"}, action = selectProfession, isBackArrow = false)
+                            TopBar(screenTitle = if((testsState as TestsViewState.SuccessState).lang is LangResultDomain.Ru){"Тесты"}else{"Tests"}, action = selectProfession, isBackArrow = false, isIconVisible = testsViewModel.isConnectionAvailable())
                             Column(modifier = Modifier.align(Alignment.Center)) {
                                 val bugBitmap = ImageBitmap.imageResource(id = R.drawable.fs_logo)
                                 Image(
@@ -205,6 +204,9 @@ fun TestsScreen(
                             isVisible = isVisibleDialog
                             )
                     }
+                }
+                is TestsViewState.EmptyState -> {
+                    NotFoundData(titleText = testsViewModel.getNotFoundDataTitle(), descriptionText = testsViewModel.getNotFoundDataDescription())
                 }
             }
         }

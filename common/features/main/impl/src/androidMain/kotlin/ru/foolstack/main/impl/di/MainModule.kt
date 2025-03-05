@@ -16,11 +16,9 @@ actual val mainModule: Module
             getTokenFromLocalUseCase = get(),
             logoutUseCase = get(),
             getAsModeUseCase = get(),
-            getBooksUseCase = get(),
-            getTestsUseCase = get(),
-            getMaterialsUseCase = get(),
+            getStudiesUseCase = get(),
             getNewsUseCase = get(),
-            getStudiesUseCase = get())
+            getBooksUseCase = get())
             }
     viewModelOf(::MainViewModel)
 }

@@ -60,10 +60,6 @@ kotlin {
             implementation(projects.common.features.study.api)
             //books
             implementation(projects.common.features.books.api)
-            //interviews
-            implementation(projects.common.features.interview.api)
-            //tests
-            implementation(projects.common.features.tests.api)
             //news
             implementation(projects.common.features.news.api)
             //professions
