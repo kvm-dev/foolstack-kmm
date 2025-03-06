@@ -60,7 +60,7 @@ fun SubMenu(
                 ) {
                     Card(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(12.dp))
                             .wrapContentWidth()
                             .clickable {
                                 if (!isAnimating) {
@@ -95,6 +95,7 @@ fun SubMenu(
                     Spacer(modifier = Modifier.weight(1f))
                     Card(
                         modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
                             .wrapContentWidth()
                             .clickable {
                                 if (!isAnimating) {
@@ -129,6 +130,7 @@ fun SubMenu(
                     Spacer(modifier = Modifier.weight(1f))
                     Card(
                         modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
                             .wrapContentWidth()
                             .clickable {
                                 if (!isAnimating) {

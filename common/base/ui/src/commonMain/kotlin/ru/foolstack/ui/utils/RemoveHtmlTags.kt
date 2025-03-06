@@ -15,4 +15,12 @@ fun String.removeHtmlTags():String{
         .replace("</h2>", "")
         .replace("<h3>", "")
         .replace("</h3>", "")
+
+        .replace("&quot;", "")
+        .replace("<ul>", "")
+        .replace("</ul>", "")
+        .replace("</li>", "")
+        .replace("</li>", "")
+        .replace("<strong>", "")
+        .replace("</strong>", "")
 }

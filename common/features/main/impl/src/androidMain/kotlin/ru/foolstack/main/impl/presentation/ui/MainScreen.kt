@@ -11,11 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,13 +26,11 @@ import org.koin.androidx.compose.koinViewModel
 import ru.foolstack.main.impl.mapper.Mapper
 import ru.foolstack.main.impl.presentation.viewmodel.MainViewModel
 import ru.foolstack.model.ProgressState
-import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.ui.components.AchievementsSlider
 import ru.foolstack.ui.components.EventHorizontalSlider
 import ru.foolstack.ui.components.MainTopBar
 import ru.foolstack.ui.components.UserType
 import ru.foolstack.ui.model.Lang
-import ru.foolstack.utils.model.ResultState
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
@@ -57,7 +52,6 @@ import ru.foolstack.ui.components.GreenDialog
 import ru.foolstack.ui.components.ShimmerEffect
 import ru.foolstack.ui.components.SubMenu
 import ru.foolstack.ui.components.Title
-import ru.foolstack.ui.components.TopBar
 import ru.foolstack.ui.theme.LoadingIndicatorBackground
 import ru.foolstack.ui.theme.MainYellow
 

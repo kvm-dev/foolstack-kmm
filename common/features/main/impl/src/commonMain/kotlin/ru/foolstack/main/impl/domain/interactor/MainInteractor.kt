@@ -29,7 +29,6 @@ class MainInteractor(
     private val getStudiesUseCase: GetStudiesUseCase,
     private val getNewsUseCase: GetNewsUseCase){
     val eventsState = getEventsUseCase.eventsState
-
     val profileState = getProfileUseCase.profileState
 
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
@@ -40,6 +39,15 @@ class MainInteractor(
 
     suspend fun getProfileFromServer() = getProfileUseCase.getProfile()
     suspend fun getProfileFromLocal() = getProfileUseCase.getProfile(fromLocal = true)
+
+    suspend fun getNewsFromServer() = getNewsUseCase.getNews()
+    suspend fun getNewsFromLocal() = getNewsUseCase.getNews(fromLocal = true)
+
+    suspend fun getBooksFromServer() = getBooksUseCase.getBooks()
+    suspend fun getBooksFromLocal() = getBooksUseCase.getBooks(fromLocal = true)
+
+    suspend fun getStudiesFromServer() = getStudiesUseCase.getStudies()
+    suspend fun getStudiesFromLocal() = getStudiesUseCase.getStudies(fromLocal = true)
 
     suspend fun isTokenExist() = getTokenFromLocalUseCase.getToken().isNotEmpty()
 
@@ -167,15 +175,29 @@ class MainInteractor(
     }
 
     suspend fun getAdditionalData(){
-        if(isConnectionAvailable()){
-            getNewsUseCase.getNews()
-            getBooksUseCase.getBooks()
-            getStudiesUseCase.getStudies()
+        if(getNewsUseCase.newsState.value !is ResultState.Success){
+            if(isConnectionAvailable()){
+                getNewsFromServer()
+            }
+            else{
+                getNewsFromLocal()
+            }
         }
-        else{
-            getNewsUseCase.getNews(fromLocal = true)
-            getBooksUseCase.getBooks(fromLocal = true)
-            getStudiesUseCase.getStudies(fromLocal = true)
+        if(getBooksUseCase.booksState.value !is ResultState.Success){
+            if(isConnectionAvailable()){
+                getBooksFromServer()
+            }
+            else{
+                getBooksFromLocal()
+            }
+        }
+        if(getStudiesUseCase.studiesState.value !is ResultState.Success){
+            if(isConnectionAvailable()){
+               getStudiesFromServer()
+            }
+            else{
+                getStudiesFromLocal()
+            }
         }
     }
 }

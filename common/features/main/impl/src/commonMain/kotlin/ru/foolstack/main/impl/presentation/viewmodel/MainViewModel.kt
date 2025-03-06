@@ -2,21 +2,15 @@ package ru.foolstack.main.impl.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import ru.foolstack.events.api.model.EventsDomain
 import ru.foolstack.main.impl.domain.interactor.MainInteractor
 import ru.foolstack.main.impl.presentation.ui.MainViewState
 import ru.foolstack.model.ProgressState
-import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
@@ -34,11 +28,13 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
         if (progressState.value == ProgressState.LOADING) {
             launch {
                 asMode = interactor.isAsModeActive()
+                if(interactor.eventsState.value !is ResultState.Success){
                     if (interactor.isConnectionAvailable()) {
                         interactor.getEventsFromServer()
                     } else {
                         interactor.getEventsFromLocal()
                     }
+                }
                 interactor.eventsState.collect { eventsState ->
                     interactor.profileState.collect { profileState ->
                         val state = interactor.checkState(eventsState = eventsState, profileState = profileState)
@@ -102,17 +98,29 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
                 if (interactor.isConnectionAvailable()) {
                     interactor.getProfileFromServer()
                     interactor.getEventsFromServer()
+                    interactor.getNewsFromServer()
+                    interactor.getBooksFromServer()
+                    interactor.getStudiesFromServer()
                 } else {
                     interactor.getProfileFromLocal()
                     interactor.getEventsFromLocal()
+                    interactor.getNewsFromLocal()
+                    interactor.getBooksFromLocal()
+                    interactor.getStudiesFromLocal()
                 }
             }
         } else {
             launch {
                 if (interactor.isConnectionAvailable()) {
                     interactor.getEventsFromServer()
+                    interactor.getNewsFromServer()
+                    interactor.getBooksFromServer()
+                    interactor.getStudiesFromServer()
                 } else {
                     interactor.getEventsFromLocal()
+                    interactor.getNewsFromLocal()
+                    interactor.getBooksFromLocal()
+                    interactor.getStudiesFromLocal()
                 }
             }
         }
