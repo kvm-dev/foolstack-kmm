@@ -90,7 +90,7 @@ fun TestsVerticalSlider(
                 ) {
                     PullToRefreshDefaults.Indicator(state = state, isRefreshing = isRefreshing, color = MaterialTheme.colorScheme.MainYellow, containerColor = MaterialTheme.colorScheme.LoadingIndicatorBackground)
                 }
-                TopBar(screenTitle = if(lang == Lang.RU){"Тесты"}else{"Tests"}, action = onChangeProfession, isBackArrow = false)
+                TopBar(screenTitle = if(lang == Lang.RU){"Тесты"}else{"Tests"}, action = onChangeProfession, isBackArrow = false, isIconVisible = isConnectionAvailable)
             }
         }
 

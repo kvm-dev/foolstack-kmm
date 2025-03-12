@@ -97,7 +97,7 @@ fun MaterialsExpandableList(
                     ) {
                         PullToRefreshDefaults.Indicator(state = state, isRefreshing = isRefreshing, color = MaterialTheme.colorScheme.MainYellow, containerColor = MaterialTheme.colorScheme.LoadingIndicatorBackground)
                     }
-                    TopBar(screenTitle = if(lang == Lang.RU){"Вопросы на интервью"}else{"Interview questions"}, action = onChangeProfession, isBackArrow = false)
+                    TopBar(screenTitle = if(lang == Lang.RU){"Вопросы на интервью"}else{"Interview questions"}, action = onChangeProfession, isBackArrow = false, isIconVisible = isConnectionAvailable)
                     ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
                 }
             }
