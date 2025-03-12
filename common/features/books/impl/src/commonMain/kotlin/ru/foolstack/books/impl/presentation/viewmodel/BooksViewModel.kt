@@ -108,7 +108,9 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
                 newValue = bookSubscribeMinCost.toString())
                 .replace(
                 oldValue = "{bookSubscribeLink}",
-                newValue = bookSubscribeLink.replace("//", "**")
+                newValue = bookSubscribeLink
+                    .replace("//", "**")
+                    .replace("/", "*")
                 )
             )
         }

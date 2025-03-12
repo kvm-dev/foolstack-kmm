@@ -162,7 +162,7 @@ fun EventVerticalSlider(
                                             contentScale = ContentScale.Crop,
                                             modifier = Modifier
                                                 .clip(RoundedCornerShape(10.dp)),
-                                            painter = painterResource(R.drawable.bug_icon),
+                                            painter = painterResource(R.drawable.error_loading_image_big),
                                             contentDescription = event.eventName
                                         )
                                     }

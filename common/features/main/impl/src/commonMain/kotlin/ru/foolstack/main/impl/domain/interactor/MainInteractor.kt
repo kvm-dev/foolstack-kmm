@@ -167,11 +167,7 @@ class MainInteractor(
     }
 
     suspend fun isAsModeActive():Boolean{
-        return if(isConnectionAvailable()){
-            getAsModeUseCase.getAsMode().isAsModeActive
-        } else{
-            false
-        }
+        return getAsModeUseCase.isAsModeEnabled(isConnectionAvailable()).isAsModeActive
     }
 
     suspend fun getAdditionalData(){

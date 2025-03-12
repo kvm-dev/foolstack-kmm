@@ -150,7 +150,7 @@ fun EventHorizontalSlider(lang: Lang,
                                         .width(280.dp)
                                         .height(180.dp)
                                         .clip(RoundedCornerShape(10.dp)),
-                                    painter = painterResource(R.drawable.bug_icon),
+                                    painter = painterResource(R.drawable.error_loading_image_little),
                                     contentDescription = event.eventName
                                 )
                             }

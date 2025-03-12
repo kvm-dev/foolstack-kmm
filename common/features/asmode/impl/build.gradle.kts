@@ -62,6 +62,8 @@ kotlin {
             implementation(projects.common.base.storage)
             //network connection
             implementation(projects.common.features.networkconnection.api)
+            //profile
+            implementation(projects.common.features.profile.api)
             //di
             implementation(libs.koin.core)
             //navigation

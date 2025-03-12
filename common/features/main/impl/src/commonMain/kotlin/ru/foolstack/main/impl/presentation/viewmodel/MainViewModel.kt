@@ -2,6 +2,8 @@ package ru.foolstack.main.impl.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,11 +45,13 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
                                 state
                             }
                         }
-                        //getAdditionalData
-                        interactor.getAdditionalData()
                         updateState(ProgressState.COMPLETED)
                     }
                 }
+            }
+            //getAdditionalData
+            launch(Dispatchers.IO){
+                interactor.getAdditionalData()
             }
         }
     }
@@ -98,12 +102,17 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
                 if (interactor.isConnectionAvailable()) {
                     interactor.getProfileFromServer()
                     interactor.getEventsFromServer()
+                } else {
+                    interactor.getProfileFromLocal()
+                    interactor.getEventsFromLocal()
+                }
+            }
+            launch(Dispatchers.IO){
+                if (interactor.isConnectionAvailable()) {
                     interactor.getNewsFromServer()
                     interactor.getBooksFromServer()
                     interactor.getStudiesFromServer()
                 } else {
-                    interactor.getProfileFromLocal()
-                    interactor.getEventsFromLocal()
                     interactor.getNewsFromLocal()
                     interactor.getBooksFromLocal()
                     interactor.getStudiesFromLocal()
@@ -113,11 +122,16 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
             launch {
                 if (interactor.isConnectionAvailable()) {
                     interactor.getEventsFromServer()
+                } else {
+                    interactor.getEventsFromLocal()
+                }
+            }
+            launch(Dispatchers.IO){
+                if (interactor.isConnectionAvailable()) {
                     interactor.getNewsFromServer()
                     interactor.getBooksFromServer()
                     interactor.getStudiesFromServer()
                 } else {
-                    interactor.getEventsFromLocal()
                     interactor.getNewsFromLocal()
                     interactor.getBooksFromLocal()
                     interactor.getStudiesFromLocal()

@@ -189,7 +189,7 @@ fun StartApplication(
                         val maxSalePercent = navBackStackEntry.arguments?.getString("maxSalePercent")?:"0"
                         val bookSubscribeText = navBackStackEntry.arguments?.getString("bookSubscribeText")?:""
                         val bookSubscribeMinCost = navBackStackEntry.arguments?.getString("bookSubscribeMinCost")?:"0"
-                        val bookSubscribeLink = navBackStackEntry.arguments?.getString("bookSubscribeLink")?.replace("**", "//")?:""
+                        val bookSubscribeLink = navBackStackEntry.arguments?.getString("bookSubscribeLink")?.replace("**", "//")?.replace("*", "/")?:""
                         bookId?.let { id->
                             isShowBottomBar.value = false
                             BookCardScreen(

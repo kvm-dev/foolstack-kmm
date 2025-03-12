@@ -164,7 +164,7 @@ fun BooksVerticalSlider(
                                 modifier = Modifier
                                     .height(180.dp)
                                     .padding(horizontal = 10.dp),
-                                painter = painterResource(R.drawable.bug_icon),
+                                painter = painterResource(R.drawable.error_loading_image_little),
                                 contentDescription = keywordFilteredBooks[index].bookName
                             )
                         }

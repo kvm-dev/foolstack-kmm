@@ -20,6 +20,8 @@ import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import ru.foolstack.network.model.UserType
+import java.util.Locale
 
 @OptIn(ExperimentalSerializationApi::class)
 actual val client: HttpClient
@@ -48,10 +50,10 @@ actual val client: HttpClient
 
         install(DefaultRequest) {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
-            header("Platform", "android")
-            header("Version", "0.0.1")
-            header("Usertype", "client")
-            header("Local", "RU")
+            header("Local", if(Locale.getDefault().toString().contains("RU")){"RU"} else {"ENG"})
+            header("Platform", getPlatform().name.lowercase(Locale.ROOT).split(" ")[0])
+            header("Version", BuildConfig.VERSION_NAME)
+            header(UserType.Client().key, UserType.Client().type)
         }
         install(ContentNegotiation) {
             register(

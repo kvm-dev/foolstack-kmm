@@ -60,7 +60,7 @@ fun SubMenu(
                 ) {
                     Card(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(10.dp))
                             .wrapContentWidth()
                             .clickable {
                                 if (!isAnimating) {
@@ -83,6 +83,7 @@ fun SubMenu(
                                 Image(
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
+                                        .padding(8.dp)
                                         .width(68.dp)
                                         .height(68.dp)
                                         .align(Alignment.CenterHorizontally),
@@ -95,7 +96,7 @@ fun SubMenu(
                     Spacer(modifier = Modifier.weight(1f))
                     Card(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(10.dp))
                             .wrapContentWidth()
                             .clickable {
                                 if (!isAnimating) {
@@ -118,6 +119,7 @@ fun SubMenu(
                             Image(
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
+                                    .padding(8.dp)
                                     .width(68.dp)
                                     .height(68.dp)
                                     .align(Alignment.CenterHorizontally),
@@ -130,7 +132,7 @@ fun SubMenu(
                     Spacer(modifier = Modifier.weight(1f))
                     Card(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(10.dp))
                             .wrapContentWidth()
                             .clickable {
                                 if (!isAnimating) {
@@ -153,6 +155,7 @@ fun SubMenu(
                             Image(
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
+                                    .padding(8.dp)
                                     .width(68.dp)
                                     .height(68.dp)
                                     .align(Alignment.CenterHorizontally),

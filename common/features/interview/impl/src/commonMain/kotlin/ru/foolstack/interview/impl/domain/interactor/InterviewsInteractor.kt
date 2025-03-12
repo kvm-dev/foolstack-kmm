@@ -200,11 +200,7 @@ class InterviewsInteractor(
     }
 
     suspend fun isAsModeActive():Boolean{
-        return if(isConnectionAvailable()){
-            getAsModeUseCase.getAsMode().isAsModeActive
-        } else{
-            false
-        }
+        return getAsModeUseCase.isAsModeEnabled(isConnectionAvailable()).isAsModeActive
     }
 
     fun getNotFoundDataTitle() = StringResources.getScreenTitleText(getCurrentLang().lang)

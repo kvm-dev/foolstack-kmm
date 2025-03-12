@@ -5,7 +5,7 @@ import ru.foolstack.asmode.api.model.AsModeDomain
 import ru.foolstack.asmode.impl.data.repository.AsModeRepository
 
 class GetAsModeUseCaseImpl(private val repository: AsModeRepository):GetAsModeUseCase {
-    override suspend fun getAsMode(): AsModeDomain {
-        return repository.getAsModeStatus()
+    override suspend fun isAsModeEnabled(isConnectionAvailable: Boolean): AsModeDomain {
+        return repository.isAsEnabled(isConnectionAvailable)
     }
 }

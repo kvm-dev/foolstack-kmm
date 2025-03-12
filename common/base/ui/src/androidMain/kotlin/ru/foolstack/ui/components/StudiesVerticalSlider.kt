@@ -159,7 +159,7 @@ fun StudiesVerticalSlider(
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .clip(shape),
-                                painter = painterResource(R.drawable.bug_icon),
+                                painter = painterResource(R.drawable.error_loading_image_big),
                                 contentDescription = study.studyName
                             )
                         }
