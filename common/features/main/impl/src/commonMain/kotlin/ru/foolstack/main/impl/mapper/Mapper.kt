@@ -10,12 +10,16 @@ class Mapper {
     fun map(eventsDomain: EventsDomain?): List<EventItem>{
         val eventList = ArrayList<EventItem>()
         eventsDomain?.events?.forEach {event->
+            val subs = ArrayList<String>()
+            event.eventSubs.forEach {eventSub->
+                subs.add(eventSub.subName)
+            }
             eventList.add(EventItem(
                 eventId = event.eventId,
                 eventName = event.eventName,
                 eventStartDate = event.eventDateStart.timestampToDateString(),
                 eventImageBase64 = event.eventImageBase64,
-                eventTags = listOf("free", "pay"),
+                eventTags = subs,
                 eventDescription = event.eventDescription,
                 eventCost = event.eventCost
             ))

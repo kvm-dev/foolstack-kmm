@@ -308,8 +308,12 @@ private fun ScrollableContent(
             }
         }
         if(bottomSplashScreenState != BottomSplashScreenState.NO_CONNECTION){
-            val onclickEvent = if(bottomSplashScreenState == BottomSplashScreenState.AUTHORIZATION){ onClickBackToAuthorizationScreen} else { onClickBackToEmailScreen }
-            SecondOrangeButton(text = secondButtonText, onClick = { onClickGuestScreen() }, isEnabled = true)
+           val onclickEvent = when(bottomSplashScreenState){
+                BottomSplashScreenState.UNAUTHORIZED-> onClickGuestScreen
+                BottomSplashScreenState.CONFIRM-> onClickBackToEmailScreen
+                else -> onClickBackToAuthorizationScreen
+            }
+            SecondOrangeButton(text = secondButtonText, onClick = { onclickEvent() }, isEnabled = true)
         }
     }
 }

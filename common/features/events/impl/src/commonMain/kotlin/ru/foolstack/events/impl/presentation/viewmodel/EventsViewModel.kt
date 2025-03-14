@@ -26,7 +26,7 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
         if(progressState.value == ProgressState.LOADING){
             launch {
                 asMode = interactor.isAsModeActive()
-                if(interactor.eventsState.value !is ResultState.Success ){
+                if(interactor.eventsState.value !is ResultState.Success || interactor.eventsState.value !is ResultState.Loading ){
                     if(interactor.isConnectionAvailable()){
                         interactor.getEventsFromServer()
                     }
@@ -34,6 +34,8 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
                         interactor.getEventsFromLocal()
                     }
                 }
+            }
+            launch{
                 interactor.eventsState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)

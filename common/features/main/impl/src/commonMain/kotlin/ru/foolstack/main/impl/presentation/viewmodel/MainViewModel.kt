@@ -26,31 +26,45 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
 
     var asMode = false
 
-    fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
+    fun initViewModel() {
         if (progressState.value == ProgressState.LOADING) {
-            launch {
-                asMode = interactor.isAsModeActive()
-                if(interactor.eventsState.value !is ResultState.Success){
+            viewModelScope.launch(coroutineExceptionHandler) {
+                if(interactor.eventsState.value !is ResultState.Success || interactor.eventsState.value !is ResultState.Loading){
                     if (interactor.isConnectionAvailable()) {
                         interactor.getEventsFromServer()
                     } else {
                         interactor.getEventsFromLocal()
                     }
                 }
+            }
+            viewModelScope.launch(coroutineExceptionHandler + Dispatchers.IO + supervisorJob){
+                launch {
+                    asMode = interactor.isAsModeActive()
+                }
                 interactor.eventsState.collect { eventsState ->
-                    interactor.profileState.collect { profileState ->
-                        val state = interactor.checkState(eventsState = eventsState, profileState = profileState)
-                        if(state !is MainViewState.Loading){
-                            _uiState.update {
-                                state
+                    if(eventsState is ResultState.Success){
+                        interactor.profileState.collect { profileState ->
+                            if(profileState is ResultState.Success){
+                                val state = interactor.checkState(eventsState = eventsState, profileState = profileState)
+                                if(state !is MainViewState.Loading){
+                                    _uiState.update {
+                                        state
+                                    }
+                                    updateState(ProgressState.COMPLETED)
+                                }
+                            }
+                            else{
+                                updateState(ProgressState.LOADING)
                             }
                         }
-                        updateState(ProgressState.COMPLETED)
+                    }
+                    else{
+                        updateState(ProgressState.LOADING)
                     }
                 }
             }
             //getAdditionalData
-            launch(Dispatchers.IO){
+            viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler + supervisorJob){
                 interactor.getAdditionalData()
             }
         }
@@ -95,10 +109,10 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
 
     fun getGuestNotificationDialogSecondBtn() = interactor.getGuestNotificationDialogSecondBtn()
 
-    fun refresh() = with(viewModelScope + coroutineExceptionHandler) {
+    fun refresh() {
         val currentState = uiState.value
         if (currentState is MainViewState.AuthorizedClient) {
-            launch {
+            viewModelScope.launch(coroutineExceptionHandler) {
                 if (interactor.isConnectionAvailable()) {
                     interactor.getProfileFromServer()
                     interactor.getEventsFromServer()
@@ -107,39 +121,17 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
                     interactor.getEventsFromLocal()
                 }
             }
-            launch(Dispatchers.IO){
-                if (interactor.isConnectionAvailable()) {
-                    interactor.getNewsFromServer()
-                    interactor.getBooksFromServer()
-                    interactor.getStudiesFromServer()
-                } else {
-                    interactor.getNewsFromLocal()
-                    interactor.getBooksFromLocal()
-                    interactor.getStudiesFromLocal()
-                }
-            }
         } else {
-            launch {
+            viewModelScope.launch(coroutineExceptionHandler){
                 if (interactor.isConnectionAvailable()) {
                     interactor.getEventsFromServer()
                 } else {
                     interactor.getEventsFromLocal()
                 }
             }
-            launch(Dispatchers.IO){
-                if (interactor.isConnectionAvailable()) {
-                    interactor.getNewsFromServer()
-                    interactor.getBooksFromServer()
-                    interactor.getStudiesFromServer()
-                } else {
-                    interactor.getNewsFromLocal()
-                    interactor.getBooksFromLocal()
-                    interactor.getStudiesFromLocal()
-                }
-            }
         }
         updateState(ProgressState.LOADING)
-            initViewModel()
+        initViewModel()
     }
 
      fun isConnectionAvailable() = interactor.isConnectionAvailable()

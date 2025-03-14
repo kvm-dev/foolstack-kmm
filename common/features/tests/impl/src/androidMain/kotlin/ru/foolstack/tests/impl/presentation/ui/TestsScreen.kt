@@ -170,40 +170,71 @@ fun TestsScreen(
                         }
                     }
                     else{
-                        val isVisibleDialog = remember { mutableStateOf(false)  }
-                        TestsVerticalSlider(
-                            tests = Mapper().mapTestsDomainToTestsItems(tests = successState.tests, passedTests = successState.passedTests),
-                            lang = if (successState.lang is LangResultDomain.Ru) {
-                                Lang.RU
-                            } else {
-                                Lang.ENG
-                            },
-                            onChangeProfession = selectProfession,
-                            onRefresh = {
-                                onRefresh()
-                            },
-                            isRefreshing = isRefreshing,
-                            selectId = testId,
-                            onClickTest = {
-                                testsViewModel.navigateToTest(
-                                    navController = navController,
-                                    testId = testId.intValue,
-                                    testDestination = testDestination
-                                )
-                            },
-                            isShowDialog = isVisibleDialog,
-                            isConnectionAvailable = testsViewModel.isConnectionAvailable()
-                        )
-                        GreenDialog(
-                            title = if(successState.lang is LangResultDomain.Ru){"Обрати внимание"} else {"Attention"},
-                            text = if(successState.lang is LangResultDomain.Ru){"Пройти тест заново можно будет только после ${successState.passedTests.find { it.testId == testId.intValue }?.finishTestTime?.timestampToDateString()}"} else {"You will be able to take the test again no early ${successState.passedTests.find { it.testId == testId.intValue }?.finishTestTime?.timestampToDateString()}"},
-                            generalActionText = if(successState.lang is LangResultDomain.Ru){"Ок, понятно"} else {"Ok, understood"},
-                            hideSecondaryButton = true,
-                            onGeneralActionClick = { isVisibleDialog.value = false },
-                            onSecondaryActionClick = {},
-                            isVisible = isVisibleDialog
+                        if(!testsViewModel.isGuest()){
+                            val isVisibleDialog = remember { mutableStateOf(false)  }
+                            TestsVerticalSlider(
+                                tests = Mapper().mapTestsDomainToTestsItems(tests = successState.tests, passedTests = successState.passedTests),
+                                lang = if (successState.lang is LangResultDomain.Ru) {
+                                    Lang.RU
+                                } else {
+                                    Lang.ENG
+                                },
+                                onChangeProfession = selectProfession,
+                                onRefresh = {
+                                    onRefresh()
+                                },
+                                isRefreshing = isRefreshing,
+                                selectId = testId,
+                                onClickTest = {
+                                    testsViewModel.navigateToTest(
+                                        navController = navController,
+                                        testId = testId.intValue,
+                                        testDestination = testDestination
+                                    )
+                                },
+                                isShowDialog = isVisibleDialog,
+                                isConnectionAvailable = testsViewModel.isConnectionAvailable()
                             )
-                    }
+                            GreenDialog(
+                                title = if(successState.lang is LangResultDomain.Ru){"Обрати внимание"} else {"Attention"},
+                                text = if(successState.lang is LangResultDomain.Ru){"Пройти тест заново можно будет только после ${successState.passedTests.find { it.testId == testId.intValue }?.finishTestTime?.timestampToDateString()}"} else {"You will be able to take the test again no early ${successState.passedTests.find { it.testId == testId.intValue }?.finishTestTime?.timestampToDateString()}"},
+                                generalActionText = if(successState.lang is LangResultDomain.Ru){"Ок, понятно"} else {"Ok, understood"},
+                                hideSecondaryButton = true,
+                                onGeneralActionClick = { isVisibleDialog.value = false },
+                                onSecondaryActionClick = {},
+                                isVisible = isVisibleDialog
+                            )
+                        }
+                        else{
+                            Box(
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.background)
+                                    .fillMaxSize()
+                                    .padding(top = 40.dp)
+                            ) {
+                                TopBar(screenTitle = if((testsState as TestsViewState.SuccessState).lang is LangResultDomain.Ru){"Тесты"}else{"Tests"}, action = selectProfession, isBackArrow = false, isIconVisible = testsViewModel.isConnectionAvailable())
+                                Column(modifier = Modifier.align(Alignment.Center)) {
+                                    val bugBitmap = ImageBitmap.imageResource(id = R.drawable.fs_logo)
+                                    Image(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(100.dp, 10.dp),
+                                        bitmap = bugBitmap,
+                                        contentDescription = "FoolStack"
+                                    )
+                                    Title(
+                                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                                        text = if ((testsState as TestsViewState.SuccessState).lang is LangResultDomain.Ru) {
+                                            "Прежде чем увидеть список тестов, необходимо авторизоваться"
+                                        } else {
+                                            "Before you see the tests, you must sing in"
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                        }
+
                 }
                 is TestsViewState.EmptyState -> {
                     NotFoundData(titleText = testsViewModel.getNotFoundDataTitle(), descriptionText = testsViewModel.getNotFoundDataDescription())

@@ -31,6 +31,8 @@ class SplashInteractor(
     private val registrationByEmailUseCase: RegistrationByEmailUseCase,
     private val confirmAuthAndRegUseCase: ConfirmAuthAndRegUseCase
 ) {
+    val profileState = getProfileUseCase.profileState
+    val eventsState = getEventsUseCase.eventsState
     fun getCurrentLang() = getCurrentLanguageUseCase.getCurrentLang()
 
     fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()

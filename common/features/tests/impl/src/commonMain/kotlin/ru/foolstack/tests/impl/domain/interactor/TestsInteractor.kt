@@ -1,5 +1,6 @@
 package ru.foolstack.tests.impl.domain.interactor
 
+import ru.foolstack.authorization.api.domain.usecase.AuthByTokenUseCase
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
 import ru.foolstack.professions.api.domain.usecase.GetProfessionsUseCase

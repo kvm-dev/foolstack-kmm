@@ -26,7 +26,7 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
         if(progressState.value == ProgressState.LOADING){
             launch {
                 asMode = interactor.isAsModeActive()
-                if(interactor.booksState.value !is ResultState.Success){
+                if(interactor.booksState.value !is ResultState.Success || interactor.booksState.value !is ResultState.Loading){
                     if(interactor.isConnectionAvailable()){
                         interactor.getBooksFromServer()
                     }
@@ -34,9 +34,10 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
                         interactor.getBooksFromLocal()
                     }
                 }
-                interactor.booksState.collect{ resultState->
-                    _uiState.update { interactor.checkState(resultState) }
-                    updateState(ProgressState.COMPLETED)
+            }
+            launch { interactor.booksState.collect{ resultState->
+                _uiState.update { interactor.checkState(resultState) }
+                updateState(ProgressState.COMPLETED)
                 }
             }
         }

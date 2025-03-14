@@ -170,8 +170,8 @@ class MainInteractor(
         return getAsModeUseCase.isAsModeEnabled(isConnectionAvailable()).isAsModeActive
     }
 
-    suspend fun getAdditionalData(){
-        if(getNewsUseCase.newsState.value !is ResultState.Success){
+    suspend fun getAdditionalData()  {
+        if(getNewsUseCase.newsState.value !is ResultState.Success || getNewsUseCase.newsState.value !is ResultState.Loading){
             if(isConnectionAvailable()){
                 getNewsFromServer()
             }
@@ -179,7 +179,7 @@ class MainInteractor(
                 getNewsFromLocal()
             }
         }
-        if(getBooksUseCase.booksState.value !is ResultState.Success){
+        if(getBooksUseCase.booksState.value !is ResultState.Success || getNewsUseCase.newsState.value !is ResultState.Loading){
             if(isConnectionAvailable()){
                 getBooksFromServer()
             }
@@ -187,7 +187,7 @@ class MainInteractor(
                 getBooksFromLocal()
             }
         }
-        if(getStudiesUseCase.studiesState.value !is ResultState.Success){
+        if(getStudiesUseCase.studiesState.value !is ResultState.Success || getNewsUseCase.newsState.value !is ResultState.Loading){
             if(isConnectionAvailable()){
                getStudiesFromServer()
             }

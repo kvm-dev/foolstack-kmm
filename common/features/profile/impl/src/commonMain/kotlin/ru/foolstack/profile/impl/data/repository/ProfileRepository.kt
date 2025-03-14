@@ -23,20 +23,26 @@ class ProfileRepository(private val localDataSource: LocalDataSource,
             localDataSource.saveProfile(result)
             localDataSource.getProfile()
         } else{
-            val resultAfterRefresh = authorizationNetworkDataSource.refreshToken(userToken = userToken, refreshToken = refreshToken)
-            if (resultAfterRefresh.errorMsg.isEmpty()){
-                authorizationLocalDataSource.saveUserTokenToLocal(resultAfterRefresh.userToken)
-                authorizationLocalDataSource.saveRefreshTokenToLocal(resultAfterRefresh.userRefreshToken)
-                userToken = authorizationLocalDataSource.getTokenFromLocal()
-                val resultProfile =  networkDataSource.getProfile(userToken)
-                if(resultProfile.errorMsg.isEmpty()){
-                    localDataSource.saveProfile(resultProfile)
-                    return localDataSource.getProfile()
+            if(refreshToken.isNotEmpty()){
+                val resultAfterRefresh = authorizationNetworkDataSource.refreshToken(userToken = userToken, refreshToken = refreshToken)
+                if (resultAfterRefresh.errorMsg.isEmpty()){
+                    authorizationLocalDataSource.saveUserTokenToLocal(resultAfterRefresh.userToken)
+                    authorizationLocalDataSource.saveRefreshTokenToLocal(resultAfterRefresh.userRefreshToken)
+                    userToken = authorizationLocalDataSource.getTokenFromLocal()
+                    val resultProfile =  networkDataSource.getProfile(userToken)
+                    if(resultProfile.errorMsg.isEmpty()){
+                        localDataSource.saveProfile(resultProfile)
+                        return localDataSource.getProfile()
+                    }
+                    else return resultProfile
+                } else{
+                    result
                 }
-                else return resultProfile
-            } else{
+            }
+            else{
                 result
             }
+
         }
     }
 

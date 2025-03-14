@@ -136,6 +136,7 @@ fun MainScreen(
                             onClickLogout = {
                                 mainViewModel.logout()
                                 onClickLogout()
+                                onRefresh()
                             }
                         )
                         EventHorizontalSlider(
@@ -182,15 +183,16 @@ fun MainScreen(
                     val isSettingsDialogGuestVisible  = remember { mutableStateOf(false) }
                     Column(
                         modifier = Modifier
-                            .apply {
-                                if (mainViewModel.isConnectionAvailable()) {
-                                    pullToRefresh(
-                                        state = state,
-                                        isRefreshing = isRefreshing,
-                                        onRefresh = onRefresh
-                                    )
+                            .pullToRefresh(
+                                state = if(mainViewModel.isConnectionAvailable()) { state } else {
+                                    PullToRefreshState()
+                                },
+                                isRefreshing = isRefreshing,
+                                onRefresh = { if(mainViewModel.isConnectionAvailable()){
+                                    onRefresh()
                                 }
-                            }
+                                }
+                            )
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())) {
                         Box(

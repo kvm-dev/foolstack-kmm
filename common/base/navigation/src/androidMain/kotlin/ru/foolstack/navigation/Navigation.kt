@@ -263,7 +263,8 @@ fun StartApplication(
                                         inclusive = false
                                     }
                                 }
-                            })
+                            },
+                            )
                     }
 
                     composable(route = "${NavigationScreens.TestScreenNavigation.name}/{testId}") {

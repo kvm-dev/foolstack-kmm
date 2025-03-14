@@ -10,7 +10,6 @@ import ru.foolstack.tests.impl.data.repository.TestsRepository
 import ru.foolstack.tests.impl.data.repository.local.LocalDataSource
 import ru.foolstack.tests.impl.data.repository.network.DelayedTestResultSender
 import ru.foolstack.tests.impl.data.repository.network.NetworkDataSource
-import ru.foolstack.tests.impl.data.repository.network.SendTestResultWorker
 import ru.foolstack.tests.impl.data.repository.network.TestsApi
 import ru.foolstack.tests.impl.domain.interactor.TestCardInteractor
 import ru.foolstack.tests.impl.domain.interactor.TestsInteractor

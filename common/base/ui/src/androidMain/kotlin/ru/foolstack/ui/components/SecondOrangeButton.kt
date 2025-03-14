@@ -36,7 +36,7 @@ fun SecondOrangeButton(
             text = text,
             textAlign = TextAlign.Center,
             fontFamily = montserratFamily, fontWeight = FontWeight.Medium, style = TextStyle(
-                fontSize = 22.sp)
+                fontSize = 14.sp)
         ) },
         colors = ButtonDefaults.buttonColors(
             contentColor = MaterialTheme.colorScheme.EnabledButtonSecondContentColor,

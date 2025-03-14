@@ -50,12 +50,17 @@ fun EventHorizontalSlider(lang: Lang,
                           onClickEvent: () -> Unit,
                           selectId: MutableState<Int>) {
 
-    val filteredEvents: List<EventItem> = if(isAsActive){
+    var filteredEvents: List<EventItem> = if(isAsActive){
         events.filter { it.eventCost == 0 }
     }
     else{
         events
     }
+    //max 5
+    if(filteredEvents.size>5){
+        filteredEvents = filteredEvents.subList(0, 5)
+    }
+
     val emptyText = if(lang== Lang.RU){ "В ближайшее время мероприятий\nне планируется" } else{ "There are not events planned\nin the near future" }
     var currentImageIndex by remember { mutableIntStateOf(0) }
     var isAnimating by remember { mutableStateOf(false) }

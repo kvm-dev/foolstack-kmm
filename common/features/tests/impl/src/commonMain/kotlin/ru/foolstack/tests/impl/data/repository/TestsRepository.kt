@@ -51,18 +51,24 @@ class TestsRepository(private val localDataSource: LocalDataSource,
         return if(result.errorMsg.isEmpty()){
             result
         } else{
-            val resultAfterRefreshToken = authorizationNetworkDataSource.refreshToken(userToken = userToken, refreshToken = refreshToken)
-            if (resultAfterRefreshToken.errorMsg.isEmpty()) {
-                authorizationLocalDataSource.saveUserTokenToLocal(resultAfterRefreshToken.userToken)
-                authorizationLocalDataSource.saveRefreshTokenToLocal(resultAfterRefreshToken.userRefreshToken)
-                userToken = authorizationLocalDataSource.getTokenFromLocal()
-                val newResult = networkDataSource.getPassedTests(userToken = userToken)
-                            localDataSource.savePassedTests(newResult)
-                localDataSource.getPassedTests()
-                return newResult
-            } else{
+            if(refreshToken.isNotEmpty()){
+                val resultAfterRefreshToken = authorizationNetworkDataSource.refreshToken(userToken = userToken, refreshToken = refreshToken)
+                if (resultAfterRefreshToken.errorMsg.isEmpty()) {
+                    authorizationLocalDataSource.saveUserTokenToLocal(resultAfterRefreshToken.userToken)
+                    authorizationLocalDataSource.saveRefreshTokenToLocal(resultAfterRefreshToken.userRefreshToken)
+                    userToken = authorizationLocalDataSource.getTokenFromLocal()
+                    val newResult = networkDataSource.getPassedTests(userToken = userToken)
+                    localDataSource.savePassedTests(newResult)
+                    localDataSource.getPassedTests()
+                    return newResult
+                } else{
+                    result
+                }
+            }
+            else{
                 result
             }
+
         }
     }
 

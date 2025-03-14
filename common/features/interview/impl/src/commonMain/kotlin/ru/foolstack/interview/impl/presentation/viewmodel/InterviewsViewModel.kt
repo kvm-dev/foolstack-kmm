@@ -2,6 +2,8 @@ package ru.foolstack.interview.impl.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,32 +25,71 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
 
     var asMode = false
 
-    fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
+    fun initViewModel() {
         if(progressState.value == ProgressState.LOADING){
-            launch {
-                asMode = interactor.isAsModeActive()
-                if(interactor.materialsState.value !is ResultState.Success){
-                    if(interactor.isConnectionAvailable()){
-                        interactor.getMaterialsFromServer()
-                    }
-                    else{
-                        interactor.getMaterialsFromLocal()
+            (viewModelScope + coroutineExceptionHandler + supervisorJob).launch {
+                launch(coroutineExceptionHandler) {
+                    asMode = interactor.isAsModeActive()
+                }
+                if (interactor.materialsState.value !is ResultState.Success || interactor.materialsState.value !is ResultState.Loading) {
+                    if (interactor.isConnectionAvailable()) {
+                        launch(coroutineExceptionHandler) {
+                            interactor.getMaterialsFromServer()
+                        }
+                    } else {
+                        launch(coroutineExceptionHandler) {
+                            interactor.getMaterialsFromLocal()
+                        }
                     }
                 }
+                else{
+                    updateState(ProgressState.LOADING)
+                }
+            }
+            (viewModelScope + coroutineExceptionHandler + supervisorJob).launch{
                 val professionId = interactor.getProfessionId()
                 interactor.materialsState.collect{ resultState->
-                    interactor.profileState.collect{ profileState->
-                        interactor.professionsState.collect{ professionsState->
-                            if(resultState == ResultState.Idle){
-                                if(interactor.isConnectionAvailable()){
-                                    interactor.getMaterialsFromServer()
+                    if(resultState is ResultState.Success){
+                        interactor.profileState.collect{ profileState->
+                            if(profileState is ResultState.Success){
+                                interactor.professionsState.collect{ professionsState->
+                                    if(resultState == ResultState.Idle){
+                                        if(interactor.isConnectionAvailable()){
+                                            launch(coroutineExceptionHandler) {
+                                                interactor.getMaterialsFromServer()
+                                            }
+                                        }
+                                        else{
+                                            launch(coroutineExceptionHandler) {
+                                                interactor.getMaterialsFromLocal()
+                                            }
+                                        }
+                                        updateState(ProgressState.LOADING)
+                                    }
+                                    if(professionsState is ResultState.Success){
+                                        _uiState.update { interactor.checkState(state = resultState, professionId = professionId, professionsState = professionsState, profileState = profileState) }
+                                        updateState(ProgressState.COMPLETED)
+                                    }
+                                    else{
+                                        updateState(ProgressState.LOADING)
+                                    }
                                 }
-                                else{
-                                    interactor.getMaterialsFromLocal() }
                             }
-                            _uiState.update { interactor.checkState(state = resultState, professionId = professionId, professionsState = professionsState, profileState = profileState) }
-                            updateState(ProgressState.COMPLETED)
+                            else{
+                                updateState(ProgressState.LOADING)
+                            }
                         }
+                    }
+                    else{
+                        if(resultState is ResultState.Idle){
+                            if(interactor.isConnectionAvailable()){
+                                launch(coroutineExceptionHandler) { interactor.getMaterialsFromServer() }
+                            }
+                            else{
+                                launch(coroutineExceptionHandler) { interactor.getMaterialsFromLocal() }
+                            }
+                        }
+                        updateState(ProgressState.LOADING)
                     }
                 }
             }

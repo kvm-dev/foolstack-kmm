@@ -20,6 +20,7 @@ import ru.foolstack.splash.impl.presentation.ui.SplashBottomText
 import ru.foolstack.splash.impl.presentation.ui.SplashViewState
 import ru.foolstack.model.ProgressState
 import ru.foolstack.utils.TextFieldValidation
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel() {
@@ -364,11 +365,15 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
        launch {
            if(interactor.isConnectionAvailable()){
                interactor.getProfileFromServer()
-               interactor.getEventsFromServer()
+               if(interactor.eventsState.value !is ResultState.Success){
+                   interactor.getEventsFromServer()
+               }
            }
            else{
                interactor.getProfileFromLocal()
-               interactor.getEventsFromLocal()
+               if(interactor.eventsState.value !is ResultState.Success){
+                   interactor.getEventsFromLocal()
+               }
            }
        }
     }

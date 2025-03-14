@@ -26,7 +26,7 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
         if(progressState.value == ProgressState.LOADING){
             launch {
                 asMode = interactor.isAsModeActive()
-                if(interactor.studiesState.value !is ResultState.Success){
+                if(interactor.studiesState.value !is ResultState.Success || interactor.studiesState.value !is ResultState.Loading){
                     if(interactor.isConnectionAvailable()){
                         interactor.getStudiesFromServer()
                     }
@@ -34,6 +34,8 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
                         interactor.getStudiesFromLocal()
                     }
                 }
+            }
+            launch {
                 interactor.studiesState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)

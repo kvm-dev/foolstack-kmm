@@ -64,6 +64,7 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                             .padding(top = 40.dp)
                     ) {
                         TopBar(
+                            isDark = false,
                             screenTitle = if ((eventState as EventCardViewState.Idle).lang is LangResultDomain.Ru) {
                                 "Событие"
                             } else {

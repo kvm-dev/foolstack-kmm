@@ -87,7 +87,10 @@ fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, splashViewMode
                             splashBitmap = splashBitmap,
                             logoBitmap = logoBitmap,
                             onClickAuthorizationScreen = { splashViewModel.authorizationOrRegistrationSplashScreen() },
-                            onClickGuestScreen = navigateToMainScreen,
+                            onClickGuestScreen = {
+                                splashViewModel.refreshProfile()
+                                navigateToMainScreen()
+                            },
                             onChangeEmail = splashViewModel::setEmail,
                             onClickAuthorizationOrRegistrationByEmail = { splashViewModel.authorizationOrRegistrationByEmail() },
                             onClickBackToAuthorizationScreen = { splashViewModel.backToAuthorizationScreen() },
