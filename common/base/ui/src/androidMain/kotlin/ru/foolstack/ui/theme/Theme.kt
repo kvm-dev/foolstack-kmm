@@ -311,21 +311,21 @@ var ColorScheme.ProfessionsBannerColor2: Color
 
 @Composable
 fun FoolStackTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-//    dynamicColor: Boolean = true,
+    theme: String,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    val darkTheme = when(theme){
+        "dark" -> true
+        "light"-> false
+        "system"-> isSystemInDarkTheme()
+        else-> isSystemInDarkTheme()
+    }
     val colorScheme = when {
-//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-//            val context = LocalContext.current
-//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-//        }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
+
 
     MaterialTheme(
         colorScheme = colorScheme,
@@ -347,7 +347,7 @@ fun FoolStackTheme(
     }
 
     colorScheme.MainBlack = if (darkTheme) {
-        Black
+        White
     } else {
         Black
     }
@@ -572,7 +572,4 @@ fun FoolStackTheme(
     } else {
         ProfessionsSaleBannerColor2
     }
-
-
-
 }

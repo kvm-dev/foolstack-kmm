@@ -1,8 +1,16 @@
 package ru.foolstack.profile.impl.mapper
 
 import ru.foolstack.profile.api.model.AchievementDomain
+import ru.foolstack.profile.api.model.DeleteProfileResponseDomain
 import ru.foolstack.profile.api.model.ProfileDomain
+import ru.foolstack.profile.api.model.UpdateEmailResponseDomain
+import ru.foolstack.profile.api.model.UpdateNameResponseDomain
+import ru.foolstack.profile.api.model.UpdatePhotoResponseDomain
 import ru.foolstack.profile.impl.model.AchievementResponse
+import ru.foolstack.profile.impl.model.response.DeleteProfileResponse
+import ru.foolstack.profile.impl.model.response.UpdateEmailResponse
+import ru.foolstack.profile.impl.model.response.UpdateNameResponse
+import ru.foolstack.profile.impl.model.response.UpdatePhotoResponse
 import ru.foolstack.storage.model.Profile
 import ru.foolstack.storage.model.UserAchievement
 
@@ -73,6 +81,34 @@ class Mapper {
             achievementName = response.achievementName,
             achievementDescription = response.achievementDescription,
             achievementLevel = response.achievementLevel
+        )
+    }
+
+    fun mapToEmailResponseDomain(response: UpdateEmailResponse): UpdateEmailResponseDomain{
+        return UpdateEmailResponseDomain(
+            success = response.success,
+            errorMsg = response.errorMsg
+        )
+    }
+
+    fun mapToNameResponseDomain(response: UpdateNameResponse): UpdateNameResponseDomain{
+        return UpdateNameResponseDomain(
+            success = response.success,
+            errorMsg = response.errorMsg
+        )
+    }
+
+    fun mapToPhotoResponseDomain(response: UpdatePhotoResponse): UpdatePhotoResponseDomain{
+        return UpdatePhotoResponseDomain(
+            success = response.success,
+            errorMsg = response.errorMsg
+        )
+    }
+
+    fun mapToDeleteProfileResponseDomain(response: DeleteProfileResponse): DeleteProfileResponseDomain{
+        return DeleteProfileResponseDomain(
+            success = response.success,
+            errorMsg = response.errorMsg
         )
     }
 }

@@ -24,7 +24,7 @@ class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
-                if(interactor.newsState.value !is ResultState.Success){
+                if(interactor.newsState.value !is ResultState.Success || interactor.newsState.value !is ResultState.Loading){
                     if(interactor.isConnectionAvailable()){
                         interactor.getNewsFromServer()
                     }
@@ -32,9 +32,10 @@ class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
                         interactor.getNewsFromLocal()
                     }
                 }
-                interactor.newsState.collect{ resultState->
-                    _uiState.update { interactor.checkState(resultState) }
-                    updateState(ProgressState.COMPLETED)
+            }
+            launch { interactor.newsState.collect{ resultState->
+                _uiState.update { interactor.checkState(resultState) }
+                updateState(ProgressState.COMPLETED)
                 }
             }
         }
@@ -65,5 +66,6 @@ class NewsViewModel(private val interactor: NewsInteractor) : BaseViewModel() {
         )
     }
 
+    fun isConnectionAvailable() = interactor.isConnectionAvailable()
     fun getCurrentLang() = interactor.getCurrentLang()
 }

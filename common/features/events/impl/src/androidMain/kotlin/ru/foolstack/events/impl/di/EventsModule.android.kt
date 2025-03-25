@@ -34,7 +34,8 @@ actual val eventsModule: Module
         EventsInteractor(
             getCurrentLanguageUseCase = get(),
             getNetworkStateUseCase = get(),
-            getEventsUseCase = get())
+            getEventsUseCase = get(),
+            getAsModeUseCase = get())
         }
         single<EventCardInteractor>{
             EventCardInteractor(

@@ -34,6 +34,7 @@ actual val booksModule: Module
                 getCurrentLanguageUseCase = get(),
                 getNetworkStateUseCase = get(),
                 getBooksUseCase = get(),
+                getAsModeUseCase = get(),
                 browserUtils = get())
         }
 
@@ -42,7 +43,8 @@ actual val booksModule: Module
                 getCurrentLanguageUseCase = get(),
                 getNetworkStateUseCase = get(),
                 browserUtils = get(),
-                getBooksUseCase = get())
+                getBooksUseCase = get(),
+                getAsModeUseCase = get())
         }
         viewModelOf(::BookCardViewModel)
         viewModelOf(::BooksViewModel)

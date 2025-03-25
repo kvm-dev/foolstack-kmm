@@ -9,11 +9,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import ru.foolstack.ui.theme.MainBackground
+import ru.foolstack.ui.theme.MainWhite
 
 @Composable
 fun ShimmerEffect(
@@ -22,12 +25,20 @@ fun ShimmerEffect(
     angleOfAxisY: Float = 270f,
     durationMillis: Int = 1000,
 ) {
+//    val shimmerColors = listOf(
+//        Color.White.copy(alpha = 0.3f),
+//        Color.White.copy(alpha = 0.5f),
+//        Color.White.copy(alpha = 1.0f),
+//        Color.White.copy(alpha = 0.5f),
+//        Color.White.copy(alpha = 0.3f),
+//    )
+
     val shimmerColors = listOf(
-        Color.White.copy(alpha = 0.3f),
-        Color.White.copy(alpha = 0.5f),
-        Color.White.copy(alpha = 1.0f),
-        Color.White.copy(alpha = 0.5f),
-        Color.White.copy(alpha = 0.3f),
+        MaterialTheme.colorScheme.MainBackground.copy(alpha = 0.3f),
+        MaterialTheme.colorScheme.MainBackground.copy(alpha = 0.5f),
+        MaterialTheme.colorScheme.MainBackground.copy(alpha = 1.0f),
+        MaterialTheme.colorScheme.MainBackground.copy(alpha = 0.5f),
+        MaterialTheme.colorScheme.MainBackground.copy(alpha = 0.3f),
     )
     val transition = rememberInfiniteTransition(label = "")
 

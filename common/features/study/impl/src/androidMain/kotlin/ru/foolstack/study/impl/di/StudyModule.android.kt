@@ -27,6 +27,7 @@ actual val studyModule: Module
         getCurrentLanguageUseCase = get(),
         getNetworkStateUseCase = get(),
         getStudiesUseCase = get(),
+        getAsModeUseCase = get(),
         browserUtils = get()
     )
     }

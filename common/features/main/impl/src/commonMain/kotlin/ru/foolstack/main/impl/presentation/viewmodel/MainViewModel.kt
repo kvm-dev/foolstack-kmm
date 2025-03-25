@@ -2,57 +2,71 @@ package ru.foolstack.main.impl.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import ru.foolstack.main.impl.domain.interactor.MainInteractor
 import ru.foolstack.main.impl.presentation.ui.MainViewState
 import ru.foolstack.model.ProgressState
-import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 
 class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
     private val _uiState = MutableStateFlow<MainViewState>(
-        MainViewState.Loading
+        MainViewState.Loading(lang = interactor.getCurrentLang())
     )
-    private val _profileState = MutableStateFlow<ResultState<ProfileDomain>>(
-        ResultState.Loading
-    )
-    val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
-    val profileState: StateFlow<ResultState<ProfileDomain>> = _profileState.asStateFlow()
 
-    fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
-        if(progressState.value == ProgressState.LOADING){
-        launch {
-            interactor.profileState.combine(interactor.eventsState) { profile, events  ->
-                if(profile is ResultState.Success && events is ResultState.Success){
-                    _profileState.value = profile
-                    val profileData = profile.data
-                    val eventsData = events.data
-                    if(profileData !=null && eventsData !=null){
-                        _uiState.update { interactor.checkState(profile = profileData, events = eventsData) }
+    val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
+
+    var asMode = false
+
+    fun initViewModel() {
+        if (progressState.value == ProgressState.LOADING) {
+            viewModelScope.launch(coroutineExceptionHandler) {
+                if(interactor.eventsState.value !is ResultState.Success || interactor.eventsState.value !is ResultState.Loading){
+                    if (interactor.isConnectionAvailable()) {
+                        interactor.getEventsFromServer()
+                    } else {
+                        interactor.getEventsFromLocal()
+                    }
+                }
+            }
+            viewModelScope.launch(coroutineExceptionHandler + Dispatchers.IO + supervisorJob){
+                launch {
+                    asMode = interactor.isAsModeActive()
+                }
+                interactor.eventsState.collect { eventsState ->
+                    if(eventsState is ResultState.Success){
+                        interactor.profileState.collect { profileState ->
+                            if(profileState is ResultState.Success){
+                                val state = interactor.checkState(eventsState = eventsState, profileState = profileState)
+                                if(state !is MainViewState.Loading){
+                                    _uiState.update {
+                                        state
+                                    }
+                                    updateState(ProgressState.COMPLETED)
+                                }
+                            }
+                            else{
+                                updateState(ProgressState.LOADING)
+                            }
+                        }
                     }
                     else{
-                        //nothing
+                        updateState(ProgressState.LOADING)
                     }
-                    updateState(ProgressState.COMPLETED)
-            }
-                else{
-                    //show Dialog error and go to Authorization
                 }
-            }.collect()
-        }
+            }
         }
     }
 
-    fun navigateToEvent(navController: NavController, eventId: Int, eventDestination: String){
+    fun navigateToEvent(navController: NavController, eventId: Int, eventDestination: String) {
         val route = "$eventDestination/{eventId}"
         navController.navigate(
             route.replace(
@@ -62,4 +76,59 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
         )
     }
 
-}
+    fun logout() = with(viewModelScope + coroutineExceptionHandler) {
+        launch {
+            val current = uiState.value as MainViewState.AuthorizedClient
+            _uiState.update {
+                current.copy(
+                    profile = null
+                )
+            }
+            interactor.logout()
+            refresh()
+        }
+    }
+
+    fun getCurrentLang() = interactor.getCurrentLang()
+
+    fun getSettingsGuestDialogTitle() = interactor.getOnlyClientsDialogSettingsTitle()
+
+    fun getSettingsGuestDialogText() = interactor.getOnlyClientsDialogSettingsText()
+
+    fun getDialogOkBtn() = interactor.getDialogsOkBtn()
+
+    fun getGuestNotificationDialogTitle() = interactor.getGuestNotificationDialogTitle()
+
+    fun getGuestNotificationDialogText() = interactor.getGuestNotificationDialogText()
+
+    fun getGuestNotificationDialogActionBtn() = interactor.getGuestNotificationDialogActionBtn()
+
+    fun getGuestNotificationDialogSecondBtn() = interactor.getGuestNotificationDialogSecondBtn()
+
+    fun refresh() {
+        val currentState = uiState.value
+        if (currentState is MainViewState.AuthorizedClient) {
+            viewModelScope.launch(coroutineExceptionHandler) {
+                if (interactor.isConnectionAvailable()) {
+                    interactor.getProfileFromServer()
+                    interactor.getEventsFromServer()
+                } else {
+                    interactor.getProfileFromLocal()
+                    interactor.getEventsFromLocal()
+                }
+            }
+        } else {
+            viewModelScope.launch(coroutineExceptionHandler){
+                if (interactor.isConnectionAvailable()) {
+                    interactor.getEventsFromServer()
+                } else {
+                    interactor.getEventsFromLocal()
+                }
+            }
+        }
+        updateState(ProgressState.LOADING)
+        initViewModel()
+    }
+
+     fun isConnectionAvailable() = interactor.isConnectionAvailable()
+ }

@@ -24,7 +24,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -104,7 +103,7 @@ fun ProfessionsVerticalSlider(
                         onClickProfession()
                     }
                     .padding(horizontal = 12.dp, vertical = 6.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
             ) {
                 Column{
                     if (professionItem.professionImageBase64.isNotEmpty()) {

@@ -1,3 +1,6 @@
+import com.android.manifmerger.ManifestSystemProperty
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
@@ -7,11 +10,13 @@ android {
     namespace = "ru.foolstack.foolstack.android"
     compileSdk = 34
     defaultConfig {
+        val version: String = properties["VERSION_NAME"].toString()
         applicationId = "ru.foolstack.foolstack.android"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = version
+        buildConfigField("String", "VERSION_NAME", properties["VERSION_NAME"].toString())
     }
     buildFeatures {
         compose = true
@@ -61,6 +66,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(projects.common.base.viewmodel)
+    //encryptedPrefs
+    implementation(projects.common.base.storage)
+    //utils
+    implementation(projects.common.base.utils)
     //tests
     debugImplementation(libs.compose.ui.tooling)
 }

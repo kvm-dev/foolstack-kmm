@@ -21,10 +21,12 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
 
     val uiState: StateFlow<BooksViewState> = _uiState.asStateFlow()
 
+    var asMode = false
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
-                if(interactor.booksState.value !is ResultState.Success){
+                asMode = interactor.isAsModeActive()
+                if(interactor.booksState.value !is ResultState.Success || interactor.booksState.value !is ResultState.Loading){
                     if(interactor.isConnectionAvailable()){
                         interactor.getBooksFromServer()
                     }
@@ -32,9 +34,10 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
                         interactor.getBooksFromLocal()
                     }
                 }
-                interactor.booksState.collect{ resultState->
-                    _uiState.update { interactor.checkState(resultState) }
-                    updateState(ProgressState.COMPLETED)
+            }
+            launch { interactor.booksState.collect{ resultState->
+                _uiState.update { interactor.checkState(resultState) }
+                updateState(ProgressState.COMPLETED)
                 }
             }
         }
@@ -106,7 +109,9 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
                 newValue = bookSubscribeMinCost.toString())
                 .replace(
                 oldValue = "{bookSubscribeLink}",
-                newValue = bookSubscribeLink.replace("//", "**")
+                newValue = bookSubscribeLink
+                    .replace("//", "**")
+                    .replace("/", "*")
                 )
             )
         }
@@ -114,6 +119,8 @@ class BooksViewModel(private val interactor: BooksInteractor) : BaseViewModel() 
     fun onClickLink(url: String){
         interactor.openInBrowser(url)
     }
+
+    fun isConnectionAvailable() = interactor.isConnectionAvailable()
 
     fun getCurrentLang() = interactor.getCurrentLang()
 }

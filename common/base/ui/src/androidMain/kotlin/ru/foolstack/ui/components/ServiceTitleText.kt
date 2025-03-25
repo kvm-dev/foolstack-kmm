@@ -9,6 +9,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import ru.foolstack.ui.theme.MainWhite
 import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
@@ -17,7 +18,7 @@ fun ServiceTitleText(text: String, modifier: Modifier){
         modifier = modifier,
         text =text, fontFamily = montserratFamily, fontWeight = FontWeight.Bold, style = TextStyle(
             fontSize = 14.sp,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.MainWhite,
             textAlign = TextAlign.Start
         )
     )

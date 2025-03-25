@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import ru.foolstack.ui.R
 import ru.foolstack.ui.theme.DisabledButtonContent
 import ru.foolstack.ui.theme.DisabledColor
+import ru.foolstack.ui.theme.MainWhite
 import ru.foolstack.ui.theme.ServiceBackground
 
 @Composable
@@ -25,7 +26,7 @@ fun CommentButton(modifier: Modifier, onClick: () -> Unit) {
         modifier = modifier.size(24.dp),
         contentPadding = PaddingValues(4.dp),
         colors = ButtonDefaults.buttonColors(
-            contentColor = Color.White,
+            contentColor = MaterialTheme.colorScheme.MainWhite,
             disabledContainerColor = MaterialTheme.colorScheme.DisabledColor,
             disabledContentColor = MaterialTheme.colorScheme.DisabledButtonContent,
             containerColor = MaterialTheme.colorScheme.ServiceBackground

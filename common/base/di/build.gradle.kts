@@ -48,6 +48,8 @@ kotlin {
             implementation(projects.common.features.tests.impl)
             implementation(projects.common.features.main.impl)
             implementation(projects.common.features.comments.impl)
+            implementation(projects.common.features.settings.impl)
+            implementation(projects.common.features.asmode.impl)
         }
         androidMain.dependencies {
             //di

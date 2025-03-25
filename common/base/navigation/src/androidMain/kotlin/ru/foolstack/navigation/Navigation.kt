@@ -32,6 +32,7 @@ import ru.foolstack.main.impl.presentation.ui.MainScreen
 import ru.foolstack.news.impl.presentation.ui.NewsCardScreen
 import ru.foolstack.news.impl.presentation.ui.NewsScreen
 import ru.foolstack.professions.impl.presentation.ui.ProfessionsScreen
+import ru.foolstack.settings.impl.presentation.ui.SettingsScreen
 import ru.foolstack.study.impl.presentation.ui.StudiesScreen
 import ru.foolstack.tests.impl.presentation.ui.TestCardScreen
 import ru.foolstack.tests.impl.presentation.ui.TestsScreen
@@ -43,10 +44,13 @@ import ru.foolstack.ui.theme.MainBackground
 
 @Composable
 fun StartApplication(
-    navController: NavHostController = rememberNavController()) {
+    navController: NavHostController = rememberNavController(),
+    theme: String,
+    recreate: ()->Unit,
+    restart: ()->Unit) {
     val context = LocalContext.current
     val activity = context.findActivity()
-    FoolStackTheme {
+    FoolStackTheme(theme = theme) {
         val getCurrentLanguageUseCase: GetCurrentLanguageUseCase by inject()
         // Get current back stack entry
         // Get the name of the current screen
@@ -98,7 +102,9 @@ fun StartApplication(
                         .background(MaterialTheme.colorScheme.MainBackground)
                 ) {
                     composable(route = NavigationScreens.SplashScreenNavigation.name) {
+                        isShowBottomBar.value = false
                         SplashScreen(
+                            theme = theme,
                             navigateToMainScreen = {
                                 isShowBottomBar.value = true
                                 navController.navigate(NavigationScreens.MainScreenNavigation.name) {
@@ -138,7 +144,23 @@ fun StartApplication(
                                     }
                                 }
                             },
-                            navController = navController, eventDestination = NavigationScreens.EventScreenNavigation.name )
+                            onclickSettings = {
+                                isShowBottomBar.value = false
+                                navController.navigate(NavigationScreens.SettingsScreenNavigation.name) {
+                                    popUpTo(NavigationScreens.SettingsScreenNavigation.name) {
+                                        inclusive = false
+                                    }
+                                }
+                            },
+                            navController = navController, eventDestination = NavigationScreens.EventScreenNavigation.name, theme = theme, onClickLogout =  {
+                                isShowBottomBar.value = false
+                                navController.navigate(NavigationScreens.SplashScreenNavigation.name)
+                                {
+                                    popUpTo(NavigationScreens.SplashScreenNavigation.name) { inclusive = false }
+                                }
+                                navController.graph.clear()
+                                recreate()} )
+
                     }
 
                     composable(route = NavigationScreens.EventsListScreenNavigation.name) {
@@ -160,14 +182,14 @@ fun StartApplication(
                         BooksScreen(navController = navController, bookDestination = NavigationScreens.BookScreenNavigation.name)
                     }
 
-                    composable(route = "${NavigationScreens.BookScreenNavigation.name}/{bookId}/{prText}/{maxSalePercent}/{bookSubscribeText}/{bookSubscribeMinCost}/{bookSubscribeLink}") {
+                    composable(route = "${NavigationScreens.BookScreenNavigation.name}/{bookId}/{prText}/{maxSalePercent}/{bookSubscribeText}/{bookSubscribeMinCost}/{bookSubscribeLink}/{isAsActive}") {
                             navBackStackEntry ->
                         val bookId = navBackStackEntry.arguments?.getString("bookId")
                         val prText = navBackStackEntry.arguments?.getString("prText")?:""
                         val maxSalePercent = navBackStackEntry.arguments?.getString("maxSalePercent")?:"0"
                         val bookSubscribeText = navBackStackEntry.arguments?.getString("bookSubscribeText")?:""
                         val bookSubscribeMinCost = navBackStackEntry.arguments?.getString("bookSubscribeMinCost")?:"0"
-                        val bookSubscribeLink = navBackStackEntry.arguments?.getString("bookSubscribeLink")?.replace("**", "//")?:""
+                        val bookSubscribeLink = navBackStackEntry.arguments?.getString("bookSubscribeLink")?.replace("**", "//")?.replace("*", "/")?:""
                         bookId?.let { id->
                             isShowBottomBar.value = false
                             BookCardScreen(
@@ -241,7 +263,8 @@ fun StartApplication(
                                         inclusive = false
                                     }
                                 }
-                            })
+                            },
+                            )
                     }
 
                     composable(route = "${NavigationScreens.TestScreenNavigation.name}/{testId}") {
@@ -260,6 +283,19 @@ fun StartApplication(
                             })
                         }
                     }
+
+                    composable(route = NavigationScreens.SettingsScreenNavigation.name) {
+                        isShowBottomBar.value = false
+                        SettingsScreen(recreateAction = recreate, navController = navController, onDeleteAction  = {
+                            isShowBottomBar.value = false
+                            navController.navigate(NavigationScreens.SplashScreenNavigation.name)
+                            {
+                                popUpTo(NavigationScreens.SplashScreenNavigation.name) { inclusive = false }
+                            }
+                            navController.graph.clear()
+                            recreate()})
+                    }
+
                 }
             }
         }

@@ -134,7 +134,8 @@ fun NewsScreen(newsViewModel: NewsViewModel = koinViewModel(), navController: Na
                                 navController = navController,
                                 newsId = newsId.intValue,
                                 newsDestination = newsDestination) },
-                            selectId = newsId
+                            selectId = newsId,
+                            isConnectionAvailable = newsViewModel.isConnectionAvailable()
                         )
                     } else {
                         Box(
@@ -155,7 +156,10 @@ fun NewsScreen(newsViewModel: NewsViewModel = koinViewModel(), navController: Na
                             } else {
                                 "Unfortunately, there is no news \nat the moment"
                             }
-                            Column(modifier = Modifier.align(Alignment.Center)) {
+                            Column(modifier = Modifier
+                                .align(Alignment.Center),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
                                 NotificationTitle(
                                     text = emptyText,
                                     modifier = Modifier.align(Alignment.CenterHorizontally)

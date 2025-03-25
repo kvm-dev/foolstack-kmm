@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.foolstack.ui.theme.MainBlack
 import ru.foolstack.ui.theme.SelectedChipBackground
 import ru.foolstack.ui.theme.UnselectedChipBackground
 import ru.foolstack.ui.theme.UnselectedChipStroke
@@ -51,12 +52,12 @@ fun Chip(
     ) {
         Text(
             text = label,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.MainBlack,
             fontFamily = montserratFamily,
             fontWeight = FontWeight.Black,
             style = TextStyle(
                 fontSize = 14.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.MainBlack,
                 textAlign = TextAlign.Center
             ),
             modifier = Modifier

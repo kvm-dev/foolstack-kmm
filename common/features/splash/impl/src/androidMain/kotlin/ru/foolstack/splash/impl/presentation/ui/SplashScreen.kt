@@ -21,8 +21,8 @@ import ru.foolstack.ui.components.BottomSplashScreenState
 import ru.foolstack.ui.components.SplashBackground
 
 @Composable
-fun SplashScreen(navigateToMainScreen: () -> Unit, splashViewModel: SplashViewModel = koinViewModel()) {
-    SplashBackground()
+fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, splashViewModel: SplashViewModel = koinViewModel()) {
+    SplashBackground(theme)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,11 +39,9 @@ fun SplashScreen(navigateToMainScreen: () -> Unit, splashViewModel: SplashViewMo
             }
 
             ProgressState.COMPLETED -> {
-                Log.d("мы здесь", "комплит")
                 val uiState by splashViewModel.uiState.collectAsState()
                 val splashBitmap = ImageBitmap.imageResource(ru.foolstack.ui.R.drawable.splash_img)
                 val logoBitmap = ImageBitmap.imageResource(ru.foolstack.ui.R.drawable.logo)
-                val bugBitmap = ImageBitmap.imageResource(id = ru.foolstack.ui.R.drawable.bug_icon)
                 BigAppTitle("foolStack")
                 when (uiState) {
                     is SplashViewState.Idle->{
@@ -55,7 +53,11 @@ fun SplashScreen(navigateToMainScreen: () -> Unit, splashViewModel: SplashViewMo
                             bottomSplashScreenState = BottomSplashScreenState.UNAUTHORIZED,
                             splashBitmap = splashBitmap,
                             logoBitmap = logoBitmap,
-                            onClickGuestScreen = navigateToMainScreen,
+                            onClickGuestScreen = {
+                                splashViewModel.refreshProfile()
+                                splashViewModel.loginByGuestLog()
+                                navigateToMainScreen()
+                            },
                             onClickAuthorizationScreen = { splashViewModel.authorizationOrRegistrationSplashScreen() },
                             titleText = state.splashBottomText.splashTitleText,
                             descriptionText = state.splashBottomText.splashDescriptionText,
@@ -86,7 +88,11 @@ fun SplashScreen(navigateToMainScreen: () -> Unit, splashViewModel: SplashViewMo
                             splashBitmap = splashBitmap,
                             logoBitmap = logoBitmap,
                             onClickAuthorizationScreen = { splashViewModel.authorizationOrRegistrationSplashScreen() },
-                            onClickGuestScreen = navigateToMainScreen,
+                            onClickGuestScreen = {
+                                splashViewModel.refreshProfile()
+                                splashViewModel.loginByGuestLog()
+                                navigateToMainScreen()
+                            },
                             onChangeEmail = splashViewModel::setEmail,
                             onClickAuthorizationOrRegistrationByEmail = { splashViewModel.authorizationOrRegistrationByEmail() },
                             onClickBackToAuthorizationScreen = { splashViewModel.backToAuthorizationScreen() },
@@ -130,16 +136,7 @@ fun SplashScreen(navigateToMainScreen: () -> Unit, splashViewModel: SplashViewMo
                     }
 
                     is SplashViewState.AnyError -> {
-                        val state = uiState as SplashViewState.AnyError
-                        BottomSplashScreen(
-                            bottomSplashScreenState = BottomSplashScreenState.ANY_ERROR,
-                            splashBitmap = splashBitmap,
-                            logoBitmap = bugBitmap,
-                            onClickTryAgain = { splashViewModel.onClickTryAgain() },
-                            titleText = state.splashTitleText,
-                            descriptionText = state.splashDescriptionText,
-                            mainButtonText = state.tryAgainButtonText,
-                        )
+                        splashViewModel.onClickTryAgain()
                     }
                 }
             }

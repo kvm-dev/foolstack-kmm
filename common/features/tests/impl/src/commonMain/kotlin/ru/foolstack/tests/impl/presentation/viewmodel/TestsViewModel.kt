@@ -2,6 +2,8 @@ package ru.foolstack.tests.impl.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,6 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import ru.foolstack.model.ProgressState
+import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.tests.impl.domain.interactor.TestsInteractor
 import ru.foolstack.tests.impl.presentation.ui.TestsViewState
 import ru.foolstack.utils.model.ResultState
@@ -21,45 +24,59 @@ class TestsViewModel(private val interactor: TestsInteractor) : BaseViewModel() 
 
     val uiState: StateFlow<TestsViewState> = _uiState.asStateFlow()
 
-    fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
-        if(progressState.value == ProgressState.LOADING){
-            launch {
-                if(interactor.testsState.value !is ResultState.Success){
-                    if(interactor.isConnectionAvailable()){
+    fun initViewModel() {
+        if(progressState.value == ProgressState.LOADING) {
+            viewModelScope.launch {
+                if (interactor.testsState.value !is ResultState.Success || interactor.testsState.value !is ResultState.Loading) {
+                    if (interactor.isConnectionAvailable()) {
                         interactor.getTestsFromServer()
                         interactor.getPassedTestsFromServer()
-                    }
-                    else{
+                    } else {
                         interactor.getTestsFromLocal()
                         interactor.getPassedTestsFromLocal()
                     }
                 }
-                val professionId = interactor.getProfessionId()
-                interactor.testsState.collect{ resultState->
+            }
+            viewModelScope.launch(coroutineExceptionHandler + Dispatchers.IO + supervisorJob) {
+            val professionId = interactor.getProfessionId()
+            interactor.testsState.collect { resultState ->
+                if(resultState is ResultState.Success) {
                     interactor.passedTestsState.collect { passedTestsState ->
-                        interactor.profileState.collect { profileState ->
-                            interactor.professionsState.collect { professionsState ->
-                                if(resultState == ResultState.Idle){
-                                    if(interactor.isConnectionAvailable()){
-                                        interactor.getTestsFromServer()
-                                        interactor.getPassedTestsFromServer()
+                        if (passedTestsState is ResultState.Success) {
+                            interactor.profileState.collect { profileState ->
+                                if (profileState is ResultState.Success) {
+                                    interactor.professionsState.collect { professionsState ->
+                                        if (resultState == ResultState.Idle) {
+                                            if (interactor.isConnectionAvailable()) {
+                                                interactor.getTestsFromServer()
+                                                interactor.getPassedTestsFromServer()
+                                            } else {
+                                                interactor.getTestsFromLocal()
+                                                interactor.getPassedTestsFromLocal()
+                                            }
+                                        }
+                                        _uiState.update {
+                                            interactor.checkState(
+                                                testsState = resultState,
+                                                professionId = professionId,
+                                                professionsState = professionsState,
+                                                profileState = profileState,
+                                                passedTestsState = passedTestsState
+                                            )
+                                        }
+                                        updateState(ProgressState.COMPLETED)
                                     }
-                                    else{
-                                        interactor.getTestsFromLocal()
-                                        interactor.getPassedTestsFromLocal()}
+                                } else {
+                                    updateState(ProgressState.LOADING)
                                 }
-                                _uiState.update {
-                                    interactor.checkState(
-                                        testsState = resultState,
-                                        professionId = professionId,
-                                        professionsState = professionsState,
-                                        profileState = profileState,
-                                        passedTestsState = passedTestsState
-                                    )
-                                }
-                                updateState(ProgressState.COMPLETED)
                             }
+                        } else {
+                            updateState(ProgressState.LOADING)
                         }
+                    }
+                }
+                else {
+                    updateState(ProgressState.LOADING)
                     }
                 }
             }
@@ -93,5 +110,17 @@ class TestsViewModel(private val interactor: TestsInteractor) : BaseViewModel() 
         )
     }
 
+    fun isGuest():Boolean{
+        return if(interactor.profileState.value is ResultState.Success){
+            val userName = (interactor.profileState.value as ResultState.Success<ProfileDomain>).data?.userName
+            userName?.isNotEmpty() != true
+        } else true
+    }
+    fun isConnectionAvailable() = interactor.isConnectionAvailable()
+
     fun getCurrentLang() = interactor.getCurrentLang()
+
+    fun getNotFoundDataTitle() = interactor.getNotFoundDataTitle()
+
+    fun getNotFoundDataDescription() = interactor.getNotFoundDataDescription()
 }

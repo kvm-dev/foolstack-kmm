@@ -1,8 +1,10 @@
 package ru.foolstack.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,9 +42,11 @@ fun GreenDialog(title: String,
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .wrapContentHeight()
                         .padding(horizontal = 14.dp),
                     onDismissRequest = {
                         isVisible.value = false
+                        onSecondaryActionClick()
                     },
                     title = {
                         Column(
@@ -65,6 +69,7 @@ fun GreenDialog(title: String,
                         if (!hideText) {
                             Text(
                                 modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(horizontal = 20.dp),
                                 text = text, fontFamily = montserratFamily,
                                 fontWeight = FontWeight.Medium, style = TextStyle(
@@ -82,7 +87,7 @@ fun GreenDialog(title: String,
                                 .fillMaxWidth()
                                 .padding(
                                     start = 20.dp, end = 20.dp,
-                                    top = 24.dp
+                                    top = 8.dp
                                 ),
                             text = generalActionText,
                             onClick = { onGeneralActionClick() },
@@ -93,6 +98,8 @@ fun GreenDialog(title: String,
                     dismissButton = {
                         if (!hideSecondaryButton) {
                         SecondGreenButton(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp, vertical = 10.dp),
                         text = secondaryActionText,
                             onClick = { onSecondaryActionClick( )},
                             isEnabled = true

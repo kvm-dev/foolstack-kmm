@@ -21,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +40,7 @@ import ru.foolstack.ui.model.Lang
 import ru.foolstack.ui.theme.Divider
 
 @Composable
-fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoading: Boolean = false) {
+fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoading: Boolean = false, selectId: MutableState<Int>, isShowDialog: MutableState<Boolean>) {
     val emptyText = if(lang== Lang.RU){ "Только зарегистрированные\nпользователи могут\nполучать достижения" } else{ "Only registered users\ncan receive\nachievements" }
     val currentImageIndex by remember { mutableIntStateOf(0) }
     var isAnimating by remember { mutableStateOf(false) }
@@ -85,7 +86,9 @@ fun AchievementsSlider(lang: Lang, achievements: List<AchievementItem>, isLoadin
                                 if (index != currentImageIndex && !isAnimating) {
                                     isAnimating = true
                                 }
-                            },
+                                selectId.value = achievement.achievementId
+                                isShowDialog.value = true
+                                       },
                         colors = CardDefaults.cardColors(
                             containerColor = Color.Transparent,
                         ),

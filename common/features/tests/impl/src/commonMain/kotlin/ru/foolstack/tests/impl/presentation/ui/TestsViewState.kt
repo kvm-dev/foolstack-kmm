@@ -17,4 +17,10 @@ sealed class TestsViewState {
         val tests: List<TestDomain>,
         val passedTests: List<PassedTestDomain>
     ): TestsViewState()
+
+    data class EmptyState(
+        val isHaveConnection: Boolean,
+        val lang: LangResultDomain,
+        val currentProfessionId: Int
+    ): TestsViewState()
 }

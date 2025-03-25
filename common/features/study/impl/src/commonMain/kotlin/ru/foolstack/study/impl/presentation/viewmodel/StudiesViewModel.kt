@@ -20,10 +20,13 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
 
     val uiState: StateFlow<StudiesViewState> = _uiState.asStateFlow()
 
+    var asMode = false
+
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
-                if(interactor.studiesState.value !is ResultState.Success){
+                asMode = interactor.isAsModeActive()
+                if(interactor.studiesState.value !is ResultState.Success || interactor.studiesState.value !is ResultState.Loading){
                     if(interactor.isConnectionAvailable()){
                         interactor.getStudiesFromServer()
                     }
@@ -31,6 +34,8 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
                         interactor.getStudiesFromLocal()
                     }
                 }
+            }
+            launch {
                 interactor.studiesState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)
@@ -75,6 +80,8 @@ class StudiesViewModel(private val interactor: StudiesInteractor) : BaseViewMode
     fun onStudyClick(url: String){
         interactor.openInBrowser(url)
     }
+
+    fun isConnectionAvailable() = interactor.isConnectionAvailable()
 
     fun getCurrentLang() = interactor.getCurrentLang()
 }

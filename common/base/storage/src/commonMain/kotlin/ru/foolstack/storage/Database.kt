@@ -72,6 +72,13 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
         }
     }
 
+    internal fun clearProfileAndPassedTests(){
+        dbQuery.clearAllProfiles()
+        dbQuery.clearAllAchievments()
+        dbQuery.clearAllPurchasedProfessions()
+        dbQuery.clearAllPassedTests()
+    }
+
     internal fun getMaterials(): Materials {
         val materials = ArrayList<Material>()
         dbQuery.selectMaterials().executeAsList().forEach {material ->

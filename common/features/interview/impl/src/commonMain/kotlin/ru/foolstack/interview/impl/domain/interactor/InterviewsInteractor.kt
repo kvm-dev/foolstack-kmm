@@ -1,10 +1,12 @@
 package ru.foolstack.interview.impl.domain.interactor
 
+import ru.foolstack.asmode.api.domain.usecase.GetAsModeUseCase
 import ru.foolstack.comments.api.domain.usecase.SendMaterialCommentUseCase
 import ru.foolstack.comments.api.model.MaterialCommentRequestDomain
 import ru.foolstack.interview.api.domain.usecase.GetMaterialsUseCase
 import ru.foolstack.interview.api.model.MaterialDomain
 import ru.foolstack.interview.api.model.MaterialsDomain
+import ru.foolstack.interview.impl.data.resources.StringResources
 import ru.foolstack.interview.impl.presentation.ui.InterviewsViewState
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
@@ -21,7 +23,8 @@ class InterviewsInteractor(
     private val getMaterialsUseCase: GetMaterialsUseCase,
     private val getProfessionsUseCase: GetProfessionsUseCase,
     private val sendMaterialCommentUseCase: SendMaterialCommentUseCase,
-    private val getProfileUseCase: GetProfileUseCase,
+    private val getAsModeUseCase: GetAsModeUseCase,
+    getProfileUseCase: GetProfileUseCase,
     private val browserUtils: BrowserUtils
 ){
     val materialsState = getMaterialsUseCase.materialsState
@@ -147,8 +150,8 @@ class InterviewsInteractor(
                 } else{
                     val filteredMaterials = HashSet<MaterialDomain>()
                     state.data?.materials?.forEach { material->
-                        material.subProfessions.forEach { subProfessin->
-                            if(subProfessin.professionId==professionId){
+                        material.subProfessions.forEach { subProfession->
+                            if(subProfession.professionId==professionId){
                                 filteredMaterials.add(material)
                             }
                         }
@@ -159,8 +162,25 @@ class InterviewsInteractor(
                             filtersList.add(sub.areaName)
                         }
                     }
-                    InterviewsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), materials = filteredMaterials.toList(),
-                     selectedFilters = filtersList.toList(), currentProfessionId = professionId, lang = lang, isShowBanner = isShowBanner)
+                    filteredMaterials.forEach { materialDomain ->
+                        materialDomain.materialName
+
+                    }
+                    if(filteredMaterials.isNotEmpty()){
+                        InterviewsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), materials = filteredMaterials.toList(),
+                            selectedFilters = filtersList.toList(), currentProfessionId = professionId, lang = lang, isShowBanner = isShowBanner)
+                    }
+                    else{
+                        if(!isConnectionAvailable()){
+                            InterviewsViewState.EmptyState(isHaveConnection = isConnectionAvailable(),
+                                currentProfessionId = professionId, lang = lang)
+                        }
+                        else{
+                            InterviewsViewState.SuccessState(isHaveConnection = isConnectionAvailable(), materials = filteredMaterials.toList(),
+                                selectedFilters = filtersList.toList(), currentProfessionId = professionId, lang = lang, isShowBanner = isShowBanner)
+                        }
+                    }
+
                 }
             }
         }
@@ -178,4 +198,12 @@ class InterviewsInteractor(
     fun goToTelegram(){
         browserUtils.openInBrowser("https://t.me/+-fxZnU-zAJJkYzIy")
     }
+
+    suspend fun isAsModeActive():Boolean{
+        return getAsModeUseCase.isAsModeEnabled(isConnectionAvailable()).isAsModeActive
+    }
+
+    fun getNotFoundDataTitle() = StringResources.getScreenTitleText(getCurrentLang().lang)
+
+    fun getNotFoundDataDescription() = StringResources.getDescriptionText(getCurrentLang().lang)
 }

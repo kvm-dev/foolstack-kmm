@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,16 +36,18 @@ import ru.foolstack.ui.model.Lang
 
 @Composable
 fun SubMenu(
+    modifier: Modifier,
     lang: Lang,
     onClickEvents: () -> Unit = {},
     onClickBooks: () -> Unit = {},
     onClickStudies: () -> Unit = {}) {
+    var clickEnabled by remember { mutableStateOf(true) }
     var isAnimating by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val events =  if(lang== Lang.RU){ "События" } else{ "Events" }
     val books =  if(lang== Lang.RU){ "Литература" } else{ "Books" }
     val studies =  if(lang== Lang.RU){ "Обучение" } else{ "Study" }
-    Column(modifier = Modifier
+    Column(modifier = modifier
         .wrapContentWidth()
         .height(160.dp)) {
         Box(modifier = Modifier
@@ -59,9 +62,10 @@ fun SubMenu(
                 ) {
                     Card(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(10.dp))
                             .wrapContentWidth()
-                            .clickable {
+                            .clickable(enabled = clickEnabled) {
+                                clickEnabled = false
                                 if (!isAnimating) {
                                     isAnimating = true
                                     coroutineScope.launch {
@@ -82,6 +86,7 @@ fun SubMenu(
                                 Image(
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
+                                        .padding(8.dp)
                                         .width(68.dp)
                                         .height(68.dp)
                                         .align(Alignment.CenterHorizontally),
@@ -94,8 +99,10 @@ fun SubMenu(
                     Spacer(modifier = Modifier.weight(1f))
                     Card(
                         modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
                             .wrapContentWidth()
-                            .clickable {
+                            .clickable(enabled = clickEnabled) {
+                                clickEnabled = false
                                 if (!isAnimating) {
                                     isAnimating = true
                                     coroutineScope.launch {
@@ -116,6 +123,7 @@ fun SubMenu(
                             Image(
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
+                                    .padding(8.dp)
                                     .width(68.dp)
                                     .height(68.dp)
                                     .align(Alignment.CenterHorizontally),
@@ -128,8 +136,10 @@ fun SubMenu(
                     Spacer(modifier = Modifier.weight(1f))
                     Card(
                         modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
                             .wrapContentWidth()
-                            .clickable {
+                            .clickable(enabled = clickEnabled) {
+                                clickEnabled = false
                                 if (!isAnimating) {
                                     isAnimating = true
                                     coroutineScope.launch {
@@ -150,6 +160,7 @@ fun SubMenu(
                             Image(
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
+                                    .padding(8.dp)
                                     .width(68.dp)
                                     .height(68.dp)
                                     .align(Alignment.CenterHorizontally),
@@ -160,8 +171,6 @@ fun SubMenu(
                         }
                     }
                 }
-
-
         }
     }
 

@@ -21,14 +21,14 @@ import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
 fun SecondGreenButton(
+    modifier: Modifier,
     text: String,
     onClick: () -> Unit = { },
     isEnabled: Boolean
 ) {
     Button(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp),
+            .fillMaxWidth(),
         onClick = { onClick() },
         enabled = isEnabled,
         content = { Text(modifier = Modifier

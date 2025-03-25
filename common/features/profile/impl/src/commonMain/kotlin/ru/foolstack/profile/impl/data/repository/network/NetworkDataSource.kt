@@ -2,7 +2,11 @@ package ru.foolstack.profile.impl.data.repository.network
 
 import ru.foolstack.network.utils.getBase64Bitmap
 import ru.foolstack.profile.api.model.AchievementDomain
+import ru.foolstack.profile.api.model.DeleteProfileResponseDomain
 import ru.foolstack.profile.api.model.ProfileDomain
+import ru.foolstack.profile.api.model.UpdateEmailResponseDomain
+import ru.foolstack.profile.api.model.UpdateNameResponseDomain
+import ru.foolstack.profile.api.model.UpdatePhotoResponseDomain
 import ru.foolstack.profile.impl.mapper.Mapper
 
 class NetworkDataSource(private val api: ProfileApi, private val mapper: Mapper){
@@ -30,4 +34,20 @@ class NetworkDataSource(private val api: ProfileApi, private val mapper: Mapper)
             errorMsg = result.errorMsg
         )
    }
+
+    suspend fun updateName(userToken: String, name: String):UpdateNameResponseDomain{
+        return mapper.mapToNameResponseDomain(api.updateName(userToken = userToken, name = name))
+    }
+
+    suspend fun updateEmail(userToken: String, email: String):UpdateEmailResponseDomain{
+        return mapper.mapToEmailResponseDomain(api.updateEmail(userToken = userToken, email = email))
+    }
+
+    suspend fun updatePhoto(userToken: String, photo: ByteArray):UpdatePhotoResponseDomain{
+        return mapper.mapToPhotoResponseDomain(api.updatePhoto(userToken = userToken, photo = photo))
+    }
+
+    suspend fun deleteProfile(userToken: String):DeleteProfileResponseDomain{
+        return mapper.mapToDeleteProfileResponseDomain(api.deleteProfile(userToken = userToken))
+    }
 }

@@ -10,6 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.foolstack.ui.theme.MainBlack
 import ru.foolstack.ui.theme.PrimaryTitleColor
 import ru.foolstack.ui.theme.montserratFamily
 
@@ -18,7 +19,7 @@ fun Title(text: String, modifier: Modifier){
     Text(modifier = modifier.padding(bottom = 10.dp, start = 16.dp, end = 16.dp),
         text =text, fontFamily = montserratFamily, fontWeight = FontWeight.Normal, style = TextStyle(
             fontSize = 22.sp,
-            color = MaterialTheme.colorScheme.PrimaryTitleColor,
+            color = MaterialTheme.colorScheme.MainBlack,
             textAlign = TextAlign.Center
         )
     )

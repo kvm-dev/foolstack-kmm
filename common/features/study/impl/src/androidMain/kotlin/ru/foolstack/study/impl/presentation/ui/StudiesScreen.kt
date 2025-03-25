@@ -147,7 +147,9 @@ fun StudiesScreen(studiesViewModel: StudiesViewModel = koinViewModel()) {
                             } },
                             selectId = studyId,
                             selectedChip = selectedFilter,
-                            onclickChip = { studiesViewModel.updateFilters(selectedFilter.value) }
+                            onclickChip = { studiesViewModel.updateFilters(selectedFilter.value) },
+                            isAsModeActive = studiesViewModel.asMode,
+                            isConnectionAvailable = studiesViewModel.isConnectionAvailable()
                         )
                     } else {
                         Box(

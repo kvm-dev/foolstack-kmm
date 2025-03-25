@@ -29,9 +29,14 @@ import ru.foolstack.ui.model.Chip
 import ru.foolstack.ui.model.Lang
 import ru.foolstack.ui.utils.decodeBase64ToBitmap
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
@@ -42,6 +47,7 @@ import ru.foolstack.ui.theme.MainYellow
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun EventVerticalSlider(
+    isAsActive: Boolean,
     lang: Lang,
     events: List<EventItem>,
     chips: List<Chip>,
@@ -53,12 +59,24 @@ fun EventVerticalSlider(
     selectId: MutableState<Int>,
     selectedChip: MutableState<String>,
     onclickChip: () -> Unit,
+    isConnectionAvailable: Boolean
 ) {
+    var clickEnabled by remember { mutableStateOf(true) }
+
     val filteredEvents = HashSet<EventItem>()
     selectedChips.filter { it.isNotEmpty() }.forEach { chip->
         events.forEach { event->
-            if(event.eventTags.contains(chip)){
-                filteredEvents.add(event)
+            if(isAsActive){
+                if(event.eventCost==0){
+                    if(event.eventTags.contains(chip)){
+                        filteredEvents.add(event)
+                    }
+                }
+            }
+            else{
+                if(event.eventTags.contains(chip)){
+                    filteredEvents.add(event)
+                }
             }
         }
     }
@@ -72,10 +90,15 @@ fun EventVerticalSlider(
     // Scrollable Row of Cards
                 LazyColumn(
                     Modifier.pullToRefresh(
-                    state = state,
-                    isRefreshing = isRefreshing,
-                    onRefresh = onRefresh
-                ).padding(bottom = 20.dp)
+                        state = if(isConnectionAvailable) { state } else {
+                            PullToRefreshState()
+                        },
+                        isRefreshing = isRefreshing,
+                        onRefresh = { if(isConnectionAvailable){
+                            onRefresh()
+                        }
+                        }
+                    ).padding(bottom = 20.dp)
                 ) {
                     stickyHeader{
                         Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
@@ -119,7 +142,8 @@ fun EventVerticalSlider(
                         }
                         Card(
                             modifier = Modifier
-                                .clickable {
+                                .clickable(enabled = clickEnabled) {
+                                    clickEnabled = false
                                     selectId.value = event.eventId
                                     onClickEvent()
                                 }
@@ -142,10 +166,10 @@ fun EventVerticalSlider(
                                 }
                                 else{
                                         Image(
-                                            contentScale = ContentScale.Crop,
+                                            contentScale = ContentScale.FillWidth,
                                             modifier = Modifier
                                                 .clip(RoundedCornerShape(10.dp)),
-                                            painter = painterResource(R.drawable.bug_icon),
+                                            painter = painterResource(R.drawable.error_loading_image_big),
                                             contentDescription = event.eventName
                                         )
                                     }

@@ -1,16 +1,21 @@
 package ru.foolstack.main.impl.di
 
 import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.Module
 import org.koin.dsl.module
 import ru.foolstack.main.impl.domain.interactor.MainInteractor
 import ru.foolstack.main.impl.presentation.viewmodel.MainViewModel
 
-val mainModule = module {
+actual val mainModule: Module
+    get() = module {
     single<MainInteractor> {
         MainInteractor(getCurrentLanguageUseCase = get(),
             getNetworkStateUseCase = get(),
             getProfileUseCase = get(),
             getEventsUseCase = get(),
-            getTokenFromLocalUseCase = get())}
+            getTokenFromLocalUseCase = get(),
+            logoutUseCase = get(),
+            getAsModeUseCase = get())
+            }
     viewModelOf(::MainViewModel)
 }

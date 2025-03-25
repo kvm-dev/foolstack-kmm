@@ -62,6 +62,8 @@ kotlin {
             implementation(projects.common.features.authorization.api)
             //events
             implementation(projects.common.features.events.api)
+            //as
+            implementation(projects.common.features.asmode.api)
         }
         androidMain.dependencies {
             //utils

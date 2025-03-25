@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.foolstack.ui.theme.MainWhite
 import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
@@ -49,7 +51,7 @@ fun BigAppTitle(text: String){
     ) {
         Text(text = text, fontFamily = montserratFamily, fontWeight = FontWeight.Bold, style = TextStyle(
             fontSize = 32.sp,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.MainWhite,
             textAlign = TextAlign.Center,
         )
         )

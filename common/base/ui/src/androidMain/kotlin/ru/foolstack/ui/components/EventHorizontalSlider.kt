@@ -44,14 +44,28 @@ import ru.foolstack.ui.utils.decodeBase64ToBitmap
 
 @Composable
 fun EventHorizontalSlider(lang: Lang,
+                          isAsActive: Boolean,
                           events: List<EventItem>,
                           isLoading: Boolean = false,
                           onClickEvent: () -> Unit,
                           selectId: MutableState<Int>) {
+    var clickEventEnabled by remember { mutableStateOf(true) }
+
+    var filteredEvents: List<EventItem> = if(isAsActive){
+        events.filter { it.eventCost == 0 }
+    }
+    else{
+        events
+    }
+    //max 5
+    if(filteredEvents.size>5){
+        filteredEvents = filteredEvents.subList(0, 5)
+    }
+
     val emptyText = if(lang== Lang.RU){ "В ближайшее время мероприятий\nне планируется" } else{ "There are not events planned\nin the near future" }
     var currentImageIndex by remember { mutableIntStateOf(0) }
-    var isAnimating by remember { mutableStateOf(false) }
-    val height = if(isLoading){ 250 } else{ if(events.isNotEmpty()){ 320 } else{ 260 } }
+    val isAnimating by remember { mutableStateOf(false) }
+    val height = if(isLoading){ 250 } else{ if(filteredEvents.isNotEmpty()){ 320 } else{ 260 } }
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(height.dp)) {
@@ -80,15 +94,14 @@ fun EventHorizontalSlider(lang: Lang,
                     }
                 }
             }
-            else if(events.isNotEmpty()){
+            else if(filteredEvents.isNotEmpty()){
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                itemsIndexed(events) { index, event ->
-                    var cost = ""
-                    var symbol = ""
-                    symbol = if (lang == Lang.RU) {
+                itemsIndexed(filteredEvents) { _, event ->
+                    val cost: String
+                    val symbol: String = if (lang == Lang.RU) {
                         "₽"
                     } else {
                         "$"
@@ -113,7 +126,8 @@ fun EventHorizontalSlider(lang: Lang,
                         modifier = Modifier
                             .clip(RoundedCornerShape(4.dp))
                             .width(280.dp)
-                            .clickable {
+                            .clickable(enabled = clickEventEnabled) {
+                                clickEventEnabled = false
                                 selectId.value = event.eventId
                                 onClickEvent()
                             },
@@ -142,7 +156,7 @@ fun EventHorizontalSlider(lang: Lang,
                                         .width(280.dp)
                                         .height(180.dp)
                                         .clip(RoundedCornerShape(10.dp)),
-                                    painter = painterResource(R.drawable.bug_icon),
+                                    painter = painterResource(R.drawable.error_loading_image_little),
                                     contentDescription = event.eventName
                                 )
                             }
@@ -193,7 +207,7 @@ fun EventHorizontalSlider(lang: Lang,
     }
 
     // Automatic Image Slider
-    if(events.isNotEmpty()){
+    if(filteredEvents.isNotEmpty()){
     LaunchedEffect(currentImageIndex) {
         while (true) {
             delay(5000L)

@@ -7,7 +7,9 @@ import ru.foolstack.profile.api.model.ProfileDomain
 
 sealed class MainViewState {
 
-    data object Loading: MainViewState()
+    data class Loading(
+        val lang: LangResultDomain
+    ): MainViewState()
 
     data class ErrorState(
         val errorTitle: String,

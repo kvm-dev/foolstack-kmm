@@ -57,6 +57,7 @@ android {
     namespace = "ru.foolstack.network"
     compileSdk = 34
     defaultConfig {
+        buildConfigField("String", "VERSION_NAME", properties["VERSION_NAME"].toString())
         minSdk = 26
     }
     buildFeatures {

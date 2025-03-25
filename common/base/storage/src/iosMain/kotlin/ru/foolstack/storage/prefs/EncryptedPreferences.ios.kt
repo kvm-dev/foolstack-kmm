@@ -24,4 +24,15 @@ actual class EncryptedPreferences actual constructor(context: PlatformContext) {
 
     actual fun saveProfessionId(professionId: Int) {
     }
+
+    actual fun getCurrentAppTheme(): String {
+        return ""
+    }
+
+    actual fun setCurrentAppTheme(appTheme: String) {
+    }
+
+    actual fun clearUserData() {
+
+    }
 }

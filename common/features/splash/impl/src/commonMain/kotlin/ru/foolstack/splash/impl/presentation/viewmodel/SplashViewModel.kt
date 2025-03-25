@@ -20,6 +20,7 @@ import ru.foolstack.splash.impl.presentation.ui.SplashBottomText
 import ru.foolstack.splash.impl.presentation.ui.SplashViewState
 import ru.foolstack.model.ProgressState
 import ru.foolstack.utils.TextFieldValidation
+import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
 class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel() {
@@ -79,6 +80,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                             _uiState.update { state }
                         }
                     } else {
+                        //sendLog
+                        interactor.authByTokenOfflineLog()
                         //goToMain without AuthCheck
                         val profile = interactor.getProfileFromLocal()
                         val events = interactor.getEventsFromLocal()
@@ -99,6 +102,7 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                     if(isInternetConnected){
                         //showAuthorizationBottomSheet
                         val state = interactor.getUnauthorizedState()
+                        interactor.getEventsFromServer()
                         _uiState.update { state }
                     }
                     else{
@@ -357,5 +361,28 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
 
     fun backToEmailScreen(){
         _uiState.update { interactor.getAuthorizationOrRegistrationState() }
+    }
+
+    fun loginByGuestLog() =  with(viewModelScope + coroutineExceptionHandler){
+        launch {
+            interactor.loginByGuestLog()
+        }
+    }
+
+    fun refreshProfile() = with(viewModelScope + coroutineExceptionHandler){
+       launch {
+           if(interactor.isConnectionAvailable()){
+               interactor.getProfileFromServer()
+               if(interactor.eventsState.value !is ResultState.Success){
+                   interactor.getEventsFromServer()
+               }
+           }
+           else{
+               interactor.getProfileFromLocal()
+               if(interactor.eventsState.value !is ResultState.Success){
+                   interactor.getEventsFromLocal()
+               }
+           }
+       }
     }
 }

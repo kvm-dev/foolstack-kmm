@@ -20,11 +20,13 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
     )
 
     val uiState: StateFlow<EventsViewState> = _uiState.asStateFlow()
+    var asMode = false
 
     fun initViewModel() = with(viewModelScope + coroutineExceptionHandler) {
         if(progressState.value == ProgressState.LOADING){
             launch {
-                if(interactor.eventsState.value !is ResultState.Success ){
+                asMode = interactor.isAsModeActive()
+                if(interactor.eventsState.value !is ResultState.Success || interactor.eventsState.value !is ResultState.Loading ){
                     if(interactor.isConnectionAvailable()){
                         interactor.getEventsFromServer()
                     }
@@ -32,6 +34,8 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
                         interactor.getEventsFromLocal()
                     }
                 }
+            }
+            launch{
                 interactor.eventsState.collect{ resultState->
                     _uiState.update { interactor.checkState(resultState) }
                     updateState(ProgressState.COMPLETED)
@@ -83,5 +87,6 @@ class EventsViewModel(private val interactor: EventsInteractor) : BaseViewModel(
         )
     }
 
+    fun isConnectionAvailable() = interactor.isConnectionAvailable()
     fun getCurrentLang() = interactor.getCurrentLang()
 }

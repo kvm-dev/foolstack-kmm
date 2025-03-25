@@ -51,4 +51,6 @@ class DatabaseSdk(databaseDriverFactory: DatabaseDriverFactory, mapper: Mapper) 
     suspend fun getProfessions() = database.getProfessions()
 
     suspend fun saveProfessions(professions: Professions) = database.clearAndSaveProfessions(professions)
+
+    suspend fun clearProfileAndPassedTests() = database.clearProfileAndPassedTests()
 }

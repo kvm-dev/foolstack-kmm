@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.foolstack.ui.theme.MainWhite
 import ru.foolstack.ui.theme.ServiceBackground
 import ru.foolstack.ui.theme.montserratFamily
 @Composable
@@ -26,9 +27,9 @@ fun ServiceSubLabel(text: String, modifier: Modifier){
             shape = RoundedCornerShape(60.dp)
         )) {
         Text(modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
-        text =text, fontFamily = montserratFamily, fontWeight = FontWeight.Bold, style = TextStyle(
+        text = text, fontFamily = montserratFamily, fontWeight = FontWeight.Bold, style = TextStyle(
             fontSize = 12.sp,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.MainWhite,
             textAlign = TextAlign.Center
         )
         )

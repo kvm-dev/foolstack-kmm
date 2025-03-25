@@ -19,4 +19,5 @@ class LocalDataSource(private val encryptedPreferences: EncryptedPreferences) {
     suspend fun saveRefreshTokenToLocal(refreshToken: String){
         encryptedPreferences.saveRefreshToken(refreshToken)
     }
+
 }

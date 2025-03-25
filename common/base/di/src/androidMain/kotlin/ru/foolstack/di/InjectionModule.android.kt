@@ -3,6 +3,7 @@ package ru.foolstack.di
 import ru.foolstack.books.impl.di.booksModule
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import ru.foolstack.asmode.impl.di.asModeModule
 import ru.foolstack.authorization.impl.di.authorizationModule
 import ru.foolstack.comments.impl.di.commentsModule
 import ru.foolstack.events.impl.di.eventsModule
@@ -16,6 +17,7 @@ import ru.foolstack.news.impl.di.newsModule
 import ru.foolstack.professions.impl.di.professionsModule
 import ru.foolstack.profile.impl.di.profileModule
 import ru.foolstack.registration.impl.di.registrationModule
+import ru.foolstack.settings.impl.di.settingsModule
 import ru.foolstack.storage.di.storageModule
 import ru.foolstack.study.impl.di.studyModule
 import ru.foolstack.tests.impl.di.testsModule
@@ -41,6 +43,8 @@ actual val injectionModule: Module
             studyModule,
             testsModule,
             mainModule,
-            commentsModule
+            commentsModule,
+            settingsModule,
+            asModeModule
         )
     }

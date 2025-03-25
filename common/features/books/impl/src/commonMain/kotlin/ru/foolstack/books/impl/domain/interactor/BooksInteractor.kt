@@ -1,5 +1,6 @@
 package ru.foolstack.books.impl.domain.interactor
 
+import ru.foolstack.asmode.api.domain.usecase.GetAsModeUseCase
 import ru.foolstack.books.api.domain.usecase.GetBooksUseCase
 import ru.foolstack.books.api.model.BooksDomain
 import ru.foolstack.books.impl.presentation.ui.BooksViewState
@@ -12,7 +13,8 @@ class BooksInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,
     private val getNetworkStateUseCase: GetNetworkStateUseCase,
     private val getBooksUseCase: GetBooksUseCase,
-    private val browserUtils: BrowserUtils
+    private val browserUtils: BrowserUtils,
+    private val getAsModeUseCase: GetAsModeUseCase
 ){
     val booksState = getBooksUseCase.booksState
 
@@ -52,5 +54,9 @@ class BooksInteractor(
 
     fun openInBrowser(url: String){
         browserUtils.openInBrowser(url)
+    }
+
+    suspend fun isAsModeActive():Boolean{
+        return getAsModeUseCase.isAsModeEnabled(isConnectionAvailable()).isAsModeActive
     }
 }

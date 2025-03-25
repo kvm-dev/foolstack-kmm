@@ -1,5 +1,6 @@
 package ru.foolstack.tests.impl.domain.interactor
 
+import ru.foolstack.authorization.api.domain.usecase.AuthByTokenUseCase
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
 import ru.foolstack.professions.api.domain.usecase.GetProfessionsUseCase
@@ -13,6 +14,7 @@ import ru.foolstack.tests.api.model.PassedTestDomain
 import ru.foolstack.tests.api.model.PassedTestsDomain
 import ru.foolstack.tests.api.model.SendRequestDomain
 import ru.foolstack.tests.api.model.TestsDomain
+import ru.foolstack.tests.impl.data.resources.StringResources
 import ru.foolstack.tests.impl.presentation.ui.TestsViewState
 import ru.foolstack.utils.model.ResultState
 
@@ -148,13 +150,31 @@ class TestsInteractor(
                             passedTests.add(passedTest)
                         }
                     }
+                    if(testsState.data?.tests?.isNotEmpty() == true){
+                        TestsViewState.SuccessState(
+                            isHaveConnection = isConnectionAvailable(),
+                            tests = testsState.data?.tests?: listOf(),
+                            lang = lang,
+                            currentProfessionId = professionId,
+                            passedTests = passedTests)
+                    }
+                    else{
+                        if(!isConnectionAvailable()){
+                            TestsViewState.EmptyState(
+                                isHaveConnection = isConnectionAvailable(),
+                                lang = lang,
+                                currentProfessionId = professionId)
+                        }
+                        else{
+                            TestsViewState.SuccessState(
+                                isHaveConnection = isConnectionAvailable(),
+                                tests = testsState.data?.tests?: listOf(),
+                                lang = lang,
+                                currentProfessionId = professionId,
+                                passedTests = passedTests)
+                        }
+                    }
 
-                    TestsViewState.SuccessState(
-                        isHaveConnection = isConnectionAvailable(),
-                        tests = testsState.data?.tests?: listOf(),
-                        lang = lang,
-                        currentProfessionId = professionId,
-                        passedTests = passedTests)
                 }
             }
         }
@@ -177,5 +197,9 @@ class TestsInteractor(
     suspend fun getProfessionId(): Int{
         return getProfessionsUseCase.getProfessionId()
     }
+
+    fun getNotFoundDataTitle() = StringResources.getScreenTitleText(getCurrentLang().lang)
+
+    fun getNotFoundDataDescription() = StringResources.getDescriptionText(getCurrentLang().lang)
 
 }
