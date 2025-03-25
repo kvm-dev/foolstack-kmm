@@ -10,7 +10,6 @@ data class ProfessionsDomain(
 
 data class ProfessionDomain(
     val professionId: Int,
-    val professionImageUrl: String,
     val professionImageBase64: String,
     val professionName: String,
     val professionParent: Int,

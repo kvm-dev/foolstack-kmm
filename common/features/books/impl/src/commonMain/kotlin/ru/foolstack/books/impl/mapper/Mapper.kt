@@ -4,20 +4,15 @@ import ru.foolstack.books.api.model.BookDomain
 import ru.foolstack.books.api.model.BookProfessionDomain
 import ru.foolstack.books.api.model.BooksDomain
 import ru.foolstack.books.impl.model.BookResponse
-import ru.foolstack.events.api.model.EventDomain
-import ru.foolstack.events.api.model.EventSubDomain
-import ru.foolstack.events.api.model.EventsDomain
 import ru.foolstack.storage.model.Book
 import ru.foolstack.storage.model.Books
 import ru.foolstack.storage.model.ProfessionListItem
 import ru.foolstack.ui.model.BookItem
 import ru.foolstack.ui.model.Chip
-import ru.foolstack.ui.model.EventItem
-import ru.foolstack.ui.utils.timestampToDateString
 
 class Mapper {
 
-     fun map(response: BookResponse, imageBase64: String):BookDomain{
+     fun map(response: BookResponse):BookDomain{
          val professions = ArrayList<BookProfessionDomain>()
          response.professions.forEach { profession->
              professions.add(BookProfessionDomain(
@@ -29,8 +24,7 @@ class Mapper {
             bookId = response.bookId,
             bookName = response.bookName,
             bookDescription = response.bookDescription,
-            bookImageUrl = response.bookImageUrl,
-            bookImageBase64 = imageBase64,
+            bookImageBase64 = response.bookImage,
             bookRefLink = response.bookRefLink,
             bookCostWithoutSale = response.bookCostWithoutSale,
             bookCostWithSale = response.bookCostWithSale,
@@ -50,7 +44,6 @@ class Mapper {
             bookId = response.bookId,
             bookName = response.bookName,
             bookDescription = response.bookDescription,
-            bookImageUrl = response.bookImageUrl,
             bookImageBase64 = response.bookImageBase64,
             bookRefLink = response.bookRefLink,
             bookCostWithoutSale = response.bookCostWithoutSale,
@@ -73,7 +66,6 @@ class Mapper {
                 bookId = book.bookId,
                 bookName = book.bookName,
                 bookDescription = book.bookDescription,
-                bookImageUrl = book.bookImageUrl,
                 bookImageBase64 = book.bookImageBase64,
                 bookRefLink = book.bookRefLink,
                 bookCostWithSale = book.bookCostWithSale,

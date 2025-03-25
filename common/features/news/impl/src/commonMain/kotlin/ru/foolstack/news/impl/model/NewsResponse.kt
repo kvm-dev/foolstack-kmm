@@ -15,5 +15,5 @@ data class NewResponse(
     @SerialName("newsText") val newsText: String = "",
     @SerialName("newsLink") val newsLink: String = "",
     @SerialName("newsDate") val newsDate: Long = 0L,
-    @SerialName("newsImageUrl") val newsImageUrl: String = ""
+    @SerialName("newsImage") val newsImage: String = ""
 )

@@ -17,7 +17,6 @@ class Mapper {
             professionPriority = profession.professionPriority,
             professionParent = profession.professionParent,
             professionType = profession.professionType,
-            professionImageUrl = profession.professionImageUrl,
             professionImageBase64 = profession.professionImageBase64,
             subProfessions = listOf()
         )
@@ -116,15 +115,14 @@ class Mapper {
         )
     }
 
-     fun recursiveProfessionsMapping(profession: ProfessionResponse, base64Images: String): ProfessionDomain{
+     fun recursiveProfessionsMapping(profession: ProfessionResponse): ProfessionDomain{
         return ProfessionDomain(
             professionId = profession.professionId,
             professionName = profession.professionName,
             professionType = profession.professionType,
             professionParent = profession.professionParent,
             professionPriority = profession.professionPriority,
-            professionImageUrl = profession.professionImageUrl,
-            professionImageBase64 = base64Images
+            professionImageBase64 = profession.professionImage
         )
     }
 
@@ -325,7 +323,6 @@ class Mapper {
             professionPriority = profession.professionPriority,
             professionParent = profession.professionParent,
             professionType = profession.professionType,
-            professionImageUrl = profession.professionImageUrl,
             professionImageBase64 = profession.professionImageBase64
         )
     }

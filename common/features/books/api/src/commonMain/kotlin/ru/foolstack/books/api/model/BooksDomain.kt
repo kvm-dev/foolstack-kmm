@@ -14,7 +14,6 @@ data class BookDomain(
     val bookId: Int,
     val bookName: String,
     val bookDescription: String,
-    val bookImageUrl: String,
     val bookImageBase64: String,
     val bookRefLink: String,
     val bookCostWithSale: Int,

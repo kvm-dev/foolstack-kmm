@@ -36,7 +36,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
             userStatus = profile.userStatus.toInt(),
             userEmail = profile.userEmail,
             userAchievements = mapper.mapAchievement(achievements),
-            userPhotoUrl = profile.userPhotoUrl,
             userPhotoBase64 = profile.userPhotoBase64,
             userPurchasedProfessions = mapper.mapPurchasedProfessions(purchasedProfessions)
         )
@@ -52,7 +51,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
             userType = profile.userType,
             userStatus = profile.userStatus.toLong(),
             userEmail = profile.userEmail,
-            userPhotoUrl = profile.userPhotoUrl,
             userPhotoBase64 = profile.userPhotoBase64
         )
         profile.userAchievements.forEach { achievement->
@@ -243,7 +241,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                 professionName = professions.professions[i].professionName,
                 professionParent = professions.professions[i].professionParent.toLong(),
                 professionPriority = professions.professions[i].professionPriority.toLong(),
-                professionImageUrl = professions.professions[i].professionImageUrl,
                 professionImageBase64 = professions.professions[i].professionImageBase64)
             for(a in professions.professions[i].subProfessions.indices){
                 dbQuery.insertProfession(professionId = professions.professions[i].subProfessions[a].professionId.toLong(),
@@ -251,7 +248,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                     professionName = professions.professions[i].subProfessions[a].professionName,
                     professionParent = professions.professions[i].subProfessions[a].professionParent.toLong(),
                     professionPriority = professions.professions[i].subProfessions[a].professionPriority.toLong(),
-                    professionImageUrl = professions.professions[i].professionImageUrl,
                     professionImageBase64 = professions.professions[i].subProfessions[a].professionImageBase64)
                 for(b in professions.professions[i].subProfessions[a].subProfessions.indices){
                     dbQuery.insertProfession(professionId = professions.professions[i].subProfessions[a].subProfessions[b].professionId.toLong(),
@@ -259,7 +255,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                         professionName = professions.professions[i].subProfessions[a].subProfessions[b].professionName,
                         professionParent = professions.professions[i].subProfessions[a].subProfessions[b].professionParent.toLong(),
                         professionPriority = professions.professions[i].subProfessions[a].subProfessions[b].professionPriority.toLong(),
-                        professionImageUrl = professions.professions[i].subProfessions[a].subProfessions[b].professionImageUrl,
                         professionImageBase64 = professions.professions[i].subProfessions[a].subProfessions[b].professionImageBase64)
                     for(c in professions.professions[i].subProfessions[a].subProfessions[b].subProfessions.indices){
                         dbQuery.insertProfession(professionId = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].professionId.toLong(),
@@ -267,7 +262,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                             professionName = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].professionName,
                             professionParent = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].professionParent.toLong(),
                             professionPriority = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].professionPriority.toLong(),
-                            professionImageUrl = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].professionImageUrl,
                             professionImageBase64 = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].professionImageBase64)
                         for(d in professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions.indices){
                             dbQuery.insertProfession(professionId = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].professionId.toLong(),
@@ -275,7 +269,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                                 professionName = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].professionName,
                                 professionParent = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].professionParent.toLong(),
                                 professionPriority = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].professionPriority.toLong(),
-                                professionImageUrl = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].professionImageUrl,
                                 professionImageBase64 = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].professionImageBase64)
                             for(e in professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].subProfessions.indices){
                                 dbQuery.insertProfession(professionId = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].subProfessions[e].professionId.toLong(),
@@ -283,7 +276,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                                     professionName = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].subProfessions[e].professionName,
                                     professionParent = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].subProfessions[e].professionParent.toLong(),
                                     professionPriority = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].subProfessions[e].professionPriority.toLong(),
-                                    professionImageUrl = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].subProfessions[e].professionImageUrl,
                                     professionImageBase64 = professions.professions[i].subProfessions[a].subProfessions[b].subProfessions[c].subProfessions[d].subProfessions[e].professionImageBase64)
                             }
                         }
@@ -311,7 +303,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                 eventCost = event.eventCost.toLong(),
                 eventDateStart = event.eventDateStart,
                 eventRefLink = event.eventRefLink,
-                eventImageUrl = event.eventImageUrl,
                 eventImageBase64 = event.eventImageBase64
             )
             event.eventSubs.forEach {eventSub->
@@ -334,7 +325,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                 newsName = new.newsName,
                 newsText = new.newsText,
                 newsDate = new.newsDate,
-                newsImageUrl = new.newsImageUrl,
                 newsImageBase64 = new.newsImageBase64,
                 newsLink = new.newsLink
             )
@@ -385,7 +375,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                 bookId = book.bookId.toLong(),
                 bookName = book.bookName,
                 bookDescription = book.bookDescription,
-                bookImageUrl = book.bookImageUrl,
                 bookImageBase64 = book.bookImageBase64,
                 bookRefLink = book.bookRefLink,
                 bookCostWithoutSale = book.bookCostWithoutSale.toLong(),
@@ -437,7 +426,6 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory, private va
                 studyId = study.studyId.toLong(),
                 studyName = study.studyName,
                 studyCost = study.studyCost.toLong(),
-                studyImageUrl = study.studyImageUrl,
                 studyImageBase64 = study.studyImageBase64,
                 studyRefLink = study.studyRefLink,
                 studySalePercent = study.studySalePercent.toLong(),

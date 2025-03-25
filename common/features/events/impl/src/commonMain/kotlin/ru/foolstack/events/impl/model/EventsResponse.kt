@@ -17,7 +17,7 @@ data class EventResponse(
     @SerialName("eventRefLink") val eventRefLink: String = "",
     @SerialName("eventDateStart") val eventDateStart: Long = 0L,
     @SerialName("eventCost") val eventCost: Int = 0,
-    @SerialName("eventImageUrl") val eventImageUrl: String = "",
+    @SerialName("eventImage") val eventImage: String = "",
     @SerialName("eventSubs") val eventSubs: List<EventSubResponse> = listOf()
 )
 @Serializable

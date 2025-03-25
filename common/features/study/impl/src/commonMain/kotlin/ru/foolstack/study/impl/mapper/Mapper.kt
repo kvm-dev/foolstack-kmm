@@ -1,7 +1,5 @@
 package ru.foolstack.study.impl.mapper
 
-import ru.foolstack.events.api.model.EventDomain
-import ru.foolstack.events.api.model.EventSubDomain
 import ru.foolstack.storage.model.Studies
 import ru.foolstack.storage.model.Study
 import ru.foolstack.study.api.model.StudiesDomain
@@ -14,7 +12,7 @@ import ru.foolstack.ui.model.StudyItem
 
 class Mapper {
 
-    fun map(response: StudyResponse, studyImageBase64: String):StudyDomain{
+    fun map(response: StudyResponse):StudyDomain{
         val professions = ArrayList<StudyProfessionDomain>()
         response.professions.forEach { profession->
             professions.add(StudyProfessionDomain(
@@ -26,8 +24,7 @@ class Mapper {
                 studyId = response.studyId,
                 studyName = response.studyName,
                 studyCost = response.studyCost,
-                studyImageUrl = response.studyImageUrl,
-                studyImageBase64 = studyImageBase64,
+                studyImageBase64 = response.studyImage,
                 studyRefLink = response.studyRefLink,
                 studySalePercent = response.studySalePercent,
                 studyLength = response.studyLength,
@@ -58,7 +55,6 @@ class Mapper {
                 studyAdditionalText = study.studyAdditionalText,
                 studyOwner = study.studyOwner,
                 studySalePercent = study.studySalePercent,
-                studyImageUrl = study.studyImageUrl,
                 studyImageBase64 = study.studyImageBase64,
                 studyRefLink = study.studyRefLink,
                 professions = professions
@@ -92,7 +88,6 @@ class Mapper {
                     studyAdditionalText = study.studyAdditionalText,
                     studyOwner = study.studyOwner,
                     studySalePercent = study.studySalePercent,
-                    studyImageUrl = study.studyImageUrl,
                     studyImageBase64 = study.studyImageBase64,
                     studyRefLink = study.studyRefLink,
                     professions = professions

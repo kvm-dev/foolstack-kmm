@@ -9,15 +9,14 @@ import ru.foolstack.ui.model.NewsItem
 
 class Mapper {
 
-     fun map(response:NewResponse, base64Image: String):SingleNewsDomain{
+     fun map(response:NewResponse):SingleNewsDomain{
                 return SingleNewsDomain(
                     newsId = response.newsId,
                     newsName = response.newsName,
                     newsText = response.newsText,
                     newsDate = response.newsDate,
                     newsLink = response.newsLink,
-                    newsImageUrl = response.newsImageUrl,
-                    newsImageBase64 = base64Image)
+                    newsImageBase64 = response.newsImage)
         }
 
     fun map(response: News):NewsDomain{
@@ -30,7 +29,6 @@ class Mapper {
                 newsDate = new.newsDate,
                 newsText = new.newsText,
                 newsLink = new.newsLink,
-                newsImageUrl = new.newsImageUrl,
                 newsImageBase64 = new.newsImageBase64
             )
             )
@@ -50,7 +48,6 @@ class Mapper {
                 newsDate = new.newsDate,
                 newsText = new.newsText,
                 newsLink = new.newsLink,
-                newsImageUrl = new.newsImageUrl,
                 newsImageBase64 = new.newsImageBase64
             ))
         }

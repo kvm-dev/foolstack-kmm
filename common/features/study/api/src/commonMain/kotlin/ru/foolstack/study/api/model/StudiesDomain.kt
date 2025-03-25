@@ -10,7 +10,6 @@ data class StudyDomain(
     val studyId: Int,
     val studyName: String,
     val studyCost: Int,
-    val studyImageUrl: String,
     val studyImageBase64: String,
     val studyRefLink: String,
     val studySalePercent: Int,

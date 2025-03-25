@@ -113,6 +113,7 @@ fun NewsVerticalSlider(
                         Image(
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .clip(RoundedCornerShape(10.dp)),
                             bitmap = it,
                             contentDescription = newsItem.newsName
@@ -122,6 +123,7 @@ fun NewsVerticalSlider(
                     Image(
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier
+                            .fillMaxWidth()
                             .clip(RoundedCornerShape(10.dp)),
                         painter = painterResource(R.drawable.error_loading_image_big),
                         contentDescription = newsItem.newsName

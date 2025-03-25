@@ -13,7 +13,7 @@ import ru.foolstack.ui.utils.timestampToDateString
 
 class Mapper {
 
-     fun map(response: EventResponse, base64Image: String):EventDomain{
+     fun map(response: EventResponse):EventDomain{
          val subs = ArrayList<EventSubDomain>()
          response.eventSubs.forEach { sub->
              subs.add(EventSubDomain(
@@ -27,8 +27,7 @@ class Mapper {
             eventDescription = response.eventDescription,
             eventDateStart = response.eventDateStart,
             eventCost = response.eventCost,
-            eventImageUrl = response.eventImageUrl,
-            eventImageBase64 = base64Image,
+            eventImageBase64 = response.eventImage,
             eventRefLink = response.eventRefLink,
             eventSubs =  subs
         )
@@ -57,7 +56,6 @@ class Mapper {
             eventCost = event.eventCost,
             eventRefLink = event.eventRefLink,
             eventDateStart = event.eventDateStart,
-            eventImageUrl = event.eventImageUrl,
             eventImageBase64 = event.eventImageBase64,
             eventSubs = subs
         )
@@ -80,7 +78,6 @@ class Mapper {
                 eventDateStart = event.eventDateStart,
                 eventCost = event.eventCost,
                 eventRefLink = event.eventRefLink,
-                eventImageUrl = event.eventImageUrl,
                 eventImageBase64 = event.eventImageBase64,
                 eventSubs = subs
             ))

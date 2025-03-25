@@ -12,7 +12,6 @@ data class EventDomain(
     val eventRefLink: String,
     val eventDateStart: Long,
     val eventCost: Int,
-    val eventImageUrl: String,
     val eventImageBase64: String,
     val eventSubs: List<EventSubDomain>
 )
