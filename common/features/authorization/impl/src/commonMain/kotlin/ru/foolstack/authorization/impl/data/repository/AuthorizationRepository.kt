@@ -6,9 +6,12 @@ import ru.foolstack.authorization.api.model.AuthByTokenDomain
 import ru.foolstack.authorization.api.model.ConfirmAuthAndRegDomain
 import ru.foolstack.authorization.api.model.IsUserExistDomain
 import ru.foolstack.authorization.impl.data.repository.local.LocalDataSource
+import ru.foolstack.authorization.impl.data.repository.network.DelayedAuthByTokenLogger
 import ru.foolstack.authorization.impl.data.repository.network.NetworkDataSource
 
-class AuthorizationRepository(private val localDataSource: LocalDataSource, private val networkDataSource: NetworkDataSource) {
+class AuthorizationRepository(private val localDataSource: LocalDataSource,
+                              private val networkDataSource: NetworkDataSource,
+                              private val delayedAuthByTokenLogger: DelayedAuthByTokenLogger) {
 
     suspend fun authByEmail(email: String, code:String):AuthByEmailDomain{
         val result = networkDataSource.authByEmail(email = email, code = code)
@@ -77,5 +80,13 @@ class AuthorizationRepository(private val localDataSource: LocalDataSource, priv
 
     suspend fun getTokenFromLocal():String{
         return localDataSource.getTokenFromLocal()
+    }
+
+    fun authByTokenOfflineLog(){
+        delayedAuthByTokenLogger.sendLog()
+    }
+
+    suspend fun loginByGuestLog(){
+        networkDataSource.loginByGuestLog()
     }
 }

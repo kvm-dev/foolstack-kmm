@@ -63,10 +63,6 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
                     }
                 }
             }
-            //getAdditionalData
-            viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler + supervisorJob){
-                interactor.getAdditionalData()
-            }
         }
     }
 

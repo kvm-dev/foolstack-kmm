@@ -5,6 +5,9 @@ import ru.foolstack.authorization.api.model.AuthByTokenDomain
 import ru.foolstack.authorization.api.model.ConfirmAuthAndRegDomain
 import ru.foolstack.authorization.api.model.IsUserExistDomain
 import ru.foolstack.authorization.impl.mapper.Mapper
+import ru.foolstack.authorization.impl.model.request.AuthByTokenOfflineLogRequest
+import ru.foolstack.authorization.impl.model.response.AuthByTokenOfflineResponse
+import ru.foolstack.authorization.impl.model.response.LoginByGuestLogResponse
 import ru.foolstack.authorization.impl.model.response.RefreshTokenResponse
 
 class NetworkDataSource(private val api: AuthorizationApi, private val mapper: Mapper){
@@ -27,5 +30,13 @@ class NetworkDataSource(private val api: AuthorizationApi, private val mapper: M
 
     suspend fun refreshToken(userToken: String, refreshToken: String):RefreshTokenResponse{
         return api.refreshToken(userToken = userToken, refreshToken = refreshToken)
+    }
+
+    suspend fun authByTokenOfflineLog(timestamp: Long, userToken: String):AuthByTokenOfflineResponse{
+        return api.sendAuthByTokenOfflineLog(request = AuthByTokenOfflineLogRequest(timestamp = timestamp), userToken = userToken)
+    }
+
+    suspend fun loginByGuestLog():LoginByGuestLogResponse{
+        return api.loginByGuestLog()
     }
 }

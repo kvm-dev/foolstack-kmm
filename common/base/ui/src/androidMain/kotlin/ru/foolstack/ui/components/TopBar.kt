@@ -10,6 +10,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,7 +39,7 @@ fun TopBar(
     isTitleVisible: Boolean = true,
     isIconVisible: Boolean = true,
     isBackArrow: Boolean = true){
-
+    var clickBackEnabled by remember { mutableStateOf(true) }
         Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp).fillMaxWidth()) {
             val icon: Painter
             if (isIconVisible) {
@@ -57,7 +61,8 @@ fun TopBar(
                     contentDescription = "",
                     tint =  if (isDark){ MaterialTheme.colorScheme.MainBlack } else { Color.White },
                     modifier = Modifier.size(24.dp)
-                        .clickable {
+                        .clickable(enabled = clickBackEnabled) {
+                            clickBackEnabled = false
                             action()
                         }
                 )

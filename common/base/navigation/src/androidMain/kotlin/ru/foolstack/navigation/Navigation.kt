@@ -182,7 +182,7 @@ fun StartApplication(
                         BooksScreen(navController = navController, bookDestination = NavigationScreens.BookScreenNavigation.name)
                     }
 
-                    composable(route = "${NavigationScreens.BookScreenNavigation.name}/{bookId}/{prText}/{maxSalePercent}/{bookSubscribeText}/{bookSubscribeMinCost}/{bookSubscribeLink}") {
+                    composable(route = "${NavigationScreens.BookScreenNavigation.name}/{bookId}/{prText}/{maxSalePercent}/{bookSubscribeText}/{bookSubscribeMinCost}/{bookSubscribeLink}/{isAsActive}") {
                             navBackStackEntry ->
                         val bookId = navBackStackEntry.arguments?.getString("bookId")
                         val prText = navBackStackEntry.arguments?.getString("prText")?:""

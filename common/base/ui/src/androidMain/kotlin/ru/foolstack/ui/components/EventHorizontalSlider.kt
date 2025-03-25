@@ -49,6 +49,7 @@ fun EventHorizontalSlider(lang: Lang,
                           isLoading: Boolean = false,
                           onClickEvent: () -> Unit,
                           selectId: MutableState<Int>) {
+    var clickEventEnabled by remember { mutableStateOf(true) }
 
     var filteredEvents: List<EventItem> = if(isAsActive){
         events.filter { it.eventCost == 0 }
@@ -63,7 +64,7 @@ fun EventHorizontalSlider(lang: Lang,
 
     val emptyText = if(lang== Lang.RU){ "В ближайшее время мероприятий\nне планируется" } else{ "There are not events planned\nin the near future" }
     var currentImageIndex by remember { mutableIntStateOf(0) }
-    var isAnimating by remember { mutableStateOf(false) }
+    val isAnimating by remember { mutableStateOf(false) }
     val height = if(isLoading){ 250 } else{ if(filteredEvents.isNotEmpty()){ 320 } else{ 260 } }
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -98,10 +99,9 @@ fun EventHorizontalSlider(lang: Lang,
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                itemsIndexed(filteredEvents) { index, event ->
-                    var cost = ""
-                    var symbol = ""
-                    symbol = if (lang == Lang.RU) {
+                itemsIndexed(filteredEvents) { _, event ->
+                    val cost: String
+                    val symbol: String = if (lang == Lang.RU) {
                         "₽"
                     } else {
                         "$"
@@ -126,7 +126,8 @@ fun EventHorizontalSlider(lang: Lang,
                         modifier = Modifier
                             .clip(RoundedCornerShape(4.dp))
                             .width(280.dp)
-                            .clickable {
+                            .clickable(enabled = clickEventEnabled) {
+                                clickEventEnabled = false
                                 selectId.value = event.eventId
                                 onClickEvent()
                             },

@@ -5,6 +5,7 @@ import ru.foolstack.authorization.api.model.AuthByTokenDomain
 import ru.foolstack.authorization.api.model.ConfirmAuthAndRegDomain
 import ru.foolstack.authorization.api.model.IsUserExistDomain
 import ru.foolstack.authorization.impl.model.response.AuthByEmailResponse
+import ru.foolstack.authorization.impl.model.response.AuthByTokenOfflineResponse
 import ru.foolstack.authorization.impl.model.response.AuthByTokenResponse
 import ru.foolstack.authorization.impl.model.response.ConfirmAuthAndRegResponse
 import ru.foolstack.authorization.impl.model.response.IsUserExistResponse

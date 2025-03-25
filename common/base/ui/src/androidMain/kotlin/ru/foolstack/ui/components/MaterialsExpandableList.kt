@@ -16,7 +16,10 @@ import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +51,7 @@ fun MaterialsExpandableList(
     onClickBanner: () -> Unit,
     lang: Lang,
     isConnectionAvailable: Boolean) {
+    var clickEnabled by remember { mutableStateOf(true) }
 
     val filteredMaterials = HashSet<MaterialSectionItem>()
     selectedChips.filter { it.isNotEmpty() }.forEach { chip->
@@ -111,11 +115,16 @@ fun MaterialsExpandableList(
                                 isExpandedMap[index] = !(isExpandedMap[index] ?: true)
                             },
                             onDetailsClick = {
-
-                                onClickMaterial(sectionData.materialId)
+                                if(clickEnabled){
+                                    clickEnabled = false
+                                    onClickMaterial(sectionData.materialId)
+                                }
                             },
                             sendCommentClick = {
-                                onSendComment(sectionData.materialId)
+                                if(clickEnabled){
+                                    clickEnabled = false
+                                    onSendComment(sectionData.materialId)
+                                }
                             },
                             lang = lang
                         )

@@ -24,10 +24,8 @@ class MainInteractor(
     private val logoutUseCase: LogoutUseCase,
     private val getTokenFromLocalUseCase: GetTokenFromLocalUseCase,
     private val getEventsUseCase: GetEventsUseCase,
-    private val getAsModeUseCase: GetAsModeUseCase,
-    private val getBooksUseCase: GetBooksUseCase,
-    private val getStudiesUseCase: GetStudiesUseCase,
-    private val getNewsUseCase: GetNewsUseCase){
+    private val getAsModeUseCase: GetAsModeUseCase
+  ){
     val eventsState = getEventsUseCase.eventsState
     val profileState = getProfileUseCase.profileState
 
@@ -39,17 +37,6 @@ class MainInteractor(
 
     suspend fun getProfileFromServer() = getProfileUseCase.getProfile()
     suspend fun getProfileFromLocal() = getProfileUseCase.getProfile(fromLocal = true)
-
-    suspend fun getNewsFromServer() = getNewsUseCase.getNews()
-    suspend fun getNewsFromLocal() = getNewsUseCase.getNews(fromLocal = true)
-
-    suspend fun getBooksFromServer() = getBooksUseCase.getBooks()
-    suspend fun getBooksFromLocal() = getBooksUseCase.getBooks(fromLocal = true)
-
-    suspend fun getStudiesFromServer() = getStudiesUseCase.getStudies()
-    suspend fun getStudiesFromLocal() = getStudiesUseCase.getStudies(fromLocal = true)
-
-    suspend fun isTokenExist() = getTokenFromLocalUseCase.getToken().isNotEmpty()
 
     fun checkState(eventsState: ResultState<EventsDomain>, profileState: ResultState<ProfileDomain>?):MainViewState{
         val lang = getCurrentLang()
@@ -168,32 +155,5 @@ class MainInteractor(
 
     suspend fun isAsModeActive():Boolean{
         return getAsModeUseCase.isAsModeEnabled(isConnectionAvailable()).isAsModeActive
-    }
-
-    suspend fun getAdditionalData()  {
-        if(getNewsUseCase.newsState.value !is ResultState.Success || getNewsUseCase.newsState.value !is ResultState.Loading){
-            if(isConnectionAvailable()){
-                getNewsFromServer()
-            }
-            else{
-                getNewsFromLocal()
-            }
-        }
-        if(getBooksUseCase.booksState.value !is ResultState.Success || getNewsUseCase.newsState.value !is ResultState.Loading){
-            if(isConnectionAvailable()){
-                getBooksFromServer()
-            }
-            else{
-                getBooksFromLocal()
-            }
-        }
-        if(getStudiesUseCase.studiesState.value !is ResultState.Success || getNewsUseCase.newsState.value !is ResultState.Loading){
-            if(isConnectionAvailable()){
-               getStudiesFromServer()
-            }
-            else{
-                getStudiesFromLocal()
-            }
-        }
     }
 }

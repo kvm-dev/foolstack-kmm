@@ -23,6 +23,10 @@ import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -156,7 +160,7 @@ fun StudiesVerticalSlider(
                         }
                         else{
                             Image(
-                                contentScale = ContentScale.Crop,
+                                contentScale = ContentScale.FillWidth,
                                 modifier = Modifier
                                     .clip(shape),
                                 painter = painterResource(R.drawable.error_loading_image_big),

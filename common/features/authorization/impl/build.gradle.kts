@@ -33,6 +33,10 @@ kotlin {
         commonMain.dependencies {
             //api
             api(projects.common.features.authorization.api)
+            //utils
+            implementation(projects.common.base.utils)
+            //date time
+            implementation(libs.kotlinx.datetime)
             //coroutines
             implementation(libs.kotlinx.coroutines.core)
             //network
@@ -40,6 +44,8 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(projects.common.base.network)
+            //lifecycle
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
             //storage
             implementation(libs.sqldelight.runtime)
             implementation(projects.common.base.storage)
@@ -51,6 +57,8 @@ kotlin {
             implementation(libs.ktor.client.android)
             //storage
             implementation(libs.sqldelight.android.driver)
+            //work manager
+            implementation(libs.work.manager)
         }
         iosMain.dependencies {
             //network

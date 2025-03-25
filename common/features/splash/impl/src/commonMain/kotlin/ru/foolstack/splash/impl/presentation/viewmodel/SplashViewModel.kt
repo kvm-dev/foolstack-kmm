@@ -80,6 +80,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                             _uiState.update { state }
                         }
                     } else {
+                        //sendLog
+                        interactor.authByTokenOfflineLog()
                         //goToMain without AuthCheck
                         val profile = interactor.getProfileFromLocal()
                         val events = interactor.getEventsFromLocal()
@@ -359,6 +361,12 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
 
     fun backToEmailScreen(){
         _uiState.update { interactor.getAuthorizationOrRegistrationState() }
+    }
+
+    fun loginByGuestLog() =  with(viewModelScope + coroutineExceptionHandler){
+        launch {
+            interactor.loginByGuestLog()
+        }
     }
 
     fun refreshProfile() = with(viewModelScope + coroutineExceptionHandler){

@@ -1,9 +1,11 @@
 package ru.foolstack.splash.impl.domain.interactor
 
 import ru.foolstack.authorization.api.domain.usecase.AuthByEmailUseCase
+import ru.foolstack.authorization.api.domain.usecase.AuthByTokenOfflineLogUseCase
 import ru.foolstack.authorization.api.domain.usecase.AuthByTokenUseCase
 import ru.foolstack.authorization.api.domain.usecase.ConfirmAuthAndRegUseCase
 import ru.foolstack.authorization.api.domain.usecase.GetTokenFromLocalUseCase
+import ru.foolstack.authorization.api.domain.usecase.GuestAuthUseCase
 import ru.foolstack.authorization.api.domain.usecase.IsUserExistUseCase
 import ru.foolstack.events.api.domain.usecase.GetEventsUseCase
 import ru.foolstack.events.api.model.EventsDomain
@@ -29,7 +31,9 @@ class SplashInteractor(
     private val authByTokenUseCase: AuthByTokenUseCase,
     private val getProfessionsUseCase: GetProfessionsUseCase,
     private val registrationByEmailUseCase: RegistrationByEmailUseCase,
-    private val confirmAuthAndRegUseCase: ConfirmAuthAndRegUseCase
+    private val confirmAuthAndRegUseCase: ConfirmAuthAndRegUseCase,
+    private val authByTokenOfflineLogUseCase: AuthByTokenOfflineLogUseCase,
+    private val authByGuestAuthUseCase: GuestAuthUseCase
 ) {
     val profileState = getProfileUseCase.profileState
     val eventsState = getEventsUseCase.eventsState
@@ -354,4 +358,12 @@ class SplashInteractor(
 
     private fun getErrorNotFoundConnectionText(lang: String? = null) =
         StringResources.getErrorNotFoundConnectionText(lang)
+
+    fun authByTokenOfflineLog(){
+        authByTokenOfflineLogUseCase.logOfflineAuthBytToken()
+    }
+
+    suspend fun loginByGuestLog(){
+        authByGuestAuthUseCase.authLog()
+    }
 }

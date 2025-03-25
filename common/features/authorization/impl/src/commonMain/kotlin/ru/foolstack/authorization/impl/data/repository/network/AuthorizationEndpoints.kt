@@ -15,4 +15,10 @@ object AuthorizationEndpoints {
 
     val authorizationByEmail: String
         get() = "auth/email/"
+
+    val authorizationByTokenOfflineLog: String
+        get() = "auth/token-offline/"
+
+    val loginByGuestLog: String
+        get() = "auth/guest-login/"
 }

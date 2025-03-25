@@ -33,6 +33,10 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
@@ -57,6 +61,8 @@ fun EventVerticalSlider(
     onclickChip: () -> Unit,
     isConnectionAvailable: Boolean
 ) {
+    var clickEnabled by remember { mutableStateOf(true) }
+
     val filteredEvents = HashSet<EventItem>()
     selectedChips.filter { it.isNotEmpty() }.forEach { chip->
         events.forEach { event->
@@ -136,7 +142,8 @@ fun EventVerticalSlider(
                         }
                         Card(
                             modifier = Modifier
-                                .clickable {
+                                .clickable(enabled = clickEnabled) {
+                                    clickEnabled = false
                                     selectId.value = event.eventId
                                     onClickEvent()
                                 }
@@ -159,7 +166,7 @@ fun EventVerticalSlider(
                                 }
                                 else{
                                         Image(
-                                            contentScale = ContentScale.Crop,
+                                            contentScale = ContentScale.FillWidth,
                                             modifier = Modifier
                                                 .clip(RoundedCornerShape(10.dp)),
                                             painter = painterResource(R.drawable.error_loading_image_big),

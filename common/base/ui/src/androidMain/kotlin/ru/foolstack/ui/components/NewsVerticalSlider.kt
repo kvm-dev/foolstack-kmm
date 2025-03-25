@@ -19,6 +19,10 @@ import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,7 +51,7 @@ fun NewsVerticalSlider(
     selectId: MutableState<Int>,
     isConnectionAvailable: Boolean
 ) {
-
+    var clickEnabled by remember { mutableStateOf(true) }
     val state = rememberPullToRefreshState()
 
     val scaleFraction = {
@@ -116,7 +120,7 @@ fun NewsVerticalSlider(
                     }
                 } else {
                     Image(
-                        contentScale = ContentScale.Crop,
+                        contentScale = ContentScale.FillWidth,
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp)),
                         painter = painterResource(R.drawable.error_loading_image_big),
@@ -140,8 +144,12 @@ fun NewsVerticalSlider(
                             .padding(top = 20.dp),
                         text = if(lang == Lang.RU){" Подробнее "} else{ "Read more"},
                         onClick = {
-                            selectId.value = newsItem.newsId
-                            onClickNews() },
+                            if(clickEnabled){
+                                clickEnabled = false
+                                selectId.value = newsItem.newsId
+                                onClickNews()
+                            }
+                             },
                         isEnabled = true,
                         isLoading = false
                     )

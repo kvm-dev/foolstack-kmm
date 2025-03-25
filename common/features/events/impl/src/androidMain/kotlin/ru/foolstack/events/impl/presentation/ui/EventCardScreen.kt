@@ -19,6 +19,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,6 +59,7 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
             when (eventState) {
 
                 is EventCardViewState.Idle -> {
+                    var clickEnabled by remember { mutableStateOf(true) }
                     Log.d("event in state is", "Error")
                     Box(
                         modifier = Modifier
@@ -88,7 +92,12 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                                 }
                             )
                             YellowButton(
-                                onClick = { backDispatcher.onBackPressed() },
+                                onClick = {
+                                    if(clickEnabled){
+                                        clickEnabled = false
+                                        backDispatcher.onBackPressed()
+                                    }
+                                          },
                                 text = if ((eventState as EventCardViewState.Idle).lang is LangResultDomain.Ru) {
                                     "Вернуться к событиям"
                                 } else {
@@ -227,7 +236,9 @@ fun EventCardScreen(eventCardViewModel: EventCardViewModel = koinViewModel(), ev
                                     },
                                     isEnabled = true,
                                     isLoading = false,
-                                    onClick = { eventCardViewModel.onClickJoinEvent(url = successState.event?.eventRefLink?:"")},
+                                    onClick = {
+                                            eventCardViewModel.onClickJoinEvent(url = successState.event?.eventRefLink?:"")
+                                              },
                                 )
                             }
                         }

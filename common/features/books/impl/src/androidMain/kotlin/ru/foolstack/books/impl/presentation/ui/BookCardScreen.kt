@@ -16,6 +16,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -47,6 +50,8 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
             val bookState by bookCardViewModel.uiState.collectAsState()
             when (bookState) {
                 is BookCardViewState.Idle -> {
+                    var clickEnabled by remember { mutableStateOf(true) }
+
                     Log.d("bookCard in state is", "Error")
                     Box(
                         modifier = Modifier
@@ -78,7 +83,12 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                                 }
                             )
                             YellowButton(
-                                onClick = { backDispatcher.onBackPressed() },
+                                onClick = {
+                                    if(clickEnabled){
+                                        clickEnabled = false
+                                        backDispatcher.onBackPressed()
+                                    }
+                                          },
                                 text = if ((bookState as BookCardViewState.Idle).lang is LangResultDomain.Ru) {
                                     "Вернуться к литературе"
                                 } else {
@@ -97,6 +107,7 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                 is BookCardViewState.SuccessState -> {
                     Log.d("bookCard in state is", "Success")
                     val successState = (bookState as BookCardViewState.SuccessState)
+                    var clickEnabled by remember { mutableStateOf(true) }
                     Box(
                         modifier = Modifier
                             .background(MaterialTheme.colorScheme.background)
@@ -120,16 +131,23 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                                                 .align(Alignment.CenterHorizontally))
                                         Column(modifier = Modifier.
                                         verticalScroll(rememberScrollState())) {
+                                            if(!bookCardViewModel.asMode){
                                             BookSaleText(
                                                 text = prText,
                                                 salePrice = maxSalePercent,
-                                                lang = if(successState.lang is LangResultDomain.Ru){Lang.RU} else {Lang.ENG},
+                                                lang = if (successState.lang is LangResultDomain.Ru) {
+                                                    Lang.RU
+                                                } else {
+                                                    Lang.ENG
+                                                },
                                                 modifier = Modifier
                                                     .padding(
                                                         start = 38.dp,
                                                         end = 38.dp,
                                                     )
-                                                    .align(Alignment.CenterHorizontally))
+                                                    .align(Alignment.CenterHorizontally)
+                                            )
+                                        }
                                             CardText(text = successState.book?.bookDescription?:"", modifier = Modifier.padding(top = 20.dp))
                                             val bookSubscribeFullText = if(successState.lang is LangResultDomain.Ru){
                                                 bookSubscribeText.replace("***", "$bookSubscribeMinCost ₽")
@@ -138,14 +156,18 @@ fun BookCardScreen(bookCardViewModel: BookCardViewModel = koinViewModel(), bookI
                                             if(!bookCardViewModel.asMode){
                                                 BookPrBlock(text = bookSubscribeFullText, modifier = Modifier
                                                     .padding(top = 12.dp)
-                                                    .clickable { bookCardViewModel.onClickLink(bookSubscribeLink) })
+                                                    .clickable{
+                                                        bookCardViewModel.onClickLink(bookSubscribeLink)
+                                                    })
                                                 GreenButton(
                                                     modifier = Modifier
                                                         .padding(top = 16.dp, bottom = 22.dp)
                                                         .fillMaxWidth(),
                                                     text = if(successState.lang is LangResultDomain.Ru){
                                                         "Купить за ${successState.book?.bookCostWithSale?: 0} ₽" } else{ "Buy ${successState.book?.bookCostWithSale?: 0} \$" },
-                                                    onClick = { bookCardViewModel.onClickLink(successState.book?.bookRefLink?: "") },
+                                                    onClick = {
+                                                            bookCardViewModel.onClickLink(successState.book?.bookRefLink?: "")
+                                                              },
                                                     isEnabled = true,
                                                     isLoading = false
                                                 )

@@ -2,6 +2,7 @@ package ru.foolstack.authorization.impl.data.repository.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -10,13 +11,16 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import ru.foolstack.authorization.impl.model.request.AuthByEmailRequest
+import ru.foolstack.authorization.impl.model.request.AuthByTokenOfflineLogRequest
 import ru.foolstack.authorization.impl.model.request.ConfirmAuthAndRegRequest
 import ru.foolstack.authorization.impl.model.request.IsUserExistRequest
 import ru.foolstack.authorization.impl.model.request.RefreshTokenRequest
 import ru.foolstack.authorization.impl.model.response.AuthByEmailResponse
+import ru.foolstack.authorization.impl.model.response.AuthByTokenOfflineResponse
 import ru.foolstack.authorization.impl.model.response.AuthByTokenResponse
 import ru.foolstack.authorization.impl.model.response.ConfirmAuthAndRegResponse
 import ru.foolstack.authorization.impl.model.response.IsUserExistResponse
+import ru.foolstack.authorization.impl.model.response.LoginByGuestLogResponse
 import ru.foolstack.authorization.impl.model.response.RefreshTokenResponse
 import ru.foolstack.network.baseUrl
 import ru.foolstack.network.exceptionHandler
@@ -91,6 +95,31 @@ class AuthorizationApi(private val client: HttpClient) {
             result.body<RefreshTokenResponse>()
         } else{
             RefreshTokenResponse(errorMsg = exceptionHandler(result.status))
+        }
+    }
+
+    suspend fun sendAuthByTokenOfflineLog(request: AuthByTokenOfflineLogRequest, userToken: String): AuthByTokenOfflineResponse {
+        val result = with(client) {
+            post("$baseUrl${AuthorizationEndpoints.authorizationByTokenOfflineLog}"){
+                header(HttpHeaders.Authorization, userToken)
+                setBody(request)
+            }
+        }
+        return if(result.status == HttpStatusCode.OK) {
+            result.body<AuthByTokenOfflineResponse>()
+        } else{
+            AuthByTokenOfflineResponse(errorMsg = exceptionHandler(result.status))
+        }
+    }
+
+    suspend fun loginByGuestLog(): LoginByGuestLogResponse{
+        val result = with(client) {
+            get("$baseUrl${AuthorizationEndpoints.loginByGuestLog}")
+        }
+        return if(result.status == HttpStatusCode.OK) {
+            result.body<LoginByGuestLogResponse>()
+        } else{
+            LoginByGuestLogResponse(errorMsg = exceptionHandler(result.status))
         }
     }
 }

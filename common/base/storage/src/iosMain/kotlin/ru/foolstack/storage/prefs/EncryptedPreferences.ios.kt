@@ -26,7 +26,7 @@ actual class EncryptedPreferences actual constructor(context: PlatformContext) {
     }
 
     actual fun getCurrentAppTheme(): String {
-        TODO("Not yet implemented")
+        return ""
     }
 
     actual fun setCurrentAppTheme(appTheme: String) {

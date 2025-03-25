@@ -47,6 +47,9 @@ import ru.foolstack.ui.theme.montserratFamily
 
 @Composable
 fun MainTopBar(theme: String, userName: String = "", userType: UserType, lang: Lang, onClickSettings: ()-> Unit, onClickLogout: ()-> Unit){
+    var clickSettingsEnabled by remember { mutableStateOf(true) }
+    var clickLogoutEnabled by remember { mutableStateOf(true) }
+
     var showedUserName = userName
     if(userType==UserType.GUEST){
         showedUserName = if(lang==Lang.RU){ "Гость" } else{ "Guest" }
@@ -86,7 +89,12 @@ fun MainTopBar(theme: String, userName: String = "", userType: UserType, lang: L
                 ) {
                     DropdownMenuItem(
                         text = {  CardText(text = if(lang==Lang.RU){ "Выйти" } else{ "Logout" }, modifier = Modifier)},
-                        onClick = { onClickLogout()}
+                        onClick = {
+                            if(clickLogoutEnabled){
+                                clickLogoutEnabled = false
+                                onClickLogout()
+                            }
+                        }
                     )
                 }
             }
@@ -99,14 +107,17 @@ fun MainTopBar(theme: String, userName: String = "", userType: UserType, lang: L
                     durationMillis = 1000
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
+            val modifier = Modifier.weight(1f)
+            Spacer(modifier = modifier)
             Icon(
                 painter = painterResource(R.drawable.settings_icon),
                 contentDescription = "",
                 tint = MaterialTheme.colorScheme.MainBlack,
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable { onClickSettings() }
+                    .clickable(enabled = clickSettingsEnabled) {
+                        clickSettingsEnabled = false
+                        onClickSettings()}
             )
         }
     }

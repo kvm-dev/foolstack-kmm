@@ -29,6 +29,10 @@ import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,6 +73,7 @@ fun BooksVerticalSlider(
     onclickBuy: () -> Unit,
     isConnectionAvailable: Boolean
 ) {
+    var clickEnabled by remember { mutableStateOf(true) }
     val filteredBooks = HashSet<BookItem>()
     selectedChips.filter { it.isNotEmpty() }.forEach { chip ->
         books.forEach { book ->
@@ -135,7 +140,8 @@ fun BooksVerticalSlider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
-                        .clickable {
+                        .clickable(enabled = clickEnabled) {
+                            clickEnabled = false
                             selectId.value = keywordFilteredBooks[index].bookId
                             onClickBook()
                         }
@@ -221,8 +227,8 @@ fun BooksVerticalSlider(
                                     "Buy"
                                 },
                                 onClick = {
-                                    selectId.value = keywordFilteredBooks[index].bookId
-                                    onclickBuy()
+                                        selectId.value = keywordFilteredBooks[index].bookId
+                                        onclickBuy()
                                 },
                                 isEnabled = true,
                                 isLoading = false
