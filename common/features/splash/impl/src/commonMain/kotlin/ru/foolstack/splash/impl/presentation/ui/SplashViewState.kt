@@ -39,13 +39,15 @@ sealed class SplashViewState{
 
     data class NoConnectionError(
         val splashTitleText: String = "",
-        val splashDescriptionText: String = ""
+        val splashDescriptionText: String = "",
+        val lang: String
     ): SplashViewState()
 
     data class AnyError(
         val splashTitleText: String = "",
         val splashDescriptionText: String = "",
-        val tryAgainButtonText: String = ""
+        val tryAgainButtonText: String = "",
+        val lang: String
     ): SplashViewState()
 }
 

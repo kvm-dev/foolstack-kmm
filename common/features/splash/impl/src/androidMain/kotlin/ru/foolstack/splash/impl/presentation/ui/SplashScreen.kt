@@ -19,6 +19,7 @@ import ru.foolstack.ui.components.BigAppTitle
 import ru.foolstack.ui.components.BottomSplashScreen
 import ru.foolstack.ui.components.BottomSplashScreenState
 import ru.foolstack.ui.components.SplashBackground
+import ru.foolstack.ui.model.Lang
 
 @Composable
 fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, splashViewModel: SplashViewModel = koinViewModel()) {
@@ -64,6 +65,7 @@ fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, splashViewMode
                             mainButtonText = state.splashBottomText.splashMainButtonText,
                             secondButtonText = state.splashBottomText.splashSecondButtonText,
                             resendButtonText = state.splashBottomText.splashResendButtonText,
+                            lang = if(state.lang == "RU") { Lang.RU } else { Lang.ENG }
                         )
                     }
 
@@ -78,6 +80,7 @@ fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, splashViewMode
                             onClickTryAgain = { splashViewModel.onClickTryAgain() },
                             titleText = state.splashTitleText,
                             descriptionText = state.splashDescriptionText,
+                            lang = if(state.lang == "RU") { Lang.RU } else { Lang.ENG }
                         )
                     }
 
@@ -104,6 +107,7 @@ fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, splashViewMode
                             errorText = splashViewModel.emailError,
                             isEmailError = splashViewModel.emailError.isNotEmpty(),
                             isEmailLoading = splashViewModel.emailLoading,
+                            lang = if(state.lang == "RU") { Lang.RU } else { Lang.ENG }
                         )
                     }
 
@@ -127,7 +131,8 @@ fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, splashViewMode
                             otpValue = splashViewModel.otpValue,
                             isOtpError = splashViewModel.otpError.isNotEmpty(),
                             isOtpLoading = splashViewModel.otpLoading,
-                            isUserExist = state.isUserExist
+                            isUserExist = state.isUserExist,
+                            lang = if(state.lang == "RU") { Lang.RU } else { Lang.ENG }
                         )
                     }
 

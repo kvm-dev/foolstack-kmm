@@ -77,7 +77,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -89,7 +90,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -101,7 +103,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -127,14 +130,16 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
             StringResources.getErrorNetworkNotFoundText(defLang) -> {
                 SplashViewState.NoConnectionError(
                     splashTitleText = StringResources.getErrorNotFoundConnectionTitle(lang),
-                    splashDescriptionText = StringResources.getErrorNotFoundConnectionText(lang)
+                    splashDescriptionText = StringResources.getErrorNotFoundConnectionText(lang),
+                    lang = lang
                 )
             }
 
@@ -146,7 +151,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -158,7 +164,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -170,7 +177,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -182,7 +190,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
         }
@@ -231,7 +240,8 @@ class SplashInteractor(
 
     fun getNoConnectionState() = SplashViewState.NoConnectionError(
         splashTitleText = getErrorNotFoundConnectionTitle(getCurrentLang().lang),
-        splashDescriptionText = getErrorNotFoundConnectionText(getCurrentLang().lang)
+        splashDescriptionText = getErrorNotFoundConnectionText(getCurrentLang().lang),
+        lang = getCurrentLang().lang
     )
 
     fun getConfirmationState(isUserExist: Boolean): SplashViewState.Confirmation{

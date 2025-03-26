@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.foolstack.ui.model.Lang
 import ru.foolstack.ui.theme.BottomScreenBackground
 
 @Composable
@@ -70,7 +71,8 @@ fun BottomSplashScreen(
     otpValue: String = "",
     isOtpError: Boolean = false,
     isOtpLoading: Boolean = false,
-    isUserExist: Boolean = false){
+    isUserExist: Boolean = false,
+    lang: Lang){
     var offset by remember { mutableFloatStateOf(0f) }
     var isAnimated by remember { mutableStateOf(false) }
     val transition = updateTransition(targetState = isAnimated, label = "transition")
@@ -125,7 +127,8 @@ fun BottomSplashScreen(
                 isOtpError = isOtpError,
                 isOtpLoading = isOtpLoading,
                 resendButtonText = resendButtonText,
-                isUserExist = isUserExist
+                isUserExist = isUserExist,
+                lang = lang
             )
         }
     }
@@ -169,8 +172,10 @@ private fun ScrollableContent(
     isOtpError: Boolean = false,
     isOtpLoading: Boolean = false,
     resendButtonText: String = "",
-    isUserExist: Boolean = false
+    isUserExist: Boolean = false,
+    lang: Lang
 ) {
+    val checked = remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     val keyboardHeight = WindowInsets.ime.getBottom(LocalDensity.current)
@@ -228,7 +233,8 @@ private fun ScrollableContent(
             }
 
             BottomSplashScreenState.AUTHORIZATION-> {
-                if(emailText.isEmpty() || isEmailError){
+                RulesAndPolicyCheckBox(lang = lang, checked = checked)
+                if(emailText.isEmpty() || isEmailError || !checked.value){
                     YellowButton(
                         onClick = {},
                         text = mainButtonText,
