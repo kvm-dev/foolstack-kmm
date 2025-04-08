@@ -6,5 +6,5 @@ data class NewsItem(
     val newsText: String,
     val newsDate: Long,
     val newsLink: String,
-    val newsImageBase64: String
+    val newsImageBase64: String?
 )

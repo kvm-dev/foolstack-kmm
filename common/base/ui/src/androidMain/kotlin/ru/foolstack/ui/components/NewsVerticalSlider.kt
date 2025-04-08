@@ -108,7 +108,7 @@ fun NewsVerticalSlider(
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 18.dp)
             ) {
-                if (newsItem.newsImageBase64.isNotEmpty()) {
+                if (newsItem.newsImageBase64?.isNotEmpty() == true) {
                     newsItem.newsImageBase64.decodeBase64ToBitmap()?.let {
                         Image(
                             contentScale = ContentScale.Crop,

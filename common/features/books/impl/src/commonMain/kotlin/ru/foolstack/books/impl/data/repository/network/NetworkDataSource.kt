@@ -3,6 +3,7 @@ package ru.foolstack.books.impl.data.repository.network
 import ru.foolstack.books.api.model.BookDomain
 import ru.foolstack.books.api.model.BooksDomain
 import ru.foolstack.books.impl.mapper.Mapper
+import ru.foolstack.books.impl.model.BooksVersionResponse
 
 class NetworkDataSource(private val api: BooksApi, private val mapper: Mapper){
 
@@ -22,5 +23,9 @@ class NetworkDataSource(private val api: BooksApi, private val mapper: Mapper){
            subscribeLink = result.subscribeLink,
            errorMsg = result.errorMsg
        )
+    }
+
+    suspend fun getVersion():BooksVersionResponse{
+        return api.getVersion()
     }
 }

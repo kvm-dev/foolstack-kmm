@@ -41,15 +41,6 @@ object StringResources {
         return text
     }
 
-    fun getGuestButtonText(lang: String?):String{
-        val text: String = if(lang=="RU"){
-            "Войти как гость"
-        } else{
-            "Login as guest"
-        }
-        return text
-    }
-
     fun getAuthorizationOrRegistrationTitle(lang: String?):String{
         val text: String = if(lang=="RU"){
             "Электронная почта"

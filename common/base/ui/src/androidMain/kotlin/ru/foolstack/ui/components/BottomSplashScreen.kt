@@ -49,7 +49,6 @@ fun BottomSplashScreen(
     bottomSplashScreenState: BottomSplashScreenState,
     splashBitmap: ImageBitmap,
     logoBitmap: ImageBitmap,
-    onClickGuestScreen: () -> Unit = {},
     onClickAuthorizationScreen: () -> Unit = {},
     onChangeEmail: (String) -> Unit = {},
     onChangeOtp: (String) -> Unit = {},
@@ -105,7 +104,6 @@ fun BottomSplashScreen(
                 bottomSplashScreenState = bottomSplashScreenState,
                 logoBitmap = logoBitmap,
                 splashBitmap = splashBitmap,
-                onClickGuestScreen = onClickGuestScreen,
                 onClickTryAgain = onClickTryAgain,
                 onClickAuthorizationScreen = onClickAuthorizationScreen,
                 onchangeEmail = onChangeEmail,
@@ -152,7 +150,6 @@ private fun ScrollableContent(
     logoBitmap: ImageBitmap,
     titleText: String,
     descriptionText: String,
-    onClickGuestScreen: () -> Unit = {},
     onClickAuthorizationScreen: () -> Unit = {},
     onchangeEmail: (String) -> Unit = {},
     onchangeOtp: (String) -> Unit = {},
@@ -315,11 +312,12 @@ private fun ScrollableContent(
         }
         if(bottomSplashScreenState != BottomSplashScreenState.NO_CONNECTION){
            val onclickEvent = when(bottomSplashScreenState){
-                BottomSplashScreenState.UNAUTHORIZED-> onClickGuestScreen
                 BottomSplashScreenState.CONFIRM-> onClickBackToEmailScreen
                 else -> onClickBackToAuthorizationScreen
             }
-            SecondOrangeButton(text = secondButtonText, onClick = { onclickEvent() }, isEnabled = true)
+            if(secondButtonText.isNotEmpty()){
+                SecondOrangeButton(text = secondButtonText, onClick = { onclickEvent() }, isEnabled = true)
+            }
         }
     }
 }

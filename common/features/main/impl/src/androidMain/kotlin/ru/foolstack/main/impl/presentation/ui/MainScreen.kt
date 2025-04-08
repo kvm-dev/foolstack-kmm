@@ -142,7 +142,7 @@ fun MainScreen(
                         EventHorizontalSlider(
                             isAsActive = mainViewModel.asMode,
                             lang = if(clientState.lang is LangResultDomain.Ru) { Lang.RU } else { Lang.ENG },
-                            events = Mapper().map((authStatus as MainViewState.AuthorizedClient).events),
+                            events = Mapper().map((authStatus as MainViewState.AuthorizedClient).events).sortedBy { it.eventId },
                             selectId = eventId,
                             onClickEvent = {
                                 mainViewModel.navigateToEvent(

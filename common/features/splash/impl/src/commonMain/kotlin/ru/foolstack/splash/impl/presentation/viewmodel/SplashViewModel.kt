@@ -363,12 +363,6 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
         _uiState.update { interactor.getAuthorizationOrRegistrationState() }
     }
 
-    fun loginByGuestLog() =  with(viewModelScope + coroutineExceptionHandler){
-        launch {
-            interactor.loginByGuestLog()
-        }
-    }
-
     fun refreshProfile() = with(viewModelScope + coroutineExceptionHandler){
        launch {
            if(interactor.isConnectionAvailable()){

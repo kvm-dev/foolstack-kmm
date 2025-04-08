@@ -3,6 +3,7 @@ package ru.foolstack.events.impl.data.repository.network
 import ru.foolstack.events.api.model.EventDomain
 import ru.foolstack.events.api.model.EventsDomain
 import ru.foolstack.events.impl.mapper.Mapper
+import ru.foolstack.events.impl.model.EventsVersionResponse
 
 class NetworkDataSource(private val api: EventsApi, private val mapper: Mapper){
 
@@ -16,5 +17,9 @@ class NetworkDataSource(private val api: EventsApi, private val mapper: Mapper){
             events = eventsList,
             errorMsg = response.errorMsg
         )
+    }
+
+    suspend fun getVersion():EventsVersionResponse{
+        return api.getVersion()
     }
 }

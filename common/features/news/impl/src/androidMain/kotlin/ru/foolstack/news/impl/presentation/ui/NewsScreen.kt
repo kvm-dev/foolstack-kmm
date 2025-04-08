@@ -126,7 +126,7 @@ fun NewsScreen(newsViewModel: NewsViewModel = koinViewModel(), navController: Na
 
                         NewsVerticalSlider(
                             lang = if(successState.lang is LangResultDomain.Ru){ Lang.RU } else {Lang.ENG},
-                            news = Mapper().mapToNewsItems(successState.news),
+                            news = Mapper().mapToNewsItems(successState.news).sortedByDescending { it.newsId },
                             onBackPressed = {  },
                             onRefresh = { onRefresh() },
                             isRefreshing = false,

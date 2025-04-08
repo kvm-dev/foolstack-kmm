@@ -139,7 +139,7 @@ fun EventsScreen(
                             } else {
                                 Lang.ENG
                             },
-                            events = Mapper().mapToEventItems(successState.events),
+                            events = Mapper().mapToEventItems(successState.events).sortedBy { it.eventId },
                             chips = Mapper().mapToChips(
                                 if(eventsViewModel.asMode){successState.events.events.filter { it.eventCost == 0 }  } else { successState.events.events }
 

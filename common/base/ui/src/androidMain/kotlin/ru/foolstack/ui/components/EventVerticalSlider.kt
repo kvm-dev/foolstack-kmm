@@ -117,7 +117,7 @@ fun EventVerticalSlider(
                             ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
                         }
                     }
-                    itemsIndexed(filteredEvents.toList()) { _, event ->
+                    itemsIndexed(filteredEvents.toList().sortedBy { it.eventId }) { _, event ->
                         val cost: String
                         val symbol: String = if (lang == Lang.RU) {
                             "₽"

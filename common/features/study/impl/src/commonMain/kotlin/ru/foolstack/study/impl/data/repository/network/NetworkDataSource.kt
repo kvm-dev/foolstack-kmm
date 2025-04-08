@@ -3,6 +3,7 @@ package ru.foolstack.study.impl.data.repository.network
 import ru.foolstack.study.api.model.StudiesDomain
 import ru.foolstack.study.api.model.StudyDomain
 import ru.foolstack.study.impl.mapper.Mapper
+import ru.foolstack.study.impl.model.StudiesVersionResponse
 
 class NetworkDataSource(private val api: StudyApi, private val mapper: Mapper){
 
@@ -16,5 +17,9 @@ class NetworkDataSource(private val api: StudyApi, private val mapper: Mapper){
             studies = studiesList,
             prText = response.prText,
             errorMsg = response.errorMsg)
+    }
+
+    suspend fun getVersion():StudiesVersionResponse{
+        return api.getVersion()
     }
 }

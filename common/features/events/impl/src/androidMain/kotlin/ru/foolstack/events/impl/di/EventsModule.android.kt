@@ -25,6 +25,7 @@ actual val eventsModule: Module
             mapper = get()) }
         single<LocalDataSource> { LocalDataSource(
             databaseSdk = get(),
+            preferences = get(),
             mapper = get()) }
         single<EventsRepository> { EventsRepository(
             networkDataSource = get(),

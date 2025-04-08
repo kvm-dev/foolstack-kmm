@@ -6,12 +6,19 @@ import ru.foolstack.news.impl.data.repository.network.NetworkDataSource
 
 class NewsRepository(private val networkDataSource: NetworkDataSource, private val localDataSource: LocalDataSource) {
     suspend fun getNewsFromServer(): NewsDomain {
-        val result = networkDataSource.getNews()
-        return if(result.errorMsg.isNotEmpty()){
+        val currentVersion = localDataSource.getNewsVersion()
+        val serverVersion = networkDataSource.getVersion().version
+        return if(currentVersion != serverVersion){
+            val result = networkDataSource.getNews()
+            if(result.errorMsg.isNotEmpty()){
                 result
-        }
-        else{
-            localDataSource.saveNews(result)
+            }
+            else{
+                localDataSource.updateNewsVersion(serverVersion)
+                localDataSource.saveNews(result)
+                localDataSource.getNews()
+            }
+        } else{
             localDataSource.getNews()
         }
     }

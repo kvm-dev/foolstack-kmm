@@ -111,15 +111,4 @@ class AuthorizationApi(private val client: HttpClient) {
             AuthByTokenOfflineResponse(errorMsg = exceptionHandler(result.status))
         }
     }
-
-    suspend fun loginByGuestLog(): LoginByGuestLogResponse{
-        val result = with(client) {
-            get("$baseUrl${AuthorizationEndpoints.loginByGuestLog}")
-        }
-        return if(result.status == HttpStatusCode.OK) {
-            result.body<LoginByGuestLogResponse>()
-        } else{
-            LoginByGuestLogResponse(errorMsg = exceptionHandler(result.status))
-        }
-    }
 }

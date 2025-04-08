@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode
 import ru.foolstack.network.baseUrl
 import ru.foolstack.network.exceptionHandler
 import ru.foolstack.study.impl.model.StudiesResponse
+import ru.foolstack.study.impl.model.StudiesVersionResponse
 
 class StudyApi(private val client: HttpClient) {
     suspend fun getStudies(): StudiesResponse{
@@ -17,6 +18,17 @@ class StudyApi(private val client: HttpClient) {
             result.body<StudiesResponse>()
         } else{
             StudiesResponse(errorMsg = exceptionHandler(result.status))
+        }
+    }
+
+    suspend fun getVersion(): StudiesVersionResponse{
+        val result = with(client) {
+            get("$baseUrl${StudyEndpoints.getStudiesVersion}")
+        }
+        return if(result.status == HttpStatusCode.OK) {
+            result.body<StudiesVersionResponse>()
+        } else{
+            StudiesVersionResponse(errorMsg = exceptionHandler(result.status))
         }
     }
 }

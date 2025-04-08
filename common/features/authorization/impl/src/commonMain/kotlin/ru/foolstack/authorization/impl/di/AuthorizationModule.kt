@@ -6,7 +6,6 @@ import ru.foolstack.authorization.api.domain.usecase.AuthByTokenOfflineLogUseCas
 import ru.foolstack.authorization.api.domain.usecase.AuthByTokenUseCase
 import ru.foolstack.authorization.api.domain.usecase.ConfirmAuthAndRegUseCase
 import ru.foolstack.authorization.api.domain.usecase.GetTokenFromLocalUseCase
-import ru.foolstack.authorization.api.domain.usecase.GuestAuthUseCase
 import ru.foolstack.authorization.api.domain.usecase.IsUserExistUseCase
 import ru.foolstack.authorization.impl.data.repository.AuthorizationRepository
 import ru.foolstack.authorization.impl.data.repository.local.LocalDataSource
@@ -18,7 +17,6 @@ import ru.foolstack.authorization.impl.domain.usecase.AuthByTokenOfflineLogUseCa
 import ru.foolstack.authorization.impl.domain.usecase.AuthByTokenUseCaseImpl
 import ru.foolstack.authorization.impl.domain.usecase.ConfirmAuthAndRegUseCaseImpl
 import ru.foolstack.authorization.impl.domain.usecase.GetTokenFromLocalUseCaseImpl
-import ru.foolstack.authorization.impl.domain.usecase.GuestAuthUseCaseImpl
 import ru.foolstack.authorization.impl.domain.usecase.IsUserExistUseCaseImpl
 import ru.foolstack.authorization.impl.mapper.Mapper
 
@@ -35,5 +33,4 @@ val authorizationModule = module {
     single<GetTokenFromLocalUseCase> { GetTokenFromLocalUseCaseImpl(get())}
     single<IsUserExistUseCase> { IsUserExistUseCaseImpl(get())}
     single<AuthByTokenOfflineLogUseCase> {AuthByTokenOfflineLogUseCaseImpl(repository = get())}
-    single<GuestAuthUseCase> {GuestAuthUseCaseImpl(repository = get())}
 }
