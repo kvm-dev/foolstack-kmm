@@ -2,10 +2,10 @@ package ru.foolstack.storage.prefs
 
 import ru.foolstack.utils.PlatformContext
 
-actual class EncryptedPreferences actual constructor(context: PlatformContext) {
 
+actual class EncryptedPreferences actual constructor(context: PlatformContext) {
     actual fun getToken(): String {
-       return ""
+        TODO("Not yet implemented")
     }
 
     actual fun saveToken(userToken: String) {
@@ -15,24 +15,53 @@ actual class EncryptedPreferences actual constructor(context: PlatformContext) {
     }
 
     actual fun getRefreshToken(): String {
-        return ""
+        TODO("Not yet implemented")
     }
 
     actual fun getProfessionId(): Int {
-        return 0
+        TODO("Not yet implemented")
     }
 
     actual fun saveProfessionId(professionId: Int) {
     }
 
     actual fun getCurrentAppTheme(): String {
-        return ""
+        TODO("Not yet implemented")
     }
 
     actual fun setCurrentAppTheme(appTheme: String) {
     }
 
-    actual fun clearUserData() {
-
+    actual fun getBooksVersion(): Int {
+        TODO("Not yet implemented")
     }
+
+    actual fun updateBooksVersion(version: Int) {
+    }
+
+    actual fun getEventsVersion(): Int {
+        TODO("Not yet implemented")
+    }
+
+    actual fun updateEventsVersion(version: Int) {
+    }
+
+    actual fun getNewsVersion(): Int {
+        TODO("Not yet implemented")
+    }
+
+    actual fun updateNewsVersion(version: Int) {
+    }
+
+    actual fun getStudiesVersion(): Int {
+        TODO("Not yet implemented")
+    }
+
+    actual fun updateStudiesVersion(version: Int) {
+    }
+
+    actual fun clearUserData() {
+    }
+
+
 }

@@ -11,7 +11,6 @@ data class Profile(
     @SerialName("userType") val userType: String,
     @SerialName("userStatus") val userStatus: Int,
     @SerialName("userEmail") val userEmail: String,
-    @SerialName("userPhotoUrl") val userPhotoUrl: String,
     @SerialName("userPhotoBase64") val userPhotoBase64: String,
     @SerialName("userAchievements") val userAchievements: List<UserAchievement>,
     @SerialName("userPurchasedProfessions") val userPurchasedProfessions: List<Int>
@@ -107,7 +106,6 @@ data class Event(
     @SerialName("eventRefLink") val eventRefLink: String,
     @SerialName("eventDateStart") val eventDateStart: Long,
     @SerialName("eventCost") val eventCost: Int,
-    @SerialName("eventImageUrl") val eventImageUrl: String,
     @SerialName("eventImageBase64") val eventImageBase64: String,
     @SerialName("eventSubs") val eventSubs: List<EventSub>
 )
@@ -130,7 +128,6 @@ data class New(
     @SerialName("newsName") val newsName: String,
     @SerialName("newsText") val newsText: String,
     @SerialName("newsDate") val newsDate: Long,
-    @SerialName("newsImageUrl") val newsImageUrl: String,
     @SerialName("newsImageBase64") val newsImageBase64: String,
     @SerialName("newsLink") val newsLink: String
 )
@@ -151,7 +148,6 @@ data class Book(
     @SerialName("bookId") val bookId: Int,
     @SerialName("bookName") val bookName: String,
     @SerialName("bookDescription") val bookDescription: String,
-    @SerialName("bookImageUrl") val bookImageUrl: String,
     @SerialName("bookImageBase64") val bookImageBase64: String,
     @SerialName("bookRefLink") val bookRefLink: String,
     @SerialName("bookCostWithSale") val bookCostWithSale: Int,
@@ -169,7 +165,6 @@ data class Professions(
 data class Profession(
     @SerialName("professionId") val professionId: Int,
     @SerialName("professionName") val professionName: String,
-    @SerialName("professionImageUrl") val professionImageUrl: String,
     @SerialName("professionImageBase64") val professionImageBase64: String,
     @SerialName("professionType") val professionType: Int,
     @SerialName("professionParent") val professionParent: Int,
@@ -189,7 +184,6 @@ data class Study(
     @SerialName("studyId") val studyId: Int,
     @SerialName("studyName") val studyName: String,
     @SerialName("studyCost") val studyCost: Int,
-    @SerialName("studyImageUrl") val studyImageUrl: String,
     @SerialName("studyImageBase64") val studyImageBase64: String,
     @SerialName("studyRefLink") val studyRefLink: String,
     @SerialName("studySalePercent") val studySalePercent: Int,

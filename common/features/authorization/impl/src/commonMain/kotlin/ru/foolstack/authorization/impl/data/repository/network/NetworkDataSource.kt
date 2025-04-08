@@ -36,7 +36,4 @@ class NetworkDataSource(private val api: AuthorizationApi, private val mapper: M
         return api.sendAuthByTokenOfflineLog(request = AuthByTokenOfflineLogRequest(timestamp = timestamp), userToken = userToken)
     }
 
-    suspend fun loginByGuestLog():LoginByGuestLogResponse{
-        return api.loginByGuestLog()
-    }
 }

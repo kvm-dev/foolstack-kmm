@@ -5,7 +5,6 @@ CREATE TABLE Profile (
     userType TEXT NOT NULL,
     userStatus INTEGER NOT NULL,
     userEmail TEXT NOT NULL,
-    userPhotoUrl TEXT NOT NULL,
     userPhotoBase64 TEXT NOT NULL
 );
 
@@ -79,7 +78,6 @@ CREATE TABLE Events(
    eventRefLink TEXT NOT NULL,
    eventDateStart INTEGER NOT NULL,
    eventCost INTEGER NOT NULL,
-   eventImageUrl TEXT NOT NULL,
    eventImageBase64 TEXT NOT NULL
 );
 
@@ -94,7 +92,6 @@ CREATE TABLE News(
    newsName TEXT NOT NULL,
    newsText TEXT NOT NULL,
    newsDate INTEGER NOT NULL,
-   newsImageUrl TEXT NOT NULL,
    newsImageBase64 TEXT NOT NULL,
    newsLink TEXT NOT NULL
 );
@@ -103,7 +100,6 @@ CREATE TABLE Books(
    bookId INTEGER NOT NULL,
    bookName TEXT NOT NULL,
    bookDescription TEXT NOT NULL,
-   bookImageUrl TEXT NOT NULL,
    bookImageBase64 TEXT NOT NULL,
    bookRefLink TEXT NOT NULL,
    bookCostWithSale INTEGER NOT NULL,
@@ -128,7 +124,6 @@ CREATE TABLE BookProfessions(
 CREATE TABLE Professions(
    professionId INTEGER NOT NULL,
    professionName TEXT NOT NULL,
-   professionImageUrl TEXT NOT NULL,
    professionImageBase64 TEXT NOT NULL,
    professionType INTEGER NOT NULL,
    professionParent INTEGER NOT NULL,
@@ -139,7 +134,6 @@ CREATE TABLE Studies(
    studyId INTEGER NOT NULL,
    studyName TEXT NOT NULL,
    studyCost INTEGER NOT NULL,
-   studyImageUrl TEXT NOT NULL,
    studyImageBase64 TEXT NOT NULL,
    studyRefLink TEXT NOT NULL,
    studySalePercent INTEGER NOT NULL,
@@ -162,8 +156,8 @@ CREATE TABLE StudiesPR(
 
 
 insertProfile:
-INSERT INTO Profile(userId, userName, userType, userStatus, userEmail, userPhotoUrl, userPhotoBase64)
-VALUES(?, ?, ?, ?, ?, ?, ?);
+INSERT INTO Profile(userId, userName, userType, userStatus, userEmail, userPhotoBase64)
+VALUES(?, ?, ?, ?, ?, ?);
 
 selectProfile:
 SELECT Profile.*
@@ -336,8 +330,8 @@ DELETE FROM TestProfessions;
 
 
 insertBooks:
-INSERT INTO Books(bookId, bookName, bookDescription, bookImageUrl, bookImageBase64, bookRefLink, bookCostWithSale, bookCostWithoutSale)
-VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO Books(bookId, bookName, bookDescription, bookImageBase64, bookRefLink, bookCostWithSale, bookCostWithoutSale)
+VALUES(?, ?, ?, ?, ?, ?, ?);
 
 selectBooks:
 SELECT Books.*
@@ -373,8 +367,8 @@ DELETE FROM BooksPR;
 
 
 insertNews:
-INSERT INTO News(newsId, newsName, newsText, newsDate, newsImageUrl, newsImageBase64, newsLink)
-VALUES(?, ?, ?, ?, ?, ?, ?);
+INSERT INTO News(newsId, newsName, newsText, newsDate, newsImageBase64, newsLink)
+VALUES(?, ?, ?, ?, ?, ?);
 
 selectNews:
 SELECT News.*
@@ -385,8 +379,8 @@ DELETE FROM News;
 
 
 insertEvents:
-INSERT INTO Events(eventId, eventName, eventDescription, eventRefLink, eventDateStart, eventCost, eventImageUrl, eventImageBase64)
-VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO Events(eventId, eventName, eventDescription, eventRefLink, eventDateStart, eventCost, eventImageBase64)
+VALUES(?, ?, ?, ?, ?, ?, ?);
 
 selectEvents:
 SELECT Events.*
@@ -415,8 +409,8 @@ DELETE FROM EventSubs;
 
 
 insertProfession:
-INSERT INTO Professions(professionId, professionName, professionImageUrl, professionImageBase64, professionType, professionParent, professionPriority)
-VALUES(?, ?, ?, ?, ?, ?, ?);
+INSERT INTO Professions(professionId, professionName, professionImageBase64, professionType, professionParent, professionPriority)
+VALUES(?, ?, ?, ?, ?, ?);
 
 selectProfessions:
 SELECT Professions.*
@@ -432,8 +426,8 @@ WHERE professionParent IS :professionId;
 
 
 insertStudy:
-INSERT INTO Studies(studyId, studyName, studyCost, studyImageUrl, studyImageBase64, studyRefLink, studySalePercent, studyLength, studyLengthType, studyOwner, studyAdditionalText)
-VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO Studies(studyId, studyName, studyCost, studyImageBase64, studyRefLink, studySalePercent, studyLength, studyLengthType, studyOwner, studyAdditionalText)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 selectStudies:
 SELECT Studies.*

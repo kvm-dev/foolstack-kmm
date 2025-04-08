@@ -31,13 +31,12 @@ class Mapper {
         return list
     }
 
-    fun mapToProfileDomain(profile: Profile, base64Photo: String):ProfileDomain{
+    fun mapToProfileDomain(profile: Profile):ProfileDomain{
         return ProfileDomain(
             userId = profile.userId,
             userName = profile.userName,
             userEmail = profile.userEmail,
-            userPhotoUrl = profile.userPhotoUrl,
-            userPhotoBase64 = base64Photo,
+            userPhotoBase64 = profile.userPhotoBase64,
             userStatus = profile.userStatus,
             userType = profile.userType,
             userAchievements = map(profile.userAchievements),
@@ -69,7 +68,6 @@ class Mapper {
             userType = profile.userType,
             userStatus = profile.userStatus,
             userAchievements = map(profile.userAchievements, userId = profile.userId),
-            userPhotoUrl = profile.userPhotoUrl,
             userPhotoBase64 = base64Photo,
             userPurchasedProfessions = profile.userPurchasedProfessions
         )

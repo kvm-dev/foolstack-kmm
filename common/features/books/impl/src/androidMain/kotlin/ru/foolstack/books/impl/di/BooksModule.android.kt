@@ -24,6 +24,7 @@ actual val booksModule: Module
             mapper = get()) }
         single<LocalDataSource> { LocalDataSource(
             databaseSdk = get(),
+            preferences = get(),
             mapper = get()) }
         single<BooksRepository> { BooksRepository(
             networkDataSource = get(),

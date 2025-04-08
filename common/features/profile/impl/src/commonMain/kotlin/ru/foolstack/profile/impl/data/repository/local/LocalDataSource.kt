@@ -9,7 +9,7 @@ class LocalDataSource(private val databaseSdk: DatabaseSdk, private val encrypte
                       private val mapper: Mapper) {
     suspend fun getProfile():ProfileDomain {
         val profile = databaseSdk.getProfile()
-       return mapper.mapToProfileDomain(profile = profile, profile.userPhotoBase64)
+       return mapper.mapToProfileDomain(profile = profile)
     }
     suspend fun saveProfile(profile:ProfileDomain){
         databaseSdk.saveProfile(profile = mapper.mapFromProfileDomain(profile, profile.userPhotoBase64))

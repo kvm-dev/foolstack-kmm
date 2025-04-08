@@ -152,6 +152,7 @@ fun StudiesVerticalSlider(
                                 Image(
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
+                                        .fillMaxWidth()
                                         .clip(shape),
                                     bitmap = it,
                                     contentDescription = study.studyName
@@ -162,6 +163,7 @@ fun StudiesVerticalSlider(
                             Image(
                                 contentScale = ContentScale.FillWidth,
                                 modifier = Modifier
+                                    .fillMaxWidth()
                                     .clip(shape),
                                 painter = painterResource(R.drawable.error_loading_image_big),
                                 contentDescription = study.studyName

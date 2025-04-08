@@ -18,8 +18,8 @@ data class ProfessionsResponse(
 data class ProfessionResponse(
     @SerialName("professionId")
     val professionId: Int = 0,
-    @SerialName("professionImageUrl")
-    val professionImageUrl: String = "",
+    @SerialName("professionImage")
+    val professionImage: String = "",
     @SerialName("professionName")
     val professionName: String = "",
     @SerialName("professionParent")

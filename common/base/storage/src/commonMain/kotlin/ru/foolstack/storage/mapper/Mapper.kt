@@ -124,7 +124,6 @@ class Mapper {
             professionPriority = profession.professionPriority.toInt(),
             professionParent = profession.professionParent.toInt(),
             professionType = profession.professionType.toInt(),
-            professionImageUrl = profession.professionImageUrl,
             professionImageBase64 = profession.professionImageBase64,
             subProfessions = listOf()
         )
@@ -226,7 +225,6 @@ class Mapper {
             eventRefLink = event.eventRefLink,
             eventDateStart = event.eventDateStart,
             eventCost = event.eventCost.toInt(),
-            eventImageUrl = event.eventImageUrl,
             eventImageBase64 = event.eventImageBase64,
             eventSubs = subList
         )
@@ -262,7 +260,6 @@ class Mapper {
             newsText = new.newsText,
             newsDate = new.newsDate,
             newsLink = new.newsLink,
-            newsImageUrl = new.newsImageUrl,
             newsImageBase64 = new.newsImageBase64
         )
     }
@@ -276,7 +273,6 @@ class Mapper {
             bookCostWithSale = book.bookCostWithSale.toInt(),
             bookCostWithoutSale = book.bookCostWithoutSale.toInt(),
             bookRefLink = book.bookRefLink,
-            bookImageUrl = book.bookImageUrl,
             bookImageBase64 = book.bookImageBase64,
             professions = professions
         )
@@ -287,7 +283,6 @@ class Mapper {
             studyId = study.studyId.toInt(),
             studyName = study.studyName,
             studyCost = study.studyCost.toInt(),
-            studyImageUrl = study.studyImageUrl,
             studyImageBase64 = study.studyImageBase64,
             studyRefLink = study.studyRefLink,
             studySalePercent = study.studySalePercent.toInt(),

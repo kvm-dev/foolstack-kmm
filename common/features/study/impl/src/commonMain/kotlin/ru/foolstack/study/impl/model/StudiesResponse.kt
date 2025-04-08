@@ -15,7 +15,7 @@ data class StudyResponse(
     @SerialName("studyId") val studyId: Int = 0,
     @SerialName("studyName") val studyName: String = "",
     @SerialName("studyCost") val studyCost: Int = 0,
-    @SerialName("studyImageUrl") val studyImageUrl: String = "",
+    @SerialName("studyImage") val studyImage: String = "",
     @SerialName("studyRefLink") val studyRefLink: String = "",
     @SerialName("studySalePercent") val studySalePercent: Int = 0,
     @SerialName("studyLength") val studyLength: Int = 0,

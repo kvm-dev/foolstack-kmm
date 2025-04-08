@@ -5,7 +5,6 @@ import ru.foolstack.authorization.api.domain.usecase.AuthByTokenOfflineLogUseCas
 import ru.foolstack.authorization.api.domain.usecase.AuthByTokenUseCase
 import ru.foolstack.authorization.api.domain.usecase.ConfirmAuthAndRegUseCase
 import ru.foolstack.authorization.api.domain.usecase.GetTokenFromLocalUseCase
-import ru.foolstack.authorization.api.domain.usecase.GuestAuthUseCase
 import ru.foolstack.authorization.api.domain.usecase.IsUserExistUseCase
 import ru.foolstack.events.api.domain.usecase.GetEventsUseCase
 import ru.foolstack.events.api.model.EventsDomain
@@ -32,8 +31,7 @@ class SplashInteractor(
     private val getProfessionsUseCase: GetProfessionsUseCase,
     private val registrationByEmailUseCase: RegistrationByEmailUseCase,
     private val confirmAuthAndRegUseCase: ConfirmAuthAndRegUseCase,
-    private val authByTokenOfflineLogUseCase: AuthByTokenOfflineLogUseCase,
-    private val authByGuestAuthUseCase: GuestAuthUseCase
+    private val authByTokenOfflineLogUseCase: AuthByTokenOfflineLogUseCase
 ) {
     val profileState = getProfileUseCase.profileState
     val eventsState = getEventsUseCase.eventsState
@@ -77,7 +75,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -89,7 +88,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -101,7 +101,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -112,9 +113,7 @@ class SplashInteractor(
                     splashBottomText = SplashBottomText(
                         splashTitleText = StringResources.getSplashTitle(lang),
                         splashDescriptionText = StringResources.getSplashPreAuthDescription(lang),
-                        splashMainButtonText = StringResources.getJoinButtonText(lang),
-                        splashResendButtonText = StringResources.getGuestButtonText(lang),
-                        splashSecondButtonText = StringResources.getGuestButtonText(lang)
+                        splashMainButtonText = StringResources.getJoinButtonText(lang)
                     )
                 )
             }
@@ -127,14 +126,16 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
             StringResources.getErrorNetworkNotFoundText(defLang) -> {
                 SplashViewState.NoConnectionError(
                     splashTitleText = StringResources.getErrorNotFoundConnectionTitle(lang),
-                    splashDescriptionText = StringResources.getErrorNotFoundConnectionText(lang)
+                    splashDescriptionText = StringResources.getErrorNotFoundConnectionText(lang),
+                    lang = lang
                 )
             }
 
@@ -146,7 +147,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -158,7 +160,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -170,7 +173,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
 
@@ -182,7 +186,8 @@ class SplashInteractor(
                             lang
                         )
                     }",
-                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang)
+                    tryAgainButtonText = StringResources.getSplashTryAgainButton(lang),
+                    lang = lang
                 )
             }
         }
@@ -221,9 +226,6 @@ class SplashInteractor(
                 splashDescriptionText = getSplashUnauthorizedDescription(lang = lang),
                 splashMainButtonText = getSplashUnauthorizedMainButtonText(
                     lang = lang
-                ),
-                splashSecondButtonText = getSplashUnauthorizedSecondButtonText(
-                    lang = lang
                 )
             )
         )
@@ -231,7 +233,8 @@ class SplashInteractor(
 
     fun getNoConnectionState() = SplashViewState.NoConnectionError(
         splashTitleText = getErrorNotFoundConnectionTitle(getCurrentLang().lang),
-        splashDescriptionText = getErrorNotFoundConnectionText(getCurrentLang().lang)
+        splashDescriptionText = getErrorNotFoundConnectionText(getCurrentLang().lang),
+        lang = getCurrentLang().lang
     )
 
     fun getConfirmationState(isUserExist: Boolean): SplashViewState.Confirmation{
@@ -246,9 +249,6 @@ class SplashInteractor(
                     lang
                 ),
                 splashMainButtonText = getSplashConfirmAuthorizationOrRegistrationMainButtonText(
-                    lang
-                ),
-                splashSecondButtonText = getSplashConfirmAuthorizationOrRegistrationSecondButtonText(
                     lang
                 ),
                 splashResendButtonText = getSplashConfirmAuthorizationOrRegistrationResendButtonText(
@@ -267,9 +267,6 @@ class SplashInteractor(
                 splashTitleText = getSplashAuthorizationOrRegistrationTitle(lang = lang),
                 splashDescriptionText = getSplashAuthorizationOrRegistrationText(lang = lang),
                 splashMainButtonText = getSplashAuthorizationOrRegistrationMainButtonText(
-                    lang = lang
-                ),
-                splashSecondButtonText = getSplashAuthorizationOrRegistrationSecondButtonText(
                     lang = lang
                 )
             )
@@ -297,9 +294,6 @@ class SplashInteractor(
 
     private fun getSplashUnauthorizedMainButtonText(lang: String? = null) =
         StringResources.getJoinButtonText(lang)
-
-    private fun getSplashUnauthorizedSecondButtonText(lang: String? = null) =
-        StringResources.getGuestButtonText(lang)
 
     private fun getSplashAuthorizationOrRegistrationTitle(lang: String? = null) =
         StringResources.getAuthorizationOrRegistrationTitle(lang)
@@ -363,7 +357,4 @@ class SplashInteractor(
         authByTokenOfflineLogUseCase.logOfflineAuthBytToken()
     }
 
-    suspend fun loginByGuestLog(){
-        authByGuestAuthUseCase.authLog()
-    }
 }

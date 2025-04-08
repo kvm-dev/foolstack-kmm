@@ -10,7 +10,6 @@ data class SingleNewsDomain(
     val newsName: String,
     val newsText: String,
     val newsDate: Long,
-    val newsImageUrl: String,
     val newsImageBase64: String,
     val newsLink: String
 )

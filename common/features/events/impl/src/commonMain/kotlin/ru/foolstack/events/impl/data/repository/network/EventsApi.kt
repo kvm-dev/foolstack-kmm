@@ -5,6 +5,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
 import ru.foolstack.events.impl.model.EventsResponse
+import ru.foolstack.events.impl.model.EventsVersionResponse
 import ru.foolstack.network.baseUrl
 import ru.foolstack.network.exceptionHandler
 
@@ -17,6 +18,17 @@ class EventsApi(private val client: HttpClient) {
             result.body<EventsResponse>()
         } else {
             EventsResponse(errorMsg = exceptionHandler(result.status))
+        }
+    }
+
+    suspend fun getVersion(): EventsVersionResponse {
+        val result = with(client) {
+            get("$baseUrl${EventsEndpoints.getEventsVersion}")
+        }
+        return if (result.status == HttpStatusCode.OK) {
+            result.body<EventsVersionResponse>()
+        } else {
+            EventsVersionResponse(errorMsg = exceptionHandler(result.status))
         }
     }
 }

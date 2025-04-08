@@ -85,8 +85,4 @@ class AuthorizationRepository(private val localDataSource: LocalDataSource,
     fun authByTokenOfflineLog(){
         delayedAuthByTokenLogger.sendLog()
     }
-
-    suspend fun loginByGuestLog(){
-        networkDataSource.loginByGuestLog()
-    }
 }

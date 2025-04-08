@@ -5,7 +5,6 @@ data class ProfileDomain(
     val userId: Int,
     val userName: String,
     val userEmail: String,
-    val userPhotoUrl: String,
     val userPhotoBase64: String,
     val userStatus: Int,
     val userType: String,

@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode
 import ru.foolstack.network.baseUrl
 import ru.foolstack.network.exceptionHandler
 import ru.foolstack.news.impl.model.NewsResponse
+import ru.foolstack.news.impl.model.NewsVersionResponse
 
 class NewsApi(private val client: HttpClient) {
     suspend fun getNews(): NewsResponse{
@@ -17,6 +18,17 @@ class NewsApi(private val client: HttpClient) {
             result.body<NewsResponse>()
         } else{
             NewsResponse(errorMsg = exceptionHandler(result.status))
+        }
+    }
+
+    suspend fun getVersion(): NewsVersionResponse{
+        val result = with(client) {
+            get("$baseUrl${NewsEndpoints.getNewsVersion}")
+        }
+        return if(result.status == HttpStatusCode.OK) {
+            result.body<NewsVersionResponse>()
+        } else{
+            NewsVersionResponse(errorMsg = exceptionHandler(result.status))
         }
     }
 }

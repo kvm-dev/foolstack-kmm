@@ -22,7 +22,6 @@ actual val splashModule: Module
         registrationByEmailUseCase = get(),
         isUserExistUseCase = get(),
         getProfessionsUseCase = get(),
-        authByGuestAuthUseCase = get(),
         authByTokenOfflineLogUseCase = get())
     }
     viewModelOf(::SplashViewModel)

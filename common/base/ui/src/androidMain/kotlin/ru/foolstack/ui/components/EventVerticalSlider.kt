@@ -117,7 +117,7 @@ fun EventVerticalSlider(
                             ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
                         }
                     }
-                    itemsIndexed(filteredEvents.toList()) { _, event ->
+                    itemsIndexed(filteredEvents.toList().sortedBy { it.eventId }) { _, event ->
                         val cost: String
                         val symbol: String = if (lang == Lang.RU) {
                             "₽"
@@ -158,6 +158,7 @@ fun EventVerticalSlider(
                                         Image(
                                             contentScale = ContentScale.Crop,
                                             modifier = Modifier
+                                                .fillMaxWidth()
                                                 .clip(RoundedCornerShape(10.dp)),
                                             bitmap = it,
                                             contentDescription = event.eventName
@@ -168,6 +169,7 @@ fun EventVerticalSlider(
                                         Image(
                                             contentScale = ContentScale.FillWidth,
                                             modifier = Modifier
+                                                .fillMaxWidth()
                                                 .clip(RoundedCornerShape(10.dp)),
                                             painter = painterResource(R.drawable.error_loading_image_big),
                                             contentDescription = event.eventName

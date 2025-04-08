@@ -18,10 +18,16 @@ actual val studyModule: Module
     get() = module{
             single<Mapper> { Mapper() }
     single<StudyApi> { StudyApi(get()) }
-    single<LocalDataSource> { LocalDataSource(databaseSdk = get(), mapper = get()) }
-    single<NetworkDataSource> { NetworkDataSource(api = get(), mapper = get()) }
+    single<LocalDataSource> { LocalDataSource(
+        databaseSdk = get(),
+        preferences = get(),
+        mapper = get()) }
+    single<NetworkDataSource> { NetworkDataSource(
+        api = get(),
+        mapper = get()) }
     single<StudyRepository> { StudyRepository(
-        networkDataSource = get(), localDataSource = get()) }
+        networkDataSource = get(),
+        localDataSource = get()) }
     single<GetStudiesUseCase> { GetStudiesUseCaseImpl(get()) }
     single<StudiesInteractor> { StudiesInteractor(
         getCurrentLanguageUseCase = get(),

@@ -20,10 +20,16 @@ actual val newsModule: Module
     get() = module{
             single<Mapper> { Mapper() }
     single<NewsApi> { NewsApi(get()) }
-    single<NetworkDataSource> { NetworkDataSource(api = get(), mapper = get()) }
-    single<LocalDataSource> { LocalDataSource(databaseSdk = get(), mapper = get()) }
+    single<NetworkDataSource> { NetworkDataSource(
+        api = get(),
+        mapper = get()) }
+    single<LocalDataSource> { LocalDataSource(
+        databaseSdk = get(),
+        preferences = get(),
+        mapper = get()) }
     single<NewsRepository> { NewsRepository(
-        networkDataSource = get(), localDataSource = get()) }
+        networkDataSource = get(),
+        localDataSource = get()) }
     single<GetNewsUseCase> { GetNewsUseCaseImpl(get()) }
     single<NewsInteractor> { NewsInteractor(
         getCurrentLanguageUseCase = get(),

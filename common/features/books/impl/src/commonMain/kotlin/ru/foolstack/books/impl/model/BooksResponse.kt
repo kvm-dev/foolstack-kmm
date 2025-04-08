@@ -19,7 +19,7 @@ data class BookResponse(
     @SerialName("bookId") val bookId: Int = 0,
     @SerialName("bookName") val bookName: String = "",
     @SerialName("bookDescription") val bookDescription: String = "",
-    @SerialName("bookImageUrl") val bookImageUrl: String = "",
+    @SerialName("bookImage") val bookImage: String = "",
     @SerialName("bookRefLink") val bookRefLink: String = "",
     @SerialName("bookCostWithSale") val bookCostWithSale: Int = 0,
     @SerialName("bookCostWithoutSale") val bookCostWithoutSale: Int = 0,
