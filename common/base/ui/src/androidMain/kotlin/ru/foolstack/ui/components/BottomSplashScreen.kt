@@ -225,7 +225,7 @@ private fun ScrollableContent(
                     isEnabled = true,
                     isLoading = false,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .padding(16.dp)
                         .fillMaxWidth())
             }
 
@@ -238,7 +238,7 @@ private fun ScrollableContent(
                         isEnabled = false,
                         isLoading = false,
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
+                            .padding(16.dp)
                             .fillMaxWidth())
                 }
                 else{
@@ -248,7 +248,7 @@ private fun ScrollableContent(
                         isEnabled = true,
                         isLoading = isEmailLoading,
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
+                            .padding(16.dp)
                             .fillMaxWidth())
                 }
             }
@@ -261,7 +261,7 @@ private fun ScrollableContent(
                         isEnabled = false,
                         isLoading = isEmailLoading,
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
+                            .padding(16.dp)
                             .fillMaxWidth())
                 }
                 else{
@@ -275,7 +275,7 @@ private fun ScrollableContent(
                             isEnabled = true,
                             isLoading = isEmailLoading,
                             modifier = Modifier
-                                .padding(horizontal = 16.dp)
+                                .padding(16.dp)
                                 .fillMaxWidth())
                     }
                 }
@@ -306,7 +306,7 @@ private fun ScrollableContent(
                     isEnabled = true,
                     isLoading = false,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .padding(16.dp)
                         .fillMaxWidth())
             }
         }
