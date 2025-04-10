@@ -321,4 +321,40 @@ object StringResources {
             "Unknown error"
         }
     }
+
+    fun getUpdateDialogTitle(lang: String?):String{
+        val text: String = if(lang=="RU"){
+            "У нас обновление"
+        } else{
+            "We have an update"
+        }
+        return text
+    }
+
+    fun getUpdateDialogGeneralButtonText(lang: String?):String{
+        val text: String = if(lang=="RU"){
+            "Давай обновимся"
+        } else{
+            "Let's update"
+        }
+        return text
+    }
+
+    fun getUpdateDialogSecondaryButtonText(lang: String?):String{
+        val text: String = if(lang=="RU"){
+            "Пока не хочу обновлять"
+        } else{
+            "I don't want to yet"
+        }
+        return text
+    }
+
+    fun getUpdateDialogSecondaryButtonCloseText(lang: String?):String{
+        val text: String = if(lang=="RU"){
+            "Закрыть приложение"
+        } else{
+            "Close application"
+        }
+        return text
+    }
 }

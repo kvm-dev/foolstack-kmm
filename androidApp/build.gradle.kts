@@ -10,7 +10,8 @@ android {
     namespace = "ru.foolstack.foolstack.android"
     compileSdk = 34
     defaultConfig {
-        val version: String = properties["VERSION_NAME"].toString()
+        val version: String = (properties.get("VERSION_NAME") as String).replace(""""""", "")
+//        val version: String = properties["VERSION_NAME"].toString()
         applicationId = "ru.foolstack.foolstack.android"
         minSdk = 26
         targetSdk = 34

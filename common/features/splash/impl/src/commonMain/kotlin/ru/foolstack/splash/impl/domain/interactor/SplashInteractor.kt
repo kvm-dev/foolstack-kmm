@@ -18,6 +18,9 @@ import ru.foolstack.professions.api.domain.usecase.GetProfessionsUseCase
 import ru.foolstack.profile.api.domain.usecase.GetProfileUseCase
 import ru.foolstack.profile.api.model.ProfileDomain
 import ru.foolstack.registration.api.domain.usecase.RegistrationByEmailUseCase
+import ru.foolstack.splash.api.domain.usecase.CheckUpdateUseCase
+import ru.foolstack.utils.BrowserUtils
+import ru.foolstack.utils.getCurrentVersion
 
 class SplashInteractor(
     private val getCurrentLanguageUseCase: GetCurrentLanguageUseCase,
@@ -28,10 +31,12 @@ class SplashInteractor(
     private val isUserExistUseCase: IsUserExistUseCase,
     private val authByEmailUseCase: AuthByEmailUseCase,
     private val authByTokenUseCase: AuthByTokenUseCase,
+    private val checkUpdateUseCase: CheckUpdateUseCase,
     private val getProfessionsUseCase: GetProfessionsUseCase,
     private val registrationByEmailUseCase: RegistrationByEmailUseCase,
     private val confirmAuthAndRegUseCase: ConfirmAuthAndRegUseCase,
-    private val authByTokenOfflineLogUseCase: AuthByTokenOfflineLogUseCase
+    private val authByTokenOfflineLogUseCase: AuthByTokenOfflineLogUseCase,
+    private val browserUtils: BrowserUtils
 ) {
     val profileState = getProfileUseCase.profileState
     val eventsState = getEventsUseCase.eventsState
@@ -287,6 +292,19 @@ class SplashInteractor(
         )
     }
 
+    fun getUpdateState(
+        descriptionText: String, isCanClose: Boolean): SplashViewState.NeedUpdateState{
+        val local = getCurrentLang()
+        return SplashViewState.NeedUpdateState(
+            lang = local.lang,
+            titleText = getUpdateDialogTitle(local.lang),
+            descriptionText = descriptionText,
+            generalButtonText = getUpdateDialogGeneralButtonText(local.lang),
+            secondaryButtonText = if(isCanClose) { getUpdateDialogSecondaryButtonText(local.lang) } else { getUpdateDialogSecondaryButtonCloseText() },
+            isCanClose = isCanClose
+        )
+    }
+
     //text values
     private fun getSplashUnauthorizedTitle(lang: String? = null) = StringResources.getSplashTitle(lang)
     private fun getSplashUnauthorizedDescription(lang: String? = null) =
@@ -353,8 +371,25 @@ class SplashInteractor(
     private fun getErrorNotFoundConnectionText(lang: String? = null) =
         StringResources.getErrorNotFoundConnectionText(lang)
 
+    private fun getUpdateDialogTitle(lang: String? = null) = StringResources.getUpdateDialogTitle(lang)
+
+    private fun getUpdateDialogGeneralButtonText(lang: String? = null) = StringResources.getUpdateDialogGeneralButtonText(lang)
+
+    private fun getUpdateDialogSecondaryButtonText(lang: String? = null) = StringResources.getUpdateDialogSecondaryButtonText(lang)
+
+    private fun getUpdateDialogSecondaryButtonCloseText(lang: String? = null) = StringResources.getUpdateDialogSecondaryButtonCloseText(lang)
+
+
+    fun getCurrentAppVersion() = getCurrentVersion()
+
     fun authByTokenOfflineLog(){
         authByTokenOfflineLogUseCase.logOfflineAuthBytToken()
     }
+
+    fun goToMarket(){
+        browserUtils.openInBrowser("https://play.google.com/store/apps/details?id=ru.foolstack.foolstack.android&pli=1")
+    }
+
+    suspend fun checkUpdate() = checkUpdateUseCase.checkUpdate()
 
 }

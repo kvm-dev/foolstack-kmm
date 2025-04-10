@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                         .safeDrawingPadding(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    StartApplication(theme = getCurrentTheme(), recreate = { recreate()}, restart = {restart()})
+                    StartApplication(theme = getCurrentTheme(), recreate = { recreate() }, restart = { restart() }, closeApplication = { finishAffinity() })
                 }
             }
         }

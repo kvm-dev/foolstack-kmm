@@ -26,9 +26,7 @@ class ProfessionsInteractor(
 
     suspend fun getProfessionsFromServer() = getProfessionsUseCase.getProfessions()
 
-    suspend fun getMaterialsFromServer(professionId: Int) = getMaterialsUseCase.getMaterialsByProfession(professionId = professionId)
-
-    suspend fun getMaterialsFromLocal() = getMaterialsUseCase.getMaterials(fromLocal = true)
+    suspend fun getMaterials(professionId: Int) = getMaterialsUseCase.getMateialsByProfession(professionId = professionId)
 
     suspend fun getTestsFromServer(professionId: Int) = getTestsUseCase.getTestsByProfession(professionId = professionId)
 
@@ -37,6 +35,10 @@ class ProfessionsInteractor(
     suspend fun getPassedTestsFromServer() = getPassedTestsUseCase.getPassedTests()
 
     suspend fun getPassedTestsFromLocal() = getPassedTestsUseCase.getPassedTests(fromLocal = true)
+
+    //    suspend fun getMaterialsFromServer(professionId: Int) = getMaterialsUseCase.getMaterialsByProfession(professionId = professionId)
+    //    suspend fun getMaterialsFromLocal() = getMaterialsUseCase.getMaterials(fromLocal = true)
+
     fun checkState(state: ResultState<ProfessionsDomain>):ProfessionsViewState{
         val lang = getCurrentLang()
         return when(state){

@@ -35,15 +35,20 @@ class InterviewsInteractor(
 
     fun isConnectionAvailable() = getNetworkStateUseCase.isNetworkAvailable()
 
-    suspend fun getMaterialsFromServer():MaterialsDomain{
-        return getMaterialsUseCase.getMaterialsByProfession(professionId = getProfessionId())
+    suspend fun getMaterials():MaterialsDomain{
+        val professionId = getProfessionId()
+        return getMaterialsUseCase.getMateialsByProfession(professionId)
     }
-
-    suspend fun getMaterialsFromLocal() = getMaterialsUseCase.getMaterials(true)
 
     suspend fun getProfessionsFromServer() = getProfessionsUseCase.getProfessions()
 
     suspend fun getProfessionsFromLocal() = getProfessionsUseCase.getProfessions(fromLocal = true)
+
+//    suspend fun getMaterialsFromServer():MaterialsDomain{
+//        return getMaterialsUseCase.getMaterialsByProfession(professionId = getProfessionId())
+//    }
+//
+//    suspend fun getMaterialsFromLocal() = getMaterialsUseCase.getMaterials(true)
 
     suspend fun checkState(state: ResultState<MaterialsDomain>,
                            profileState: ResultState<ProfileDomain>,

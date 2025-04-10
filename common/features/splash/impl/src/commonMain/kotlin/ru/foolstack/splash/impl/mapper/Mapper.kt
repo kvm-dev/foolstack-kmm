@@ -1,15 +1,10 @@
 package ru.foolstack.splash.impl.mapper
 
-import ru.foolstack.splash.impl.model.TokenValidateResult
-import ru.foolstack.splash.api.model.TokenValidateResultDomain
+import ru.foolstack.splash.api.model.LastVersionDomain
+import ru.foolstack.splash.impl.model.LastVersionResponse
 
 class Mapper {
-    fun map(result: TokenValidateResult): TokenValidateResultDomain {
-        return when(result){
-            TokenValidateResult.TokenIsNotFound -> TokenValidateResultDomain.TokenIsNotFound
-            TokenValidateResult.TokenIsExpired -> TokenValidateResultDomain.TokenIsExpired
-            TokenValidateResult.TokenIsNotValid -> TokenValidateResultDomain.TokenIsNotValid
-            is TokenValidateResult.TokenIsValid -> TokenValidateResultDomain.TokenIsValid(result.tokenId)
-        }
+    fun map(result: LastVersionResponse): LastVersionDomain {
+        return LastVersionDomain(lastVersion = result.lastVersion, aboutUpdate = result.aboutUpdate, isImportant = result.isImportant, errorMsg = result.errorMsg)
     }
 }

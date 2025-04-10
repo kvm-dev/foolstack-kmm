@@ -20,6 +20,7 @@ import ru.foolstack.splash.impl.presentation.ui.SplashBottomText
 import ru.foolstack.splash.impl.presentation.ui.SplashViewState
 import ru.foolstack.model.ProgressState
 import ru.foolstack.utils.TextFieldValidation
+import ru.foolstack.utils.getCurrentVersion
 import ru.foolstack.utils.model.ResultState
 import ru.foolstack.viewmodel.BaseViewModel
 
@@ -28,6 +29,8 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
         SplashViewState.Idle
     )
     val uiState: StateFlow<SplashViewState> = _uiState.asStateFlow()
+
+    private var isNeedToCheckUpdate by mutableStateOf(true)
 
     private var viewModelJob = SupervisorJob()
     private val uiScope = CoroutineScope(Dispatchers.IO + viewModelJob + coroutineExceptionHandler)
@@ -63,22 +66,40 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                         //authByToken
                         val profile = interactor.getProfileFromServer()
                         val events = interactor.getEventsFromServer()
-                        if(interactor.validateAuthorizedData(
-                                profile = profile,
-                                events = events)){
-                            val state = interactor.getAuthorizedState(
-                                local = local,
-                                isInternetConnected = isInternetConnected,
-                                profile = profile,
-                                events = events)
-                            _uiState.update { state }
-                        }
-                        else{
-                            val state = interactor.authorizedErrorsResponseHandler(
-                                profile = profile,
-                                events = events)
-                            _uiState.update { state }
-                        }
+                        //updateData
+                        val currentAppVersion = interactor.getCurrentAppVersion()
+                        val serverVersionData = interactor.checkUpdate()
+                        val updateState = interactor.getUpdateState(
+                            descriptionText = serverVersionData.aboutUpdate,
+                            isCanClose = !serverVersionData.isImportant
+                        )
+                            if(interactor.validateAuthorizedData(
+                                    profile = profile,
+                                    events = events)){
+                                val state = interactor.getAuthorizedState(
+                                    local = local,
+                                    isInternetConnected = isInternetConnected,
+                                    profile = profile,
+                                    events = events)
+                                if(isNeedToCheckUpdate){
+                                    if(currentAppVersion!=serverVersionData.lastVersion){
+                                        _uiState.update { updateState }
+                                    }
+                                    else{
+                                        _uiState.update { state }
+                                    }
+                                }
+                                else{
+                                    _uiState.update { state }
+                                }
+                            }
+                            else{
+                                val state = interactor.authorizedErrorsResponseHandler(
+                                    profile = profile,
+                                    events = events)
+                                _uiState.update { state }
+                            }
+
                     } else {
                         //sendLog
                         interactor.authByTokenOfflineLog()
@@ -100,10 +121,32 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                     }
                 } else {
                     if(isInternetConnected){
-                        //showAuthorizationBottomSheet
-                        val state = interactor.getUnauthorizedState()
-                        interactor.getEventsFromServer()
-                        _uiState.update { state }
+                        //updateData
+                        val currentAppVersion = interactor.getCurrentAppVersion()
+                        val serverVersionData = interactor.checkUpdate()
+
+                        val updateState = interactor.getUpdateState(
+                            descriptionText = serverVersionData.aboutUpdate,
+                            isCanClose = !serverVersionData.isImportant
+                        )
+
+                            //showAuthorizationBottomSheet
+                            val state = interactor.getUnauthorizedState()
+                            interactor.getEventsFromServer()
+
+                        if(isNeedToCheckUpdate){
+                            if(currentAppVersion!=serverVersionData.lastVersion){
+                                _uiState.update { updateState }
+                            }
+                            else{
+                                _uiState.update { state }
+                            }
+                        }
+                        else{
+                            _uiState.update { state }
+                        }
+
+
                     }
                     else{
                         //showConnectionErrorBottomSheet
@@ -378,5 +421,15 @@ class SplashViewModel(private val interactor: SplashInteractor) : BaseViewModel(
                }
            }
        }
+    }
+
+    fun goToMarket(){
+        interactor.goToMarket()
+    }
+
+    fun closeUpdateDialog(){
+        isNeedToCheckUpdate = false
+        updateState(ProgressState.LOADING)
+        initViewModel()
     }
 }

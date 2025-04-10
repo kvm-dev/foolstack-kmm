@@ -1,18 +1,11 @@
 package ru.foolstack.splash.impl.presentation.ui
 
-import ru.foolstack.books.api.model.BooksDomain
 import ru.foolstack.events.api.model.EventsDomain
-import ru.foolstack.interview.api.model.MaterialsDomain
-import ru.foolstack.news.api.model.NewsDomain
-import ru.foolstack.professions.api.model.ProfessionsDomain
 import ru.foolstack.profile.api.model.ProfileDomain
-import ru.foolstack.study.api.model.StudiesDomain
-import ru.foolstack.tests.api.model.PassedTestsDomain
-import ru.foolstack.tests.api.model.TestsDomain
 
 sealed class SplashViewState{
 
-    object Idle: SplashViewState()
+    data object Idle: SplashViewState()
     data class UnAuthorized(
         val lang: String,
         val isInternetConnected: Boolean,
@@ -34,7 +27,7 @@ sealed class SplashViewState{
         val isHaveToken: Boolean?,
         val profileData: ProfileDomain?,
         val isInternetConnected: Boolean,
-        val events: EventsDomain?
+        val events: EventsDomain?,
     ): SplashViewState()
 
     data class NoConnectionError(
@@ -47,6 +40,15 @@ sealed class SplashViewState{
         val splashTitleText: String = "",
         val splashDescriptionText: String = "",
         val tryAgainButtonText: String = "",
+        val lang: String
+    ): SplashViewState()
+
+    data class NeedUpdateState(
+        val titleText: String,
+        val descriptionText:String,
+        val isCanClose: Boolean,
+        val generalButtonText: String,
+        val secondaryButtonText: String,
         val lang: String
     ): SplashViewState()
 }

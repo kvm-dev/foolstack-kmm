@@ -212,9 +212,7 @@ fun InterviewsScreen(
                             materialId.intValue = it
                             isShowBottomSheet.value = true },
                         isShowBanner = successState.isShowBanner,
-                        onClickBanner = {interviewsViewModel.goToTelegram()},
-                        isConnectionAvailable = interviewsViewModel.isConnectionAvailable()
-                        )
+                        onClickBanner = {interviewsViewModel.goToTelegram()})
                     }
                     CommentBottomSheet(
                         isShowBottomSheet = isShowBottomSheet,

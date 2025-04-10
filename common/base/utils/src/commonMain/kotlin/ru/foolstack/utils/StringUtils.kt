@@ -6,3 +6,4 @@ fun String.clearHtml():String{
         .replace("</p>", "")
         .replace("&nbsp;", " ")
 }
+expect fun getCurrentVersion(): String

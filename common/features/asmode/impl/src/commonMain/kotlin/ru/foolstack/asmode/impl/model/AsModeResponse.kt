@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AsModeResponse(
-    @SerialName("isAsModeActive") val isAsModeActive: Boolean = false
+    @SerialName("isAsModeActive") val isAsModeActive: Boolean = false,
+    @SerialName("errorMsg") val errorMsg: String = ""
 )

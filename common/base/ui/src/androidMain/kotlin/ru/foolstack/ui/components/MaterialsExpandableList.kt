@@ -49,8 +49,7 @@ fun MaterialsExpandableList(
     isRefreshing: Boolean,
     isShowBanner:Boolean,
     onClickBanner: () -> Unit,
-    lang: Lang,
-    isConnectionAvailable: Boolean) {
+    lang: Lang) {
     var clickEnabled by remember { mutableStateOf(true) }
 
     val filteredMaterials = HashSet<MaterialSectionItem>()
@@ -77,15 +76,20 @@ fun MaterialsExpandableList(
     LazyColumn(
         Modifier
             .pullToRefresh(
-                state = if(isConnectionAvailable) { state } else {
-                    PullToRefreshState()
-                },
+                state = PullToRefreshState(),
                 isRefreshing = isRefreshing,
-                onRefresh = { if(isConnectionAvailable){
-                    onRefresh()
-                }
-                }
+                onRefresh = {}
             )
+//            .pullToRefresh(
+//                state = if(isConnectionAvailable) { state } else {
+//                    PullToRefreshState()
+//                },
+//                isRefreshing = isRefreshing,
+//                onRefresh = { if(isConnectionAvailable){
+//                    onRefresh()
+//                }
+//                }
+//            )
             .padding(bottom = 20.dp),
         content = {
             stickyHeader{
@@ -101,7 +105,8 @@ fun MaterialsExpandableList(
                     ) {
                         PullToRefreshDefaults.Indicator(state = state, isRefreshing = isRefreshing, color = MaterialTheme.colorScheme.MainYellow, containerColor = MaterialTheme.colorScheme.LoadingIndicatorBackground)
                     }
-                    TopBar(screenTitle = if(lang == Lang.RU){"Вопросы на интервью"}else{"Interview questions"}, action = onChangeProfession, isBackArrow = false, isIconVisible = isConnectionAvailable)
+                    TopBar(screenTitle = if(lang == Lang.RU){"Вопросы на интервью"}else{"Interview questions"}, action = onChangeProfession, isBackArrow = false, isIconVisible = true)
+//                    TopBar(screenTitle = if(lang == Lang.RU){"Вопросы на интервью"}else{"Interview questions"}, action = onChangeProfession, isBackArrow = false, isIconVisible = isConnectionAvailable)
                     ChipSelector(chips = chips, selectedChips = selectedChips, selectedChip = selectedChip, onclickChip = onclickChip)
                 }
             }

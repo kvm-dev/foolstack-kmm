@@ -47,7 +47,8 @@ fun StartApplication(
     navController: NavHostController = rememberNavController(),
     theme: String,
     recreate: ()->Unit,
-    restart: ()->Unit) {
+    restart: ()->Unit,
+    closeApplication: ()->Unit) {
     val context = LocalContext.current
     val activity = context.findActivity()
     FoolStackTheme(theme = theme) {
@@ -105,6 +106,7 @@ fun StartApplication(
                         isShowBottomBar.value = false
                         SplashScreen(
                             theme = theme,
+                            closeApplication = { closeApplication() },
                             navigateToMainScreen = {
                                 isShowBottomBar.value = true
                                 navController.navigate(NavigationScreens.MainScreenNavigation.name) {

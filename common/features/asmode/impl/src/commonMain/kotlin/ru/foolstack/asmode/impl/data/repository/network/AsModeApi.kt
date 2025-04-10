@@ -6,6 +6,7 @@ import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
 import ru.foolstack.asmode.impl.model.AsModeResponse
 import ru.foolstack.network.baseUrl
+import ru.foolstack.network.exceptionHandler
 
 class AsModeApi(private val client: HttpClient) {
     suspend fun getAsMode(): AsModeResponse{
@@ -15,7 +16,7 @@ class AsModeApi(private val client: HttpClient) {
         return if(result.status == HttpStatusCode.OK) {
             result.body<AsModeResponse>()
         } else{
-            AsModeResponse(isAsModeActive = false)
+            AsModeResponse(errorMsg = exceptionHandler(result.status))
         }
     }
 }

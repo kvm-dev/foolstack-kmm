@@ -34,6 +34,7 @@ fun GreenDialog(title: String,
                 hideText: Boolean = false,
                 isVisible: MutableState<Boolean>,
                 onGeneralActionClick:()->Unit,
+                isCanClose: Boolean = true,
                 onSecondaryActionClick:()->Unit) {
             if (isVisible.value) {
                 AlertDialog(
@@ -45,8 +46,10 @@ fun GreenDialog(title: String,
                         .wrapContentHeight()
                         .padding(horizontal = 14.dp),
                     onDismissRequest = {
-                        isVisible.value = false
-                        onSecondaryActionClick()
+                        if(isCanClose){
+                            isVisible.value = false
+                            onSecondaryActionClick()
+                        }
                     },
                     title = {
                         Column(
@@ -86,8 +89,8 @@ fun GreenDialog(title: String,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(
-                                    start = 20.dp, end = 20.dp,
-                                    top = 8.dp
+                                    horizontal = 20.dp,
+                                    vertical = 8.dp
                                 ),
                             text = generalActionText,
                             onClick = { onGeneralActionClick() },
@@ -99,7 +102,7 @@ fun GreenDialog(title: String,
                         if (!hideSecondaryButton) {
                         SecondGreenButton(
                             modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 10.dp),
+                                .padding(horizontal = 20.dp, vertical = 4.dp),
                         text = secondaryActionText,
                             onClick = { onSecondaryActionClick( )},
                             isEnabled = true

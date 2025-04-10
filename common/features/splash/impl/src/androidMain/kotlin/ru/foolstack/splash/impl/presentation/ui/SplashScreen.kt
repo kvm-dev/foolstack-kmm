@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -18,11 +20,12 @@ import ru.foolstack.model.ProgressState
 import ru.foolstack.ui.components.BigAppTitle
 import ru.foolstack.ui.components.BottomSplashScreen
 import ru.foolstack.ui.components.BottomSplashScreenState
+import ru.foolstack.ui.components.GreenDialog
 import ru.foolstack.ui.components.SplashBackground
 import ru.foolstack.ui.model.Lang
 
 @Composable
-fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, splashViewModel: SplashViewModel = koinViewModel()) {
+fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, closeApplication: () -> Unit, splashViewModel: SplashViewModel = koinViewModel()) {
     SplashBackground(theme)
     Column(
         modifier = Modifier
@@ -44,9 +47,28 @@ fun SplashScreen(theme: String, navigateToMainScreen: () -> Unit, splashViewMode
                 val splashBitmap = ImageBitmap.imageResource(ru.foolstack.ui.R.drawable.splash_img)
                 val logoBitmap = ImageBitmap.imageResource(ru.foolstack.ui.R.drawable.logo)
                 BigAppTitle("foolStack")
+                val isUpdateDialogVisible = remember {
+                    mutableStateOf(false)
+                }
                 when (uiState) {
                     is SplashViewState.Idle->{
-                        //nothing init state
+                        splashViewModel.initViewModel()
+                    }
+
+                    is SplashViewState.NeedUpdateState-> {
+                        Log.d("апдейт стейт", "да")
+                        val state = uiState as SplashViewState.NeedUpdateState
+                        isUpdateDialogVisible.value = true
+                        GreenDialog(
+                            isVisible = isUpdateDialogVisible,
+                            isCanClose = state.isCanClose,
+                            title = state.titleText,
+                            text = state.descriptionText,
+                            generalActionText = state.generalButtonText,
+                            secondaryActionText = state.secondaryButtonText,
+                            onGeneralActionClick = { splashViewModel.goToMarket(); closeApplication() },
+                            onSecondaryActionClick = { if(state.isCanClose) { splashViewModel.closeUpdateDialog() } else { closeApplication() } })
+
                     }
                     is SplashViewState.UnAuthorized -> {
                         val state = uiState as SplashViewState.UnAuthorized

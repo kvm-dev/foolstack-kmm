@@ -24,7 +24,7 @@ actual val interviewModule: Module
         single<NetworkDataSource> { NetworkDataSource(api = get(), mapper = get()) }
         single<MaterialsRepository> { MaterialsRepository(
         localDataSource = get(),
-        networkDataSource = get()) }
+        mapper = get()) }
         single<GetMaterialsUseCase> { GetMaterialsUseCaseImpl(get()) }
         single<InterviewsInteractor> { InterviewsInteractor(
             getCurrentLanguageUseCase = get(),

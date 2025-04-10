@@ -2,8 +2,6 @@ package ru.foolstack.interview.impl.presentation.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,15 +30,18 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
                     asMode = interactor.isAsModeActive()
                 }
                 if (interactor.materialsState.value !is ResultState.Success || interactor.materialsState.value !is ResultState.Loading) {
-                    if (interactor.isConnectionAvailable()) {
-                        launch(coroutineExceptionHandler) {
-                            interactor.getMaterialsFromServer()
-                        }
-                    } else {
-                        launch(coroutineExceptionHandler) {
-                            interactor.getMaterialsFromLocal()
-                        }
+                    launch(coroutineExceptionHandler) {
+                        interactor.getMaterials()
                     }
+//                    if (interactor.isConnectionAvailable()) {
+//                        launch(coroutineExceptionHandler) {
+//                            interactor.getMaterialsFromServer()
+//                        }
+//                    } else {
+//                        launch(coroutineExceptionHandler) {
+//                            interactor.getMaterialsFromLocal()
+//                        }
+//                    }
                 }
                 else{
                     updateState(ProgressState.LOADING)
@@ -54,16 +55,19 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
                             if(profileState is ResultState.Success){
                                 interactor.professionsState.collect{ professionsState->
                                     if(resultState == ResultState.Idle){
-                                        if(interactor.isConnectionAvailable()){
-                                            launch(coroutineExceptionHandler) {
-                                                interactor.getMaterialsFromServer()
-                                            }
+                                        launch(coroutineExceptionHandler){
+                                            interactor.getMaterials()
                                         }
-                                        else{
-                                            launch(coroutineExceptionHandler) {
-                                                interactor.getMaterialsFromLocal()
-                                            }
-                                        }
+//                                        if(interactor.isConnectionAvailable()){
+//                                            launch(coroutineExceptionHandler) {
+//                                                interactor.getMaterialsFromServer()
+//                                            }
+//                                        }
+//                                        else{
+//                                            launch(coroutineExceptionHandler) {
+//                                                interactor.getMaterialsFromLocal()
+//                                            }
+//                                        }
                                         updateState(ProgressState.LOADING)
                                     }
                                     if(professionsState is ResultState.Success){
@@ -82,12 +86,13 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
                     }
                     else{
                         if(resultState is ResultState.Idle){
-                            if(interactor.isConnectionAvailable()){
-                                launch(coroutineExceptionHandler) { interactor.getMaterialsFromServer() }
-                            }
-                            else{
-                                launch(coroutineExceptionHandler) { interactor.getMaterialsFromLocal() }
-                            }
+                            interactor.getMaterials()
+//                            if(interactor.isConnectionAvailable()){
+//                                launch(coroutineExceptionHandler) { interactor.getMaterialsFromServer() }
+//                            }
+//                            else{
+//                                launch(coroutineExceptionHandler) { interactor.getMaterialsFromLocal() }
+//                            }
                         }
                         updateState(ProgressState.LOADING)
                     }
@@ -99,12 +104,13 @@ class InterviewsViewModel(private val interactor: InterviewsInteractor) : BaseVi
         val lang = interactor.getCurrentLang()
         _uiState.update { InterviewsViewState.LoadingState(lang = lang) }
         launch {
-            if(interactor.isConnectionAvailable()){
-                interactor.getMaterialsFromServer()
-            }
-            else{
-                interactor.getMaterialsFromLocal()
-            }
+            interactor.getMaterials()
+//            if(interactor.isConnectionAvailable()){
+//                interactor.getMaterialsFromServer()
+//            }
+//            else{
+//                interactor.getMaterialsFromLocal()
+//            }
             updateState(ProgressState.LOADING)
             initViewModel()
         }

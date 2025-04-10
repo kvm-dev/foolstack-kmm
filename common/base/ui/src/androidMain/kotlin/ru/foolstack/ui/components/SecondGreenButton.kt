@@ -2,6 +2,7 @@ package ru.foolstack.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -26,9 +27,11 @@ fun SecondGreenButton(
     onClick: () -> Unit = { },
     isEnabled: Boolean
 ) {
+    val shape = RoundedCornerShape(16.dp)
     Button(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
+        shape = shape,
         onClick = { onClick() },
         enabled = isEnabled,
         content = { Text(modifier = Modifier

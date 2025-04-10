@@ -1,8 +1,8 @@
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -31,9 +31,11 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             //api
-            api(projects.common.features.splash.api)
+            implementation(projects.common.features.splash.api)
             //utils
             implementation(projects.common.base.utils)
+            //ui
+            implementation(projects.common.base.ui)
             //language
             implementation(projects.common.features.language.api)
             //view model
@@ -42,6 +44,12 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             //network
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(projects.common.base.network)
+            //storage
+            implementation(libs.sqldelight.runtime)
+            implementation(projects.common.base.storage)
             //network connection
             implementation(projects.common.features.networkconnection.api)
             //di
@@ -50,37 +58,33 @@ kotlin {
             implementation(libs.navigation)
             //profile
             implementation(projects.common.features.profile.api)
-            //professions
-            implementation(projects.common.features.professions.api)
             //authorization
             implementation(projects.common.features.authorization.api)
             //registration
             implementation(projects.common.features.registration.api)
-            //books
-            implementation(projects.common.features.books.api)
+            //professions
+            implementation(projects.common.features.professions.api)
             //events
             implementation(projects.common.features.events.api)
-            //interview
-            implementation(projects.common.features.interview.api)
-            //news
-            implementation(projects.common.features.news.api)
-            //study
-            implementation(projects.common.features.study.api)
-            //tests
-            implementation(projects.common.features.tests.api)
         }
         androidMain.dependencies {
+            //utils
+            implementation(projects.common.base.utils)
             //viewmodel
             implementation(libs.androidx.lifecycle.runtime.compose)
             //lifecycle
             implementation(libs.androidx.lifecycle.viewmodel)
             //network
             implementation(libs.ktor.client.okhttp)
+            //storage
+            implementation(libs.sqldelight.android.driver)
             //di
             implementation(libs.koin.compose)
             //ui
             implementation(projects.common.base.ui)
             implementation(libs.material3.android)
+            implementation(libs.compose.material3)
+            implementation(libs.androidx.material3.android)
             //compose
             implementation(libs.compose.foundation)
             implementation(project.dependencies.platform(libs.compose.bom))
@@ -90,6 +94,8 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            //storage
+            implementation(libs.sqldelight.native.driver)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

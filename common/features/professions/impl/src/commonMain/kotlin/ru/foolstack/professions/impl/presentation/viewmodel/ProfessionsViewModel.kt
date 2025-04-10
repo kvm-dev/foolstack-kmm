@@ -43,13 +43,14 @@ class ProfessionsViewModel(private val interactor: ProfessionsInteractor) : Base
     fun saveProfession(professionId: Int) = with(viewModelScope + coroutineExceptionHandler){
         launch {
             interactor.saveProfession(professionId)
+            interactor.getMaterials(professionId)
             if(interactor.isConnectionAvailable()){
-                interactor.getMaterialsFromServer(professionId)
+//                interactor.getMaterialsFromServer(professionId)
                 interactor.getTestsFromServer(professionId)
                 interactor.getPassedTestsFromServer()
             }
             else{
-                interactor.getMaterialsFromLocal()
+//                interactor.getMaterialsFromLocal()
                 interactor.getTestsFromLocal()
                 interactor.getPassedTestsFromLocal()
             }
