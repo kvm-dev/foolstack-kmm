@@ -161,7 +161,8 @@ fun StartApplication(
                                     popUpTo(NavigationScreens.SplashScreenNavigation.name) { inclusive = false }
                                 }
                                 navController.graph.clear()
-                                recreate()} )
+                                recreate()},
+                            onExitApplication = { closeApplication() })
 
                     }
 

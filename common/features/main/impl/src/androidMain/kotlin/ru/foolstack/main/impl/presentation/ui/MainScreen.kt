@@ -1,6 +1,7 @@
 package ru.foolstack.main.impl.presentation.ui
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -64,14 +65,17 @@ fun MainScreen(
     onclickStudies: () -> Unit = {},
     onclickSettings: () -> Unit = {},
     onClickLogout: () -> Unit,
+    onExitApplication:() -> Unit,
     navController: NavController,
     theme: String,
     eventDestination: String) {
     val eventId  = remember { mutableIntStateOf(0) }
     var isRefreshing by remember { mutableStateOf(false) }
+    val isQuitDialogVisible = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val isShowGuestNotificationDialog  = remember { mutableStateOf(true) }
-
+    BackHandler {
+        isQuitDialogVisible.value = true
+    }
     val state = rememberPullToRefreshState()
 
     val scaleFraction = {
@@ -99,7 +103,6 @@ fun MainScreen(
             when(authStatus){
                 is MainViewState.AuthorizedClient-> {
                     Log.d("user is ", "Client")
-                    isShowGuestNotificationDialog.value = false
                     val clientState = authStatus as MainViewState.AuthorizedClient
                     Column(
                         modifier = Modifier
@@ -176,89 +179,16 @@ fun MainScreen(
                             isVisible = isShowAchievementDialog
                         )
                     }
-                }
-                is MainViewState.GuestClient-> {
-                    Log.d("user is ", "Guest")
-                    val guestState = authStatus as MainViewState.GuestClient
-                    val isSettingsDialogGuestVisible  = remember { mutableStateOf(false) }
-                    Column(
-                        modifier = Modifier
-                            .pullToRefresh(
-                                state = if(mainViewModel.isConnectionAvailable()) { state } else {
-                                    PullToRefreshState()
-                                },
-                                isRefreshing = isRefreshing,
-                                onRefresh = { if(mainViewModel.isConnectionAvailable()){
-                                    onRefresh()
-                                }
-                                }
-                            )
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())) {
-                        Box(
-                            Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .graphicsLayer {
-                                    scaleX = scaleFraction()
-                                    scaleY = scaleFraction()
-                                }
-                                .zIndex(1F)
-                        ) {
-                            PullToRefreshDefaults.Indicator(state = state, isRefreshing = isRefreshing, color = MaterialTheme.colorScheme.MainYellow, containerColor = MaterialTheme.colorScheme.LoadingIndicatorBackground)
-                        }
-                        MainTopBar(userType = UserType.GUEST, lang = if(guestState.lang is LangResultDomain.Ru) { Lang.RU } else { Lang.ENG }, onClickSettings = {isSettingsDialogGuestVisible.value = true}, theme = theme, onClickLogout = {
-                            mainViewModel.logout()
-                            onClickLogout()
-                        })
-                        EventHorizontalSlider(
-                            isAsActive = mainViewModel.asMode,
-                            lang = if(guestState.lang is LangResultDomain.Ru) { Lang.RU } else { Lang.ENG }, events = Mapper().map((authStatus as MainViewState.GuestClient).events),
-                            selectId = eventId,
-                            onClickEvent = {
-                                mainViewModel.navigateToEvent(
-                                    navController = navController,
-                                    eventId = eventId.intValue,
-                                    eventDestination = eventDestination
-                                )
-                            }
-                        )
 
-                        AchievementsSlider(lang = if(guestState.lang is LangResultDomain.Ru) { Lang.RU } else {Lang.ENG}, achievements = listOf(), selectId = selectedAchievement, isShowDialog = isShowAchievementDialog)
-                        SubMenu(
-                            modifier = Modifier,
-                            lang = if(guestState.lang is LangResultDomain.Ru) { Lang.RU } else {Lang.ENG},
-                            onClickEvents = onClickEvents,
-                            onClickBooks = onClickBooks,
-                            onClickStudies = onclickStudies)
-                    }
                     GreenDialog(
-                        title = mainViewModel.getSettingsGuestDialogTitle(),
-                        text = mainViewModel.getSettingsGuestDialogText(),
-                        generalActionText = mainViewModel.getDialogOkBtn(),
-                        hideSecondaryButton = true,
-                        onGeneralActionClick = {
-                            isSettingsDialogGuestVisible.value = false
-                        },
-                        onSecondaryActionClick = {
-                            isSettingsDialogGuestVisible.value = false
-                        },
-                        isVisible = isSettingsDialogGuestVisible
-                    )
-                    GreenDialog(
-                        title = mainViewModel.getGuestNotificationDialogTitle(),
-                        text = mainViewModel.getGuestNotificationDialogText(),
-                        generalActionText = mainViewModel.getGuestNotificationDialogActionBtn(),
-                        secondaryActionText = mainViewModel.getGuestNotificationDialogSecondBtn(),
-                        onGeneralActionClick = {
-                            isShowGuestNotificationDialog.value = false
-                            mainViewModel.logout()
-                            onClickLogout()
-                        },
-                        onSecondaryActionClick = {
-                            isShowGuestNotificationDialog.value = false
-                        },
-                        isVisible = isShowGuestNotificationDialog
-                    )
+                        isVisible = isQuitDialogVisible,
+                        isCanClose = true,
+                        title = mainViewModel.getQuitDialogTitle(),
+                        text = mainViewModel.getQuitDialogDescription(),
+                        generalActionText = mainViewModel.getQuitDialogMainBtn(),
+                        secondaryActionText = mainViewModel.getQuitDialogSecondBtn(),
+                        onGeneralActionClick = { onExitApplication() },
+                        onSecondaryActionClick = { isQuitDialogVisible.value = false })
                 }
 
                 is MainViewState.Loading-> {

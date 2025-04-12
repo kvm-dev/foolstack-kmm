@@ -8,6 +8,7 @@ import ru.foolstack.events.api.domain.usecase.GetEventsUseCase
 import ru.foolstack.events.api.model.EventsDomain
 import ru.foolstack.language.api.domain.GetCurrentLanguageUseCase
 import ru.foolstack.language.api.model.LangResultDomain
+import ru.foolstack.main.impl.data.StringResources
 import ru.foolstack.main.impl.presentation.ui.MainViewState
 import ru.foolstack.networkconnection.api.domain.GetNetworkStateUseCase
 import ru.foolstack.news.api.domain.usecase.GetNewsUseCase
@@ -56,10 +57,7 @@ class MainInteractor(
                     if(profileState!=null){
                         when(profileState){
                             is ResultState.Idle -> {
-                                return MainViewState.GuestClient(
-                                    isHaveConnection = isConnectionAvailable(),
-                                    lang = lang,
-                                    events = eventsState.data)
+                                return MainViewState.Loading(lang = lang)
                             }
                             is ResultState.Loading -> {
                                 return MainViewState.Loading(lang = lang)
@@ -74,18 +72,18 @@ class MainInteractor(
                                     )
                                 }
                                 else{
-                                    return MainViewState.GuestClient(isHaveConnection = isConnectionAvailable(),
-                                        lang = lang,
-                                        events = eventsState.data)
+                                    return MainViewState.ErrorState(errorTitle = if(lang is LangResultDomain.Ru){ "" } else { "" },
+                                        errorText = if(lang is LangResultDomain.Ru){ "" } else { "" }
+                                    )
                                 }
 
                             }
                         }
                     }
                     else{
-                        return MainViewState.GuestClient(isHaveConnection = isConnectionAvailable(),
-                            lang = lang,
-                            events = eventsState.data)
+                        return MainViewState.ErrorState(errorTitle = if(lang is LangResultDomain.Ru){ "" } else { "" },
+                            errorText = if(lang is LangResultDomain.Ru){ "" } else { "" }
+                        )
                     }
                 }
             }
@@ -97,60 +95,19 @@ class MainInteractor(
         getProfileUseCase.clearState()
     }
 
-    fun getOnlyClientsDialogSettingsTitle():String{
-        return if(getCurrentLanguageUseCase.getCurrentLang() is LangResultDomain.Ru){
-            "Очень жаль"
-        } else{
-            "Sorry"
-        }
+    fun getQuitDialogTitle():String{
+        return StringResources.getQuitDialogTitle(getCurrentLanguageUseCase.getCurrentLang().lang)
     }
 
-    fun getOnlyClientsDialogSettingsText():String{
-        return if(getCurrentLanguageUseCase.getCurrentLang() is LangResultDomain.Ru){
-            "Настройки доступны только авторизованным пользователям"
-        } else{
-            "Settings available only for authorized users"
-        }
+    fun getQuitDialogDescription():String{
+        return StringResources.getQuitDialogDescription(getCurrentLanguageUseCase.getCurrentLang().lang)
+    }
+    fun getQuitDialogMainBtn():String{
+        return StringResources.getQuitDialogMainBtn(getCurrentLanguageUseCase.getCurrentLang().lang)
     }
 
-    fun getDialogsOkBtn():String{
-        return if(getCurrentLanguageUseCase.getCurrentLang() is LangResultDomain.Ru){
-            "Ок"
-        } else{
-            "Ok"
-        }
-    }
-
-    fun getGuestNotificationDialogTitle():String{
-        return if(getCurrentLanguageUseCase.getCurrentLang() is LangResultDomain.Ru){
-            "Обрати внимание"
-        } else{
-            "Attention"
-        }
-    }
-
-    fun getGuestNotificationDialogText():String{
-        return if(getCurrentLanguageUseCase.getCurrentLang() is LangResultDomain.Ru){
-            "Неавторизованные пользователи видят контент в ограниченном виде и имеют меньше возможностей.\n\nВойди в учетную запись для того, чтобы пользоваться более широким функционалом приложения"
-        } else{
-            "Content is available to unauthorized users in a limited form.\n\nSign in to your account to access advanced app features"
-        }
-    }
-
-    fun getGuestNotificationDialogActionBtn():String{
-        return if(getCurrentLanguageUseCase.getCurrentLang() is LangResultDomain.Ru){
-            "Авторизоваться"
-        } else{
-            "Sign in"
-        }
-    }
-
-    fun getGuestNotificationDialogSecondBtn():String{
-        return if(getCurrentLanguageUseCase.getCurrentLang() is LangResultDomain.Ru){
-            "Продолжить как гость"
-        } else{
-            "Continue as guest"
-        }
+    fun getQuitDialogSecondBtn():String{
+        return StringResources.getQuitDialogSecondBtn(getCurrentLanguageUseCase.getCurrentLang().lang)
     }
 
     suspend fun isAsModeActive():Boolean{

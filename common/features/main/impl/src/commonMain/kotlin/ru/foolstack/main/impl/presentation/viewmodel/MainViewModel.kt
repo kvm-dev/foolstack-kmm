@@ -91,20 +91,6 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
 
     fun getCurrentLang() = interactor.getCurrentLang()
 
-    fun getSettingsGuestDialogTitle() = interactor.getOnlyClientsDialogSettingsTitle()
-
-    fun getSettingsGuestDialogText() = interactor.getOnlyClientsDialogSettingsText()
-
-    fun getDialogOkBtn() = interactor.getDialogsOkBtn()
-
-    fun getGuestNotificationDialogTitle() = interactor.getGuestNotificationDialogTitle()
-
-    fun getGuestNotificationDialogText() = interactor.getGuestNotificationDialogText()
-
-    fun getGuestNotificationDialogActionBtn() = interactor.getGuestNotificationDialogActionBtn()
-
-    fun getGuestNotificationDialogSecondBtn() = interactor.getGuestNotificationDialogSecondBtn()
-
     fun refresh() {
         val currentState = uiState.value
         if (currentState is MainViewState.AuthorizedClient) {
@@ -129,6 +115,11 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel() {
         updateState(ProgressState.LOADING)
         initViewModel()
     }
+
+    fun getQuitDialogTitle() = interactor.getQuitDialogTitle()
+    fun getQuitDialogDescription() = interactor.getQuitDialogDescription()
+    fun getQuitDialogMainBtn() = interactor.getQuitDialogMainBtn()
+    fun getQuitDialogSecondBtn() = interactor.getQuitDialogSecondBtn()
 
      fun isConnectionAvailable() = interactor.isConnectionAvailable()
  }

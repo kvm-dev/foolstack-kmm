@@ -21,9 +21,4 @@ sealed class MainViewState {
         val profile: ProfileDomain?,
         val events: EventsDomain?
     ): MainViewState()
-    data class GuestClient(
-        val isHaveConnection: Boolean,
-        val lang: LangResultDomain,
-        val events: EventsDomain?
-    ): MainViewState()
 }
