@@ -23,7 +23,7 @@ kotlin {
         version = "1.0"
         ios.deploymentTarget = "16.0"
         framework {
-            baseName = "impl"
+            baseName = "registration.impl"
             isStatic = true
         }
     }

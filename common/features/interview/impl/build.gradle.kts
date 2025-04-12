@@ -24,7 +24,7 @@ kotlin {
         version = "1.0"
         ios.deploymentTarget = "16.0"
         framework {
-            baseName = "impl"
+            baseName = "interview.impl"
             isStatic = true
         }
     }

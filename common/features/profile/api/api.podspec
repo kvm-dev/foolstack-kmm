@@ -6,15 +6,15 @@ Pod::Spec.new do |spec|
     spec.authors                  = ''
     spec.license                  = ''
     spec.summary                  = 'Some description for the Shared Module'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/api.framework'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/profile.api.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '16.0'
                 
                 
-    if !Dir.exist?('build/cocoapods/framework/api.framework') || Dir.empty?('build/cocoapods/framework/api.framework')
+    if !Dir.exist?('build/cocoapods/framework/profile.api.framework') || Dir.empty?('build/cocoapods/framework/profile.api.framework')
         raise "
 
-        Kotlin framework 'api' doesn't exist yet, so a proper Xcode project can't be generated.
+        Kotlin framework 'profile.api' doesn't exist yet, so a proper Xcode project can't be generated.
         'pod install' should be executed after running ':generateDummyFramework' Gradle task:
 
             ./gradlew :common:features:profile:api:generateDummyFramework
@@ -24,7 +24,7 @@ Pod::Spec.new do |spec|
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':common:features:profile:api',
-        'PRODUCT_MODULE_NAME' => 'api',
+        'PRODUCT_MODULE_NAME' => 'profile.api',
     }
                 
     spec.script_phases = [

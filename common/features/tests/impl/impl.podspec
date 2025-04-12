@@ -6,15 +6,15 @@ Pod::Spec.new do |spec|
     spec.authors                  = ''
     spec.license                  = ''
     spec.summary                  = 'Some description for the Shared Module'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/impl.framework'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/tests.impl.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '16.0'
                 
                 
-    if !Dir.exist?('build/cocoapods/framework/impl.framework') || Dir.empty?('build/cocoapods/framework/impl.framework')
+    if !Dir.exist?('build/cocoapods/framework/tests.impl.framework') || Dir.empty?('build/cocoapods/framework/tests.impl.framework')
         raise "
 
-        Kotlin framework 'impl' doesn't exist yet, so a proper Xcode project can't be generated.
+        Kotlin framework 'tests.impl' doesn't exist yet, so a proper Xcode project can't be generated.
         'pod install' should be executed after running ':generateDummyFramework' Gradle task:
 
             ./gradlew :common:features:tests:impl:generateDummyFramework
@@ -24,7 +24,7 @@ Pod::Spec.new do |spec|
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':common:features:tests:impl',
-        'PRODUCT_MODULE_NAME' => 'impl',
+        'PRODUCT_MODULE_NAME' => 'tests.impl',
     }
                 
     spec.script_phases = [

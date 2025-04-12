@@ -22,7 +22,7 @@ kotlin {
         version = "1.0"
         ios.deploymentTarget = "16.0"
         framework {
-            baseName = "api"
+            baseName = "main.api"
             isStatic = true
         }
     }
